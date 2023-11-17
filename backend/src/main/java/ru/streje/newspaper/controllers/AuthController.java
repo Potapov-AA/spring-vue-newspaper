@@ -1,5 +1,30 @@
 package ru.streje.newspaper.controllers;
 
-public class AuthController {
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+import ru.streje.newspaper.dtos.JwtRequest;
+import ru.streje.newspaper.dtos.RegistrationUserRequest;
+import ru.streje.newspaper.services.AuthService;
+
+@CrossOrigin
+@RestController
+@RequiredArgsConstructor
+public class AuthController {
+	private final AuthService authService;
+	
+	@PostMapping("/auth")
+	public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+		return authService.createAuthToken(authRequest);
+	}
+	
+	@PostMapping("/registration")
+	public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
+		return authService.createNewUser(registrationUserRequest);
+	}
 }
+
