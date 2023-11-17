@@ -1,5 +1,9 @@
 package ru.streje.newspaper.repositories;
 
-public class UserRepository {
+import org.springframework.data.repository.CrudRepository;
+
+import ru.streje.newspaper.models.User;
+
+public interface UserRepository extends CrudRepository<User, Integer>{
 
 }
