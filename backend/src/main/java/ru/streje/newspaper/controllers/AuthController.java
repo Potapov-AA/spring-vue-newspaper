@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.JwtRequest;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
@@ -23,7 +24,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/registration")
-	public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
+	public ResponseEntity<?> createNewUser(@Valid @RequestBody RegistrationUserRequest registrationUserRequest) {
 		return authService.createNewUser(registrationUserRequest);
 	}
 }
