@@ -1,5 +1,9 @@
 package ru.streje.newspaper.dtos;
 
-public class JwtRequest {
+import lombok.Data;
 
+@Data
+public class JwtRequest {
+	private String email;
+	private String password;
 }
