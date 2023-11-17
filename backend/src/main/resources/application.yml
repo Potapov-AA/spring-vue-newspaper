@@ -4,7 +4,7 @@ server:
     context-path: /api
 jwt:
   secret: dajksljn4322odnsakkl231jljdljsakigposojjkwkjjiojaddsad9989
-  lifetime: 5m
+  lifetime: 5h
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
