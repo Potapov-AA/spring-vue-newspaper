@@ -13,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.JwtRequest;
 import ru.streje.newspaper.dtos.JwtResponse;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
-import ru.streje.newspaper.exeptions.AppError;
+import ru.streje.newspaper.messages.ErrorMessage;
+import ru.streje.newspaper.messages.SuccesMessage;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 @Service
@@ -29,7 +30,7 @@ public class AuthService {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"),
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"),
 					HttpStatus.UNAUTHORIZED);
 		}
 
@@ -40,17 +41,17 @@ public class AuthService {
 
 	public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
 		if (!registrationUserRequest.getPassword().equals(registrationUserRequest.getConfirmPassword())) {
-			return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"),
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"),
 					HttpStatus.BAD_REQUEST);
 		}
 
 		if (userService.findByEmail(registrationUserRequest.getEmail()).isPresent()) {
 			return new ResponseEntity<>(
-					new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с данной почтой уже существует"),
+					new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Пользователь с данной почтой уже существует"),
 					HttpStatus.BAD_REQUEST);
 		}
 
 		userService.createNewUser(registrationUserRequest);
-		return ResponseEntity.ok(HttpStatus.OK);
+		return new ResponseEntity<>(new SuccesMessage("Регистрация прошла успешно"), HttpStatus.OK);
 	}
 }
