@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import ru.streje.newspaper.services.ArticleService;
 
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class MainController {
+	final private ArticleService articleService;
+	
 	@GetMapping("/")
-	public ResponseEntity<?> getTasks(@RequestHeader("authorization") String token) {
-		return new ResponseEntity<>(token, HttpStatus.OK);
+	public ResponseEntity<?> getArticle(@RequestHeader("authorization") String token) {
+		return new ResponseEntity<>(articleService.getAllArticle(), HttpStatus.OK);
 	}
 }
