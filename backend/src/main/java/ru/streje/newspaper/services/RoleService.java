@@ -1,5 +1,17 @@
 package ru.streje.newspaper.services;
 
-public class RoleService {
+import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+import ru.streje.newspaper.models.Role;
+import ru.streje.newspaper.repositories.RoleRepository;
+
+@Service
+@RequiredArgsConstructor
+public class RoleService {
+	private final RoleRepository roleRepository;
+	
+	public Role getUserRole() {
+		return roleRepository.findByName("ROLE_USER").get();
+	}
 }
