@@ -98,7 +98,28 @@ public class ArticleService {
 	}
 	
 	// TO:DO прописать метод
-	public ResponseEntity<?> changeAtricle(int id) {
-		return null;
+	public ResponseEntity<?> changeAtricle(ArticleRequest articleRequest, int id) {
+		try {
+			Article article = articleRepository.findById(id).get();
+			
+			if (articleRequest.getTitle() != null) {
+				article.setTitle(articleRequest.getTitle());
+			}
+			
+			if (articleRequest.getText() != null) {
+				article.setText(articleRequest.getText());
+			}
+			
+			if (articleRequest.getImage() != null) {
+				article.setImage(articleRequest.getImage());
+			}
+			
+			articleRepository.save(article);
+			
+			return new ResponseEntity<>(new SuccesMessage("Статья успешно изменена"), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_MODIFIED.value(), "Не удалось изменить данную статью"), HttpStatus.NOT_MODIFIED);
+		}
+		
 	}
 }
