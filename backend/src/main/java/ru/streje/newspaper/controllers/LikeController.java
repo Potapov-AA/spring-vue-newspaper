@@ -18,8 +18,8 @@ public class LikeController {
 	final private LikeService likeService;
 	
 	@GetMapping("/likestatus/{articleId}")
-	public ResponseEntity<?> getLikestatus() {
-		return null;
+	public ResponseEntity<?> getLikestatus(@RequestHeader("authorization") String token, @PathVariable("articleId") Integer articleId) {
+		return likeService.getUserLikeStatus(token.substring(7), articleId);
 	}
 	
 	@PostMapping("/addremovelike/{articleId}")
