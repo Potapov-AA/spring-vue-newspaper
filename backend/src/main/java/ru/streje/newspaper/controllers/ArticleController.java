@@ -28,7 +28,6 @@ public class ArticleController {
 	
 	@GetMapping("/article/{id}")
 	public ResponseEntity<?> getArticle(@PathVariable("id") Integer id) {
-		System.out.println(123);
 		return articleService.getArticle(id);
 	}
 	
