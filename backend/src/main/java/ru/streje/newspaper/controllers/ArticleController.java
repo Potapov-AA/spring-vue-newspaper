@@ -21,9 +21,15 @@ import ru.streje.newspaper.services.ArticleService;
 public class ArticleController {
 	final private ArticleService articleService;
 
-	@GetMapping("/")
+	@GetMapping("/articles")
 	public ResponseEntity<?> getArticles() {
 		return articleService.getAllArticle();
+	}
+	
+	@GetMapping("/article/{id}")
+	public ResponseEntity<?> getArticle(@PathVariable("id") Integer id) {
+		System.out.println(123);
+		return articleService.getArticle(id);
 	}
 	
 	@PostMapping("/newarticle")
