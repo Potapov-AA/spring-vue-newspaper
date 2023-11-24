@@ -42,6 +42,7 @@ public class SecurityConfig {
 //			.cors().disable()
 			.authorizeRequests()
 			.requestMatchers("/articles").permitAll()
+			.requestMatchers("/addremovelike/{articleId}").authenticated()
 			.requestMatchers("/newarticle").hasRole("ADMIN")
 			.requestMatchers("/article/{id}").hasRole("ADMIN")
 			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
