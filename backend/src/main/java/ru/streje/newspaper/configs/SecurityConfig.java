@@ -43,6 +43,7 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.requestMatchers("/articles").permitAll()
 			.requestMatchers("/addremovelike/{articleId}").authenticated()
+			.requestMatchers("/likestatus/{articleId}").authenticated()
 			.requestMatchers("/newarticle").hasRole("ADMIN")
 			.requestMatchers("/article/{id}").hasRole("ADMIN")
 			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
