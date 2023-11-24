@@ -12,4 +12,6 @@ public class ArticleRequest {
 	private String text;
 	
 	private byte[] image;
+	
+	private String[] themes;
 }
