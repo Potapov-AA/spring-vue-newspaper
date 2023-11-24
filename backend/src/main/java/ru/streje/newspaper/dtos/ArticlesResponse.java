@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class ArticleResponse {
+public class ArticlesResponse {
 	Integer id;
 	String title;
 	String text;
