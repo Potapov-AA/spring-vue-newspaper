@@ -24,9 +24,15 @@ public class UserService implements UserDetailsService {
 	private final RoleService roleService;
 	private final PasswordEncoder passwordEncoder;
 	
+	/**
+	 * Метод поиска пользователя по email
+	 * @param email - почта пользователя
+	 * @return экземпляр User
+	 */
 	public Optional<User> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
+	
 	
 	@Transactional
 	@Override
@@ -41,6 +47,10 @@ public class UserService implements UserDetailsService {
 				user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
 	}
 	
+	/**
+	 * Метод создания нового пользователя
+	 * @param registrationUserRequest - параметры для создания нового пользователя
+	 */
 	public void createNewUser(RegistrationUserRequest registrationUserRequest) {
 		User user = new User();
 		user.setEmail(registrationUserRequest.getEmail());

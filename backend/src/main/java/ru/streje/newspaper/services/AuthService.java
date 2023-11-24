@@ -24,7 +24,12 @@ public class AuthService {
 	private final UserService userService;
 	private final JwtTokenUtils jwtTokenUtils;
 	private final AuthenticationManager authenticationManager;
-
+	
+	/**
+	 * Метод получения токена авторизации
+	 * @param authRequest - параметры для получения токена
+	 * @return сообщение содержащее токен или сообщение о невалидности данных
+	 */
 	public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
 		try {
 			authenticationManager.authenticate(
@@ -38,7 +43,12 @@ public class AuthService {
 		String token = jwtTokenUtils.generateToken(userDetails);
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
-
+	
+	/**
+	 * Метод регистрации нового пользователя
+	 * @param registrationUserRequest - параметры для рагистрации пользователя
+	 * @return сообщение о существовании пользователя с такими данными или сообщение о успешности создания пользователя
+	 */
 	public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
 		if (!registrationUserRequest.getPassword().equals(registrationUserRequest.getConfirmPassword())) {
 			return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"),
