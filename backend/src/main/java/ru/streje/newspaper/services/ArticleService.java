@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.ArticleRequest;
-import ru.streje.newspaper.dtos.ArticlesResponse;
+import ru.streje.newspaper.dtos.ArticleResponse;
 import ru.streje.newspaper.messages.ErrorMessage;
 import ru.streje.newspaper.messages.SuccesMessage;
 import ru.streje.newspaper.models.Article;
@@ -24,32 +24,43 @@ public class ArticleService {
 	private final ArticleRepository articleRepository;
 	
 	/**
+	 * Метод заполняет и возвращает экземпляр класса ArticleResponse
+	 * @param article - экземпляр класса Article
+	 * @return экземпляр класса ArticleResponse
+	 */
+	private ArticleResponse fillArticleResponse(Article article) {
+		ArticleResponse articleResponse = new ArticleResponse();
+		
+		articleResponse.setId(article.getId());
+		articleResponse.setTitle(article.getTitle());
+		articleResponse.setText(article.getText());
+		articleResponse.setImage(article.getImage());
+		articleResponse.setDate(article.getDate());
+		
+		List<String> themes = new ArrayList<>();
+		for (Theme theme : article.getThemes()) {
+			themes.add("#" + theme.getName());
+		}			
+		articleResponse.setThemes(themes);
+		
+		articleResponse.setCountLikes(article.getUsers().size());
+		
+		return articleResponse;
+	}
+	
+	/**
 	 * Метод возвращает все статьи при их наличии,
 	 * иначе возвращает сообщение, что статьи не найдены
 	 * @return список всех статей (ArticleResponse) / сообщение об их отсутствии
 	 */
 	public ResponseEntity<?> getAllArticle() {
-		List<ArticlesResponse> articles = new ArrayList<>();
+		List<ArticleResponse> articles = new ArrayList<>();
 		
 		Iterable<Article> iArticles = articleRepository.findAll();
 		
 		for (Article article : iArticles) {
-			ArticlesResponse articleRes = new ArticlesResponse();
-			articleRes.setId(article.getId());
-			articleRes.setTitle(article.getTitle());
-			articleRes.setText(article.getText());
-			articleRes.setImage(null);
-			articleRes.setDate(article.getDate());
-			
-			List<String> themes = new ArrayList<>();
-			for (Theme theme : article.getThemes()) {
-				themes.add("#" + theme.getName());
-			}			
-			articleRes.setThemes(themes);
-			
-			articleRes.setCountLikes(article.getUsers().size());
-						
-			articles.add(articleRes);
+			ArticleResponse articleResponse = fillArticleResponse(article);						
+			articles.add(articleResponse);
 		}
 		
 		if(articles.size() > 0) {
@@ -59,6 +70,22 @@ public class ArticleService {
 		}
 	}
 	
+	/**
+	 * Метод поиска статьи по ID
+	 * @param id - индитификатор статьи
+	 * @return статью или сообщение о ее отсутствии
+	 */
+	public ResponseEntity<?> getArticle(int id) {
+		try {
+			Article article = articleRepository.findById(id).get();
+			
+			ArticleResponse articleResponse = fillArticleResponse(article);
+						
+			return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данная статья не найдена"), HttpStatus.NOT_FOUND);
+		}
+	}
 	
 	/**
 	 * Метод добавления новой статьи в БД
@@ -97,7 +124,12 @@ public class ArticleService {
 		}
 	}
 	
-	// TO:DO прописать метод
+	/**
+	 * Метод обновления статьи по ID
+	 * @param articleRequest - изменяемые параметры
+	 * @param id - индитификатор статьи
+	 * @return сообщение об успехе/провале обновления статьи
+	 */
 	public ResponseEntity<?> changeAtricle(ArticleRequest articleRequest, int id) {
 		try {
 			Article article = articleRepository.findById(id).get();
