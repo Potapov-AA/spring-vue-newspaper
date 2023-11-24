@@ -24,8 +24,9 @@ public class ArticleService {
 	private final ArticleRepository articleRepository;
 	
 	/**
-	 * Метод возвращает все статьи
-	 * @return список всех статей (ArticleResponse)
+	 * Метод возвращает все статьи при их наличии,
+	 * иначе возвращает сообщение, что статьи не найдены
+	 * @return список всех статей (ArticleResponse) / сообщение об их отсутствии
 	 */
 	public ResponseEntity<?> getAllArticle() {
 		List<ArticlesResponse> articles = new ArrayList<>();
@@ -58,7 +59,13 @@ public class ArticleService {
 		}
 	}
 	
-	public SuccesMessage addNewArticle(ArticleRequest articleRequest) {
+	
+	/**
+	 * Метод добавления новой статьи в БД
+	 * @param articleRequest - данные для новой записи
+	 * @return сообщение об успехе/провале добавления записи
+	 */
+	public ResponseEntity<?> addNewArticle(ArticleRequest articleRequest) {
 		Article article = new Article();
 		
 		article.setTitle(articleRequest.getTitle());
@@ -66,7 +73,22 @@ public class ArticleService {
 		article.setImage(articleRequest.getImage());
 		article.setDate(Date.valueOf(LocalDate.now()));
 		
-		articleRepository.save(article);
-		return new SuccesMessage("Article added successfully");
+		try {
+			articleRepository.save(article);
+			return new ResponseEntity<>(new SuccesMessage("Статья успешно добавлена"), HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новую статью"), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	// TO:DO прописать метод
+	public ResponseEntity<?> deleteArticle(int id) {
+		return null;
+	}
+	
+	// TO:DO прописать метод
+	public ResponseEntity<?> changeAtricle(int id) {
+		return null;
 	}
 }
