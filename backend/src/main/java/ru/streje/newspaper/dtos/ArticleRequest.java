@@ -1,7 +1,5 @@
 package ru.streje.newspaper.dtos;
 
-import java.sql.Date;
-
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
