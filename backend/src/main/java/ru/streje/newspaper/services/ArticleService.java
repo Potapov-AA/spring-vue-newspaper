@@ -103,7 +103,7 @@ public class ArticleService {
 	 * @param id - индитификатор статьи
 	 * @return статью или сообщение о ее отсутствии
 	 */
-	public ResponseEntity<?> getArticle(int id) {
+	public ResponseEntity<?> getArticleResponse(int id) {
 		try {
 			Article article = articleRepository.findById(id).get();
 
@@ -115,6 +115,7 @@ public class ArticleService {
 					HttpStatus.NOT_FOUND);
 		}
 	}
+	
 
 	/**
 	 * Метод добавления новой статьи в БД
@@ -198,5 +199,31 @@ public class ArticleService {
 					HttpStatus.NOT_MODIFIED);
 		}
 
+	}
+	
+	/**
+	 * Метод получение экземпляра Article по id
+	 * @param id - индитификатор 
+	 * @return экземпляр Article
+	 */
+	public Article getArticle(int id) {
+		try {
+			Article article = articleRepository.findById(id).get();
+			return article;
+		} catch (Exception e) {
+			return null;
+		}
+	}	
+	
+	/**
+	 * Метод сохранения экземпляра Article в БД
+	 * @param article - экземпляр Article
+	 */
+	public void saveArticle(Article article) {
+		try {
+			articleRepository.save(article);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }
