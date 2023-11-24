@@ -61,13 +61,12 @@ public class UserService implements UserDetailsService {
 		userRepository.save(user);
 	}
 	
+	
 	//ПО ИДЕЕ ПОКА ЧТО НЕ НУЖНЫ
 	public Integer getUserId(String email) {
 		User user = findByEmail(email).get();
 		return user.getId();
 	}
 	
-	public User getUser(String email) {
-		return findByEmail(email).get();
-	}
+	
 }
