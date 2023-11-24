@@ -62,8 +62,8 @@ public class ArticleService {
 	
 	/**
 	 * Метод добавления новой статьи в БД
-	 * @param articleRequest - данные для новой записи
-	 * @return сообщение об успехе/провале добавления записи
+	 * @param articleRequest - данные для новой статьи
+	 * @return сообщение об успехе/провале добавления статьи
 	 */
 	public ResponseEntity<?> addNewArticle(ArticleRequest articleRequest) {
 		Article article = new Article();
@@ -82,9 +82,19 @@ public class ArticleService {
 		}
 	}
 	
-	// TO:DO прописать метод
+	/**
+	 * Метод удаления статьи по ID
+	 * @param id - индитификатор статьи
+	 * @return сообщение об успехе/провале удаления статьи
+	 */
 	public ResponseEntity<?> deleteArticle(int id) {
-		return null;
+		try {
+			Article article = articleRepository.findById(id).get();
+			articleRepository.delete(article);
+			return new ResponseEntity<>(new SuccesMessage("Статья успешно удалена"), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данная статья не найдена или уже удалена"), HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	// TO:DO прописать метод
