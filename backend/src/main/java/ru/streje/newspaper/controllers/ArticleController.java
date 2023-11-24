@@ -28,7 +28,7 @@ public class ArticleController {
 	
 	@GetMapping("/article/{id}")
 	public ResponseEntity<?> getArticle(@PathVariable("id") Integer id) {
-		return articleService.getArticle(id);
+		return articleService.getArticleResponse(id);
 	}
 	
 	@PostMapping("/newarticle")
