@@ -42,6 +42,7 @@ public class SecurityConfig {
 //			.cors().disable()
 			.authorizeRequests()
 			.requestMatchers("/newarticle").hasRole("ADMIN")
+			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
 //			.requestMatchers("/tasks/{taskId}").hasRole("ADMIN")
 //			.requestMatchers("/info").authenticated()
 //			.requestMatchers("/admin").hasRole("ADMIN")
