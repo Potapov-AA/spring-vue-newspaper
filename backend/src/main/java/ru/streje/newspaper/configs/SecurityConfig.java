@@ -41,7 +41,7 @@ public class SecurityConfig {
 			.csrf().disable()
 //			.cors().disable()
 			.authorizeRequests()
-			.requestMatchers("/").authenticated()
+			.requestMatchers("/newarticle").hasRole("ADMIN")
 //			.requestMatchers("/tasks/{taskId}").hasRole("ADMIN")
 //			.requestMatchers("/info").authenticated()
 //			.requestMatchers("/admin").hasRole("ADMIN")
