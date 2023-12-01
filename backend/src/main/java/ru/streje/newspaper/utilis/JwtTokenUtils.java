@@ -24,12 +24,14 @@ public class JwtTokenUtils {
 	@Value("${jwt.lifetime}")
 	private Duration jwtLifetime;
 
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(UserDetails userDetails, String firstName, String lastName) {
 		Map<String, Object> claims = new HashMap();
 		List<String> rolesList = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
 		claims.put("roles", rolesList);
-
+		claims.put("firstname", firstName);
+		claims.put("lastname", lastName);
+		
 		Date issuedDate = new Date();
 		Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
 
