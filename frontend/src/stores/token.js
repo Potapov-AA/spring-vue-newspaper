@@ -11,6 +11,8 @@ const STORE_NAME = 'token'
 const getDefaultSettings = () => ({
   token: '',
   logined: false,
+  firstName: '',
+  lastName: '',
   role: ROLES.ANONIM
 })
 
@@ -24,7 +26,15 @@ export const useTokenStore = defineStore(STORE_NAME, {
     role:
       localStorage.getItem('token') === null
         ? getDefaultSettings().role
-        : this.parseJWT(localStorage.getItem('token')).roles[0]
+        : this.parseJWT(localStorage.getItem('token')).roles[0],
+    firstName:
+      localStorage.getItem('token') === null
+        ? getDefaultSettings().firstName
+        : this.parseJWT(localStorage.getItem('token')).firstname,
+    lastName:
+      localStorage.getItem('token') === null
+        ? getDefaultSettings().lastName
+        : this.parseJWT(localStorage.getItem('token')).lastname
   }),
 
   actions: {
@@ -32,6 +42,8 @@ export const useTokenStore = defineStore(STORE_NAME, {
       this.token = 'Bearer ' + token
       this.logined = true
       this.role = this.parseJWT(token).roles[0]
+      this.firstName = this.parseJWT(token).firstname
+      this.lastName = this.parseJWT(token).lastname
 
       localStorage.setItem('token', this.token)
     },
@@ -40,6 +52,8 @@ export const useTokenStore = defineStore(STORE_NAME, {
       this.token = ''
       this.logined = false
       this.role = ROLES.ANONIM
+      this.firstName = ''
+      this.lastName = ''
 
       localStorage.removeItem('token')
     },
