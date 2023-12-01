@@ -1,9 +1,8 @@
 package ru.streje.newspaper.services;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,8 @@ public class ArticleService {
 	private final ArticleRepository articleRepository;
 
 	private final ThemeService themeService;
+	
+	private final int secondsIn24Houres = 86400;
 
 	/**
 	 * Метод заполняет и возвращает экземпляр класса ArticleResponse
@@ -32,7 +33,7 @@ public class ArticleService {
 	 * @param article - экземпляр класса Article
 	 * @return экземпляр класса ArticleResponse
 	 */
-	private ArticleResponse fillArticleResponse(Article article) {
+	private ArticleResponse fillArticleResponse(Article article) {	
 		ArticleResponse articleResponse = new ArticleResponse();
 
 		articleResponse.setId(article.getId());
@@ -83,16 +84,19 @@ public class ArticleService {
 		List<ArticleResponse> articles = new ArrayList<>();
 
 		Iterable<Article> iArticles = articleRepository.findAll();
-
-		for (Article article : iArticles) {
-			ArticleResponse articleResponse = fillArticleResponse(article);
-			articles.add(articleResponse);
+		
+		for (Article article : iArticles) {			
+			System.out.println(new Date().getTime() - article.getDate().getTime());
+			if ((new Date().getTime() - article.getDate().getTime()) / 100 <= secondsIn24Houres) {
+				ArticleResponse articleResponse = fillArticleResponse(article);
+				articles.add(articleResponse);
+			}
 		}
 
 		if (articles.size() > 0) {
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Статьи не найдены"),
+			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "За последнии 24 часа статьей не найдено"),
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -129,7 +133,7 @@ public class ArticleService {
 		article.setTitle(articleRequest.getTitle());
 		article.setText(articleRequest.getText());
 		article.setImage(articleRequest.getImage());
-		article.setDate(Date.valueOf(LocalDate.now()));
+		article.setDate(new Date());
 
 		Collection<Theme> themes = fillThemes(articleRequest);
 		article.setThemes(themes);
