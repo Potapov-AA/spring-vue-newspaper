@@ -5,14 +5,13 @@ import { onMounted } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 
 onMounted(() => {
-    console.log(1)
     useArticleStore().getArticles()
 })
 
 </script>
 
 <template>
-  <v-container>
+  <v-container class="d-flex fill-height fluid justify-start align-center flex-column">
     <HeaderComponent/>
 
 
@@ -25,9 +24,7 @@ onMounted(() => {
     <div v-else>
         {{ useArticleStore().errorMessage }}
     </div>
+
+    <h2>sdssddsdsd</h2>
   </v-container>
 </template>
-
-
-
-<style></style>
