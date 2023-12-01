@@ -1,3 +1,10 @@
+$titlefont: 'Montserrat Alternates', 'Vina Sans', sans-serif;
+
+.title {
+  font-family: $titlefont;
+  font-size: 48px;
+}
+
 .errorMessage {
   color: red;
 }
