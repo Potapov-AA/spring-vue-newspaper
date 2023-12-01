@@ -1,49 +1,64 @@
 import { defineStore } from 'pinia'
 
 export const ROLES = {
+  ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER',
-  ANONIM: 'ANONIM',
-  ADMIN: 'ROLE_ADMIN'
+  ANONIM: 'ANONIM'
 }
 
 const STORE_NAME = 'token'
 
-const getDefaultSettings = () => ({
+const getDefaultParametrs = () => ({
   token: '',
   logined: false,
-  firstName: '',
-  lastName: '',
-  role: ROLES.ANONIM
+  role: ROLES.ANONIM,
+  firstname: '',
+  lastname: ''
 })
+
+function parseJWT(token) {
+  let base64Url = token.split('.')[1]
+  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+
+  let jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      })
+      .join('')
+  )
+  return JSON.parse(jsonPayload)
+}
 
 export const useTokenStore = defineStore(STORE_NAME, {
   state: () => ({
     token:
       localStorage.getItem('token') === null
-        ? getDefaultSettings().token
+        ? getDefaultParametrs().token
         : localStorage.getItem('token'),
-    logined: localStorage.getItem('token') === null ? getDefaultSettings().logined : true,
+    logined: localStorage.getItem('token') === null ? getDefaultParametrs().logined : true,
     role:
       localStorage.getItem('token') === null
-        ? getDefaultSettings().role
-        : this.parseJWT(localStorage.getItem('token')).roles[0],
-    firstName:
+        ? getDefaultParametrs().role
+        : parseJWT(localStorage.getItem('token').substring(6)).roles[0],
+    firstname:
       localStorage.getItem('token') === null
-        ? getDefaultSettings().firstName
-        : this.parseJWT(localStorage.getItem('token')).firstname,
-    lastName:
+        ? getDefaultParametrs().firstname
+        : parseJWT(localStorage.getItem('token').substring(6)).firstname,
+    lastname:
       localStorage.getItem('token') === null
-        ? getDefaultSettings().lastName
-        : this.parseJWT(localStorage.getItem('token')).lastname
+        ? getDefaultParametrs().lastname
+        : parseJWT(localStorage.getItem('token').substring(6)).lastname
   }),
 
   actions: {
     rememberToken(token) {
       this.token = 'Bearer ' + token
       this.logined = true
-      this.role = this.parseJWT(token).roles[0]
-      this.firstName = this.parseJWT(token).firstname
-      this.lastName = this.parseJWT(token).lastname
+      this.role = parseJWT(token).roles[0]
+      this.firstname = parseJWT(token).firstname
+      this.lastname = parseJWT(token).lastname
 
       localStorage.setItem('token', this.token)
     },
@@ -52,26 +67,10 @@ export const useTokenStore = defineStore(STORE_NAME, {
       this.token = ''
       this.logined = false
       this.role = ROLES.ANONIM
-      this.firstName = ''
-      this.lastName = ''
+      this.firstname = ''
+      this.lastname = ''
 
       localStorage.removeItem('token')
-    },
-
-    parseJWT(token) {
-      let base64Url = token.split('.')[1]
-      let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-
-      let jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-          })
-          .join('')
-      )
-
-      return JSON.parse(jsonPayload)
     }
   }
 })
