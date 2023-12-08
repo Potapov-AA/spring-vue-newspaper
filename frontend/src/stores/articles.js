@@ -21,6 +21,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
           })
           .catch((error) => {
             this.errorMessage = error.response.data.message
+            this.articles = []
           })
       }
   }
