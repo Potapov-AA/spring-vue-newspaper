@@ -1,30 +1,33 @@
 <script setup>
 import { useArticleStore } from '@/stores/articles'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import HeaderComponent from '@/components/HeaderComponent.vue'
 
-onMounted(() => {
-    useArticleStore().getArticles()
-})
+import PaginationComponent from '@/components/PaginationComponent.vue'
 
+const isArticles = ref(false)
+
+function updateArticle() {
+  useArticleStore().getArticles()
+  isArticles.value = useArticleStore().articles.length > 0 ? true : false
+}
+
+onMounted(async() => {
+  await useArticleStore().getArticles()
+  isArticles.value = useArticleStore().articles.length > 0 ? true : false
+  window.setInterval(updateArticle, 60000)
+})
 </script>
 
 <template>
   <v-container class="d-flex fill-height fluid justify-start align-center flex-column">
     <HeaderComponent/>
-
-
-    <div v-if="useArticleStore().articles.length > 0">
-        <div v-for="article in useArticleStore().articles" :key="article.id">
-            {{ article }}
-            {{ article.date.substring(0, 10) }}
-        </div>
+    <div v-if="isArticles">      
+      <PaginationComponent v-bind:items="useArticleStore().articles"/>
     </div>
     <div v-else>
-        {{ useArticleStore().errorMessage }}
+      {{ useArticleStore().errorMessage }}
     </div>
-
-    <h2>sdssddsdsd</h2>
   </v-container>
 </template>
