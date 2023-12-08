@@ -86,7 +86,6 @@ public class ArticleService {
 		Iterable<Article> iArticles = articleRepository.findAll();
 		
 		for (Article article : iArticles) {			
-			System.out.println(new Date().getTime() - article.getDate().getTime());
 			if ((new Date().getTime() - article.getDate().getTime()) / 100 <= secondsIn24Houres) {
 				ArticleResponse articleResponse = fillArticleResponse(article);
 				articles.add(articleResponse);
