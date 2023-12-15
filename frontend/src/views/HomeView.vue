@@ -16,7 +16,7 @@ function updateArticle() {
 onMounted(async() => {
   await useArticleStore().getArticles()
   isArticles.value = useArticleStore().articles.length > 0 ? true : false
-  window.setInterval(updateArticle, 60000)
+  window.setInterval(updateArticle, 30000)
 })
 </script>
 
@@ -26,7 +26,7 @@ onMounted(async() => {
     <div v-if="isArticles">      
       <PaginationComponent v-bind:items="useArticleStore().articles"/>
     </div>
-    <div v-else>
+    <div v-else class="py-10 px-5">
       {{ useArticleStore().errorMessage }}
     </div>
   </v-container>
