@@ -77,4 +77,15 @@ public class LikeService {
 
 		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
 	}
+	
+	public ResponseEntity<?> getCountLikes(int articleId) {
+		LikeResponse likeResponse = new LikeResponse();
+
+		Article article = articleService.getArticle(articleId);
+		Collection<User> users = article.getUsers();
+
+		likeResponse.setCountLike(users.size());
+
+		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+	}
 }
