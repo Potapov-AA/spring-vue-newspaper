@@ -11,18 +11,22 @@ export const useArticleStore = defineStore(STORE_NAME, {
 
   actions: {
     async getArticles() {
+      try {
         await axios
           .get('http://localhost:8081/api/articles')
           .then((response) => {
-            {   
-                this.articles = response.data.reverse()
-                this.errorMessage = ''
+            {
+              this.articles = response.data.reverse()
+              this.errorMessage = ''
             }
           })
           .catch((error) => {
             this.errorMessage = error.response.data.message
             this.articles = []
           })
+      } catch (error) {
+        this.errorMessage = 'Идет загрузка статьей...'
       }
+    }
   }
 })
