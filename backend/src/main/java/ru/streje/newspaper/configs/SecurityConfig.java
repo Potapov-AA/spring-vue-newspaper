@@ -43,7 +43,7 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.requestMatchers("/articles").permitAll()
 			.requestMatchers("/comments/{articleId}").permitAll()
-			.requestMatchers("/countLikes/{articleId}").permitAll()
+			.requestMatchers("/countlikes/{articleId}").permitAll()
 			.requestMatchers("/addcomment/{articleId}").authenticated()
 			.requestMatchers("/addremovelike/{articleId}").authenticated()
 			.requestMatchers("/likestatus/{articleId}").authenticated()
@@ -60,6 +60,7 @@ public class SecurityConfig {
 		
 		return http.build();
 	}
+	
 	
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
