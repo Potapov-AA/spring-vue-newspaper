@@ -1,9 +1,9 @@
 package ru.streje.newspaper.services;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class CommentService {
 			CommentResponse commentResponse = new CommentResponse();
 			commentResponse.setFirstName(comment.getUser().getFirstname());
 			commentResponse.setLastName(comment.getUser().getLastname());
-			commentResponse.setDate(Date.valueOf(LocalDate.now()));
+			commentResponse.setDate(comment.getDate());
 			commentResponse.setText(comment.getText());
 			commentResponses.add(commentResponse);
 		}
@@ -74,7 +74,7 @@ public class CommentService {
 		
 		comment.setArticle(article);
 		comment.setText(commentRequest.getText());
-		comment.setDate(Date.valueOf(LocalDate.now()));
+		comment.setDate(new Date());
 		comment.setUser(user);
 
 		try {

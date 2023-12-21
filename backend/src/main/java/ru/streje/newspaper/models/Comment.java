@@ -1,6 +1,6 @@
 package ru.streje.newspaper.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,16 +19,16 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@Column(name = "text")
 	private String text;
-	
+
 	@Column(name = "date")
 	private Date date;
-	
+
 	@ManyToOne
 	private Article article;
-	
+
 	@ManyToOne
 	private User user;
 }
