@@ -10,13 +10,36 @@ const props = defineProps({
 const userLikeStatus = ref(-1)
 const countLikes = ref(0)
 
-// Добавить отправку токена
+// Получение статуса лайка
 async function getLikeStatus() {
-  await axios
-    .get('http://localhost:8081/api/likestatus/' + props.id)
+  await axios({
+    url: 'http://localhost:8081/api/likestatus/' + props.id,
+    method: 'get',
+    headers: {
+      Authorization: useTokenStore().token
+    }
+  })
+    .then((response) => {
+      userLikeStatus.value = response.data.userStatus
+    })
+    .catch(() => {
+      userLikeStatus.value = -1
+    })
+}
+
+// Изменение статуса лайка
+async function changeLikeStatus() {
+  await axios({
+    url: 'http://localhost:8081/api/addremovelike/' + props.id,
+    method: 'post',
+    headers: {
+      Authorization: useTokenStore().token
+    }
+  })
     .then((response) => {
       {
         userLikeStatus.value = response.data.userStatus
+        countLikes.value = response.data.countLike
       }
     })
     .catch(() => {
@@ -24,35 +47,48 @@ async function getLikeStatus() {
     })
 }
 
+// Получение количества лайков
 async function getCountLikes() {
-  await axios
-    .get('http://localhost:8081/api/countlikes/' + props.id)
+  await axios({
+    url: 'http://localhost:8081/api/countlikes/' + props.id,
+    method: 'get'
+  })
     .then((response) => {
       {
-        countLikes.value = response.data.countLikes
+        countLikes.value = response.data.countLike
       }
     })
     .catch(() => {
-      userLikeStatus.value = -1
+      countLikes.value = 0
     })
 }
 
 onMounted(() => {
-  getCountLikes()   
+  getCountLikes()
+  if(useTokenStore().logined) {
+    getLikeStatus()
+  }
+  window.setInterval(getCountLikes, 10000)
 })
 </script>
 
 <template>
   <div v-if="useTokenStore().logined">
-    <div v-if="getLikeStatus() == 1">
-      <v-icon :size="size">{{ 'mdi-heart' }}</v-icon>
+    <div v-if="userLikeStatus == 1">
+      <button @click="changeLikeStatus()">
+        <v-icon>{{ 'mdi-heart' }}</v-icon>
+      </button>
+      {{ countLikes }}
     </div>
     <div v-else>
+      <button @click="changeLikeStatus()">
+        <v-icon>{{ 'mdi-heart-outline' }}</v-icon>
+      </button>
       {{ countLikes }}
-      <v-icon :size="size">{{ 'mdi-heart-outline' }}</v-icon>
     </div>
-  </div> 
+  </div>
   <div v-else>
-    CANTLIKES
+    <v-icon>{{ 'mdi-heart-outline' }}</v-icon>
+    {{ countLikes }}
   </div>
 </template>
