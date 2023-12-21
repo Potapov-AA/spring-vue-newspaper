@@ -67,7 +67,7 @@ function hideContent(id) {
             {{ date.getDate() }}-{{ date.getMonth() + 1 }}-{{ date.getFullYear() }}
             {{ date.getHours() }}:{{ date.getMinutes() }}
           </p>
-          <LikeComponent/>
+          <LikeComponent v-bind:id="props.article.id"/>
         </div>
       </div>
     </div>
