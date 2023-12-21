@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 
 import LikeComponent from '@/components/LikeComponent.vue'
+import CommentComponent from '@/components/CommentComponent.vue'
+
 
 const props = defineProps({
   article: Object
@@ -62,14 +64,16 @@ function hideContent(id) {
         >
           Показать меньше
         </button>
+
         <div class="d-flex align-center">
           <p align="right" class="mr-2">
             {{ date.getDate() }}-{{ date.getMonth() + 1 }}-{{ date.getFullYear() }}
-            {{ date.getHours() }}:{{ date.getMinutes() }}
+            {{ date.getHours() }}:<span v-if="date.getMinutes() < 10">0{{ date.getMinutes() }}</span><span v-else>{{ date.getMinutes() }}</span>
           </p>
           <LikeComponent v-bind:id="props.article.id"/>
         </div>
       </div>
+      <CommentComponent v-bind:id="props.article.id"/>
     </div>
   </v-card>
 </template>
