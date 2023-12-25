@@ -1,122 +1,85 @@
 <script setup>
 import { useTokenStore, ROLES } from '@/stores/token'
+// import { useArticleStore } from '@/stores/articles'
 import { ref } from 'vue'
 
 const dialog = ref(false)
+
+const title = ref('')
+const themes = ref('')
+const text = ref('')
+const image = ref()
+
+function addArticle(title, themes, text, image) {
+    console.log(title)
+    console.log(image)
+}
 </script>
 
 <template>
-  <div class="text-center">
-    <v-btn 
-        v-if="useTokenStore().role == ROLES.ADMIN"
-        color="lime-lighten-5" 
-        @click="dialog = true"
-        class="mx-2"
-    >
-        Добавить статью
-    </v-btn>
+    <div>
+        <v-btn 
+            v-if="useTokenStore().role == ROLES.ADMIN"
+            color="lime-lighten-5" 
+            @click="dialog = true"
+            class="mx-2"
+        >
+            Добавить статью
+        </v-btn>
 
-    <v-dialog 
-        v-model="dialog" 
-        fullscreen
-        :scrim="false"
-        transition="dialog-bottom-transition"
-    >
-        
-    <v-card>
-        <v-card-title>
-          <span class="text-h5">User Profile</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal first name*"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal middle name"
-                  hint="example of helper text only on focus"
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal last name*"
-                  hint="example of persistent helper text"
-                  persistent-hint
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Email*"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Age*"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-autocomplete
-                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                  label="Interests"
-                  multiple
-                ></v-autocomplete>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="dialog = false"
-          >
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        <v-dialog 
+            v-model="dialog" 
+            fullscreen
+            :scrim="false"
+            transition="dialog-bottom-transition"
+        >
+            
+        <v-card>
+            <v-card-title class="d-flex justify-center mt-5">
+                <span class="text-h5">Добавление новой статьи</span>
+            </v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-text-field
+                        v-model = title
+                        label="Название"
+                        placeholder="Человек-Паук снова актакует!"
+                    />
+                    <v-text-field
+                        v-model = themes
+                        label="Темы"
+                        placeholder="Паук; DC; Marvel"
+                    />
+                    <v-textarea
+                        v-model = text
+                        label="Текст"    
+                    />
+                    <v-file-input 
+                        v-model = image
+                        label="Изображение"
+                    />
+                </v-container>
+            </v-card-text>
+            <v-card-actions  class="d-flex justify-end mb-15 mr-15">
+                <v-btn
+                    color="red-darken-1"
+                    variant="text"
+                    @click="dialog = false"
+                >
+                    Отмена
+                </v-btn>
+                <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="() => {
+                        dialog = false
+                        addArticle(title, themes, text, image)
+                    }"
+                >
+                    Добавить
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+        </v-dialog>
   </div>
 </template>
