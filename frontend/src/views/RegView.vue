@@ -12,15 +12,17 @@ const password = ref('')
 const confirmPassword = ref('')
 
 async function registration(firstname, lastname, email, password, confPassword) {
-  await axios
-    .post('http://localhost:8081/api/registration', {
+  await axios({
+    url: 'http://localhost:8081/api/registration',
+    method: 'post',
+    data: {
       firstname: firstname,
       lastname: lastname,
       email: email,
       password: password,
-      confirmPassword: confPassword,
-      
-    })
+      confirmPassword: confPassword
+    }
+  })
     .then((response) => {
       {
         responseMessage.value = response.data.message
@@ -40,24 +42,17 @@ async function registration(firstname, lastname, email, password, confPassword) 
       <v-form>
         <h2 align="center" class="mb-3">РЕГИСТРАЦИЯ</h2>
 
-        <v-text-field 
-          v-model="firstname" 
-          type="text" 
-          label="Имя" 
-          placeholder="Иван" 
-        />
+        <v-text-field v-model="firstname" type="text" label="Имя" placeholder="Иван" />
         <v-text-field 
           v-model="lastname" 
           type="text" 
           label="Фамилия" 
-          placeholder="Иванов" 
-        />
+          placeholder="Иванов" />
         <v-text-field 
           v-model="email" 
           type="email" 
           label="Почта" 
-          placeholder="johndoe@gmail.com" 
-        />
+          placeholder="johndoe@gmail.com" />
         <v-text-field
           v-model="password"
           type="password"
@@ -71,14 +66,22 @@ async function registration(firstname, lastname, email, password, confPassword) 
           placeholder="Подтвердите пароль"
         />
 
-        <p align="center" :class="{'errorMessage': !isSuccess, 'successMessage': isSuccess, 'mb-4': true}">{{ responseMessage }}</p>
+        <p align="center" :class="{ errorMessage: !isSuccess, successMessage: isSuccess, 'mb-4': true }">
+          {{ responseMessage }}
+        </p>
 
-        <v-btn @click="registration(firstname, lastname, email, password, confirmPassword)" block class="mt-2">Войти</v-btn>
+        <v-btn
+          @click="registration(firstname, lastname, email, password, confirmPassword)"
+          block
+          class="mt-2"
+        >
+          Войти
+        </v-btn>
 
         <div class="mt-4 d-flex justify-space-between">
-            <router-link :to="{ name: 'login' }">Назад</router-link>
-            <router-link :to="{ name: 'home' }">На главную</router-link>
-          </div>
+          <router-link :to="{ name: 'login' }">Назад</router-link>
+          <router-link :to="{ name: 'home' }">На главную</router-link>
+        </div>
       </v-form>
     </v-sheet>
   </v-container>

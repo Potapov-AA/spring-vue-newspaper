@@ -9,8 +9,14 @@ const email = ref('')
 const password = ref('')
 
 async function login(email, password) {
-  await axios
-    .post('http://localhost:8081/api/auth', { email: email, password: password })
+  await axios({
+    url: 'http://localhost:8081/api/auth',
+    method: 'post',
+    data: {
+      email: email,
+      password: password
+    }
+  })
     .then((response) => {
       {
         useTokenStore().rememberToken(response.data.token)
@@ -50,7 +56,7 @@ function exit() {
             placeholder="Введите пароль"
           />
           <p class="errorMessage mb-4">{{ responseMessage }}</p>
-          <v-btn @click="login(email, password)" block class="mt-2">Войти</v-btn>
+          <v-btn @click="login(email, password)" block class="mt-2"> Войти </v-btn>
           <div class="mt-4 d-flex justify-space-between">
             <router-link :to="{ name: 'home' }">Назад</router-link>
             <router-link :to="{ name: 'reg' }">Регистрация</router-link>

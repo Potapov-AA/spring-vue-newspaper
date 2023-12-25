@@ -3,16 +3,8 @@ import axios from 'axios'
 import { useArticleStore } from '@/stores/articles'
 import { useTokenStore } from '../stores/token'
 import { onMounted, ref } from 'vue'
-
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
-
-const isArticles = ref(false)
-
-function updateArticle() {
-  useArticleStore().getArticles()
-  isArticles.value = useArticleStore().articles.length > 0 ? true : false
-}
 
 async function checkToken() {
   await axios({
@@ -21,15 +13,22 @@ async function checkToken() {
     headers: {
       Authorization: useTokenStore().token
     }
+  }).catch(() => {
+    useTokenStore().forgetToken()
   })
-    .catch(() => {
-      useTokenStore().forgetToken()
-    })
+}
+
+const isArticles = ref(false)
+
+function updateArticle() {
+  useArticleStore().getArticles()
+  isArticles.value = useArticleStore().articles.length > 0 ? true : false
 }
 
 onMounted(async () => {
   checkToken()
   await useArticleStore().getArticles()
+
   isArticles.value = useArticleStore().articles.length > 0 ? true : false
 
   window.setInterval(updateArticle, 60000)
