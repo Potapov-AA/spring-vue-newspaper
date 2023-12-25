@@ -77,7 +77,14 @@ public class LikeService {
 
 		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
 	}
-	
+
+	/**
+	 * Получение количества лайков
+	 * 
+	 * @param articleId - индитификатор статьи
+	 * @return LikeRespone(countLike:int, userStatus:-1 (доступно не авторизованым
+	 *         пользователям))
+	 */
 	public ResponseEntity<?> getCountLikes(int articleId) {
 		LikeResponse likeResponse = new LikeResponse();
 
