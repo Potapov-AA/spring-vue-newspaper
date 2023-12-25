@@ -49,8 +49,13 @@ const date = ref(new Date(props.article.date))
         <div class="d-flex align-center">
           <p align="right" class="mr-2">
             {{ date.getDate() }}-{{ date.getMonth() + 1 }}-{{ date.getFullYear() }}
-            {{ date.getHours() }}:<span v-if="date.getMinutes() < 10">0{{ date.getMinutes() }}</span
-            ><span v-else>{{ date.getMinutes() }}</span>
+            {{ date.getHours() }}:
+            <span v-if="date.getMinutes() < 10">
+              0{{ date.getMinutes() }}
+            </span>
+            <span v-else>
+              {{ date.getMinutes() }}
+            </span>
           </p>
           <LikeComponent v-bind:id="props.article.id" />
         </div>

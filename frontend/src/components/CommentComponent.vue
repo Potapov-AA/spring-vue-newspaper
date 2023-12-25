@@ -8,7 +8,6 @@ const props = defineProps({
   id: Number
 })
 
-const textComment = ref('')
 const countCommentShow = ref(3)
 
 const comments = ref([])
@@ -54,6 +53,8 @@ function getNewDate(date) {
   return result
 }
 
+const textComment = ref('')
+
 async function addComment(textComment) {
   await axios({
     url: 'http://localhost:8081/api/addcomment/' + props.id,
@@ -86,11 +87,11 @@ onMounted(() => {
     Показать комментарии ({{ comments.length }})
   </div>
   <div
+    :id="'btn-hide-comment-' + props.id"
     @click="() => {
       hideContent('article-comment-' + props.id, 'btn-show-comment-' + props.id, 'btn-hide-comment-' + props.id, 'mb-3') 
       countCommentShow = 3
     }"
-    :id="'btn-hide-comment-' + props.id"
     class="hidden"
     style="color: blue"
   >
@@ -107,10 +108,14 @@ onMounted(() => {
         </div>
       </div>
       <div v-if="countCommentShow < comments.length" class="mb-3">
-        <p @click="countCommentShow += 3" align="center" style="color: royalblue;">Показать еще</p>
+        <p @click="countCommentShow += 3" align="center" style="color: royalblue;">
+          Показать еще
+        </p>
       </div>
     </div>
-    <div v-else class="mb-3">Комментариев пока что нет, будь первым</div>
+    <div v-else class="mb-3">
+      Комментариев пока что нет, будь первым
+    </div>
 
     <div v-if="useTokenStore().logined">
       <v-form>
@@ -122,10 +127,14 @@ onMounted(() => {
           row-height="15"
         />
         <div class="d-flex justify-end">
-          <v-btn @click="addComment(textComment)" class="mb-3">Отправить</v-btn>
+          <v-btn @click="addComment(textComment)" class="mb-3">
+            Отправить
+          </v-btn>
         </div>
       </v-form>
     </div>
-    <div v-else class="mb-3">Авторизуйтесь, чтобы оставить комментарий</div>
+    <div v-else class="mb-3">
+      Авторизуйтесь, чтобы оставить комментарий
+    </div>
   </div>
 </template>
