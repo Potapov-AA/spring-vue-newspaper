@@ -12,6 +12,7 @@ const countItemsOnPage = ref(3)
 function nextPage() {
   pageNumber.value++
 }
+
 function prevPage() {
   pageNumber.value--
 }
@@ -32,9 +33,13 @@ const paginatedData = computed(() => {
 <template>
   <div class="py-5 px-5">
     <div class="d-flex align-center justify-center mb-4">
-      <v-btn @click="prevPage" :disabled="pageNumber === 0">Назад</v-btn>
+      <v-btn @click="prevPage" :disabled="pageNumber === 0">
+        Назад
+      </v-btn>
       <p class="mx-5">{{ pageNumber + 1 }}</p>
-      <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1">Далее</v-btn>
+      <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1">
+        Далее
+      </v-btn>
     </div>
     <div v-for="item in paginatedData" :key="item.id" class="mb-4">
       <ArticleComponent v-bind:article="item" />

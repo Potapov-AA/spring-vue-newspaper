@@ -10,7 +10,6 @@ const props = defineProps({
 const userLikeStatus = ref(-1)
 const countLikes = ref(0)
 
-// Получение статуса лайка
 async function getLikeStatus() {
   await axios({
     url: 'http://localhost:8081/api/likestatus/' + props.id,
@@ -27,7 +26,6 @@ async function getLikeStatus() {
     })
 }
 
-// Изменение статуса лайка
 async function changeLikeStatus() {
   await axios({
     url: 'http://localhost:8081/api/addremovelike/' + props.id,
@@ -47,7 +45,6 @@ async function changeLikeStatus() {
     })
 }
 
-// Получение количества лайков
 async function getCountLikes() {
   await axios({
     url: 'http://localhost:8081/api/countlikes/' + props.id,
