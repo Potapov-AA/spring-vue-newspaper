@@ -31,7 +31,7 @@ const paginatedData = computed(() => {
 
 <template>
   <div class="py-5 px-5">
-    <div v-if="pageCount > 1" class="d-flex align-center justify-center mb-4">
+    <div class="d-flex align-center justify-center mb-4">
       <v-btn @click="prevPage" :disabled="pageNumber === 0">Назад</v-btn>
       <p class="mx-5">{{ pageNumber + 1 }}</p>
       <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1">Далее</v-btn>
