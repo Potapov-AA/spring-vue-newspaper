@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
 import { showContent, hideContent } from '@/js/functions.js'
+import { useTokenStore, ROLES } from '@/stores/token'
+import { ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
 
@@ -18,16 +19,22 @@ const date = ref(new Date(props.article.date))
       <img v-else src="/default-news.png" width="200" height="200" />
     </div>
     <div>
-      <div class="d-flex">
-        <b v-for="tag in props.article.themes" :key="tag" class="mx-1">
-          #<i>{{ tag }}</i>
-        </b>
+      <div class="d-flex justify-space-between align-center mr-3">
+        <div class="d-flex">
+          <b v-for="tag in props.article.themes" :key="tag" class="mx-1">
+            #<i>{{ tag }}</i>
+          </b>
+        </div>
+        <div>
+          <v-icon v-if="useTokenStore().role == ROLES.ADMIN" class="mr-2">{{ 'mdi-pen' }}</v-icon>
+          <v-icon v-if="useTokenStore().role == ROLES.ADMIN" color="red">{{ 'mdi-delete' }}</v-icon>   
+        </div>     
       </div>
-      <h2>{{ props.article.title }}</h2>
-      <div>
-        {{ props.article.text.slice(0, 150) }}
+        <h2 class="text-justify">{{ props.article.title }}</h2>      
+      <div class="text-justify">
+        {{ props.article.text.slice(0, 250) }}
         <span :id="'article-' + props.article.id" class="hidden">
-          {{ props.article.text.slice(150) }}
+          {{ props.article.text.slice(250) }}
         </span>
       </div>
       <div class="my-3 mr-2 d-flex align-center justify-space-between">

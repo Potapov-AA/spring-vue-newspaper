@@ -1,5 +1,6 @@
 <script setup>
 import { useTokenStore } from '@/stores/token'
+import NewArticleComponent from '@/components/NewArticleComponent.vue'
 </script>
 
 <template>
@@ -11,6 +12,7 @@ import { useTokenStore } from '@/stores/token'
           {{ useTokenStore().firstname }}
           {{ useTokenStore().lastname }}
         </div>
+        <NewArticleComponent/>
         <v-btn @click="useTokenStore().forgetToken()" type="button">
           Выход
         </v-btn>
