@@ -1,5 +1,6 @@
 <script setup>
 import axios from 'axios'
+import { showContent, hideContent } from '@/js/functions.js'
 import { useTokenStore } from '@/stores/token'
 import { onMounted, ref } from 'vue'
 
@@ -9,26 +10,6 @@ const props = defineProps({
 
 const textComment = ref('')
 const countCommentShow = ref(3)
-
-function showMoreContent() {
-  var btnShow = document.getElementById('btn-show-comment-' + props.id)
-  var btnHide = document.getElementById('btn-hide-comment-' + props.id)
-  var coomentBlock = document.getElementById('article-comment-' + props.id)
-
-  btnHide.className = 'mb-3'
-  btnShow.className = 'hidden'
-  coomentBlock.className = ''
-}
-
-function hideContent() {
-  var btnShow = document.getElementById('btn-show-comment-' + props.id)
-  var btnHide = document.getElementById('btn-hide-comment-' + props.id)
-  var coomentBlock = document.getElementById('article-comment-' + props.id)
-
-  btnHide.className = 'hidden'
-  btnShow.className = 'mb-3'
-  coomentBlock.className = 'hidden'
-}
 
 const comments = ref([])
 
@@ -96,12 +77,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div @click="showMoreContent()" :id="'btn-show-comment-' + props.id" class="" style="color: blue">
+  <div 
+    :id="'btn-show-comment-' + props.id"  
+    @click="showContent('article-comment-' + props.id, 'btn-show-comment-' + props.id, 'btn-hide-comment-' + props.id, 'mb-3')"
+    class="" 
+    style="color: blue" 
+  >
     Показать комментарии ({{ comments.length }})
   </div>
   <div
     @click="() => {
-      hideContent() 
+      hideContent('article-comment-' + props.id, 'btn-show-comment-' + props.id, 'btn-hide-comment-' + props.id, 'mb-3') 
       countCommentShow = 3
     }"
     :id="'btn-hide-comment-' + props.id"
