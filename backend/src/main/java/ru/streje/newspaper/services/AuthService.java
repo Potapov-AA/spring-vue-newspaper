@@ -24,18 +24,20 @@ public class AuthService {
 	private final UserService userService;
 	private final JwtTokenUtils jwtTokenUtils;
 	private final AuthenticationManager authenticationManager;
-	
+
 	/**
 	 * Метод получения токена авторизации
+	 * 
 	 * @param authRequest - параметры для получения токена
 	 * @return сообщение содержащее токен или сообщение о невалидности данных
 	 */
-	public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+	public ResponseEntity<?> createAuthToken(JwtRequest authRequest) {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"),
+			return new ResponseEntity<>(
+					new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"),
 					HttpStatus.UNAUTHORIZED);
 		}
 
@@ -45,13 +47,15 @@ public class AuthService {
 		String token = jwtTokenUtils.generateToken(userDetails, firstName, lastName);
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
-	
+
 	/**
 	 * Метод регистрации нового пользователя
+	 * 
 	 * @param registrationUserRequest - параметры для рагистрации пользователя
-	 * @return сообщение о существовании пользователя с такими данными или сообщение о успешности создания пользователя
+	 * @return сообщение о существовании пользователя с такими данными или сообщение
+	 *         о успешности создания пользователя
 	 */
-	public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
+	public ResponseEntity<?> createNewUser(RegistrationUserRequest registrationUserRequest) {
 		if (!registrationUserRequest.getPassword().equals(registrationUserRequest.getConfirmPassword())) {
 			return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"),
 					HttpStatus.BAD_REQUEST);
@@ -65,5 +69,15 @@ public class AuthService {
 
 		userService.createNewUser(registrationUserRequest);
 		return new ResponseEntity<>(new SuccesMessage("Регистрация прошла успешно"), HttpStatus.OK);
+	}
+
+	/**
+	 * Метод проверки состояния токена
+	 * 
+	 * @param token - токен для проверки
+	 * @return статус OK, если токен активен, иначе выкинет ошибку 401
+	 */
+	public ResponseEntity<?> checkTokenStatus(String token) {
+		return new ResponseEntity<>("Токен активен", HttpStatus.OK);
 	}
 }

@@ -47,6 +47,7 @@ public class SecurityConfig {
 			.requestMatchers("/addcomment/{articleId}").authenticated()
 			.requestMatchers("/addremovelike/{articleId}").authenticated()
 			.requestMatchers("/likestatus/{articleId}").authenticated()
+			.requestMatchers("/checktoken").authenticated()
 			.requestMatchers("/newarticle").hasRole("ADMIN")
 			.requestMatchers("/article/{id}").hasRole("ADMIN")
 			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
