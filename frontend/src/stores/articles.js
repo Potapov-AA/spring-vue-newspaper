@@ -31,9 +31,19 @@ export const useArticleStore = defineStore(STORE_NAME, {
       }
     },
 
-    async addArticles() {
+    async addArticles(title, text, image, themes, token) {
       await axios({
-        
+        url: '127.0.0.1:8081/api/newarticle',
+        method: 'post',
+        data: {
+          title: title,
+          text: text,
+          image: image,
+          themes: themes
+        },
+        headers: {
+          Authorization: token
+        }
       })
     }
   }
