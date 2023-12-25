@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
 
 export const ROLES = {
   ADMIN: 'ROLE_ADMIN',
@@ -71,6 +72,18 @@ export const useTokenStore = defineStore(STORE_NAME, {
       this.lastname = ''
 
       localStorage.removeItem('token')
+    },
+
+    async checkTokenStatus() {
+      await axios({
+        url: 'http://localhost:8081/api/checktoken',
+        method: 'post',
+        headers: {
+          Authorization: this.token
+        }
+      }).catch(() => {
+        this.forgetToken()
+      })
     }
   }
 })
