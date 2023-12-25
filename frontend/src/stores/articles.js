@@ -12,8 +12,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
   actions: {
     async getArticles() {
       try {
-        await axios
-          .get('http://localhost:8081/api/articles')
+        await axios({
+          url: 'http://localhost:8081/api/articles',
+          method: 'get'
+        })
           .then((response) => {
             {
               this.articles = response.data.reverse()
@@ -27,6 +29,12 @@ export const useArticleStore = defineStore(STORE_NAME, {
       } catch (error) {
         this.errorMessage = 'Идет загрузка статьей...'
       }
+    },
+
+    async addArticles() {
+      await axios({
+        
+      })
     }
   }
 })
