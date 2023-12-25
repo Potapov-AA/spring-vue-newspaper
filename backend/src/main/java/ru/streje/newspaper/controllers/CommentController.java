@@ -18,15 +18,17 @@ import ru.streje.newspaper.services.CommentService;
 @RequiredArgsConstructor
 public class CommentController {
 	private final CommentService commentService;
-	
+
 	@GetMapping("/comments/{articleId}")
-	public ResponseEntity<?> getComments(@PathVariable("articleId") Integer articleId) {
+	public ResponseEntity<?> getComments(@PathVariable("articleId") Integer articleId) {	
 		return commentService.getComments(articleId);
 	}
-	
+
 	@PostMapping("/addcomment/{articleId}")
-	public ResponseEntity<?> postComment(@RequestHeader("authorization") String token, @PathVariable("articleId") Integer articleId, @RequestBody CommentRequest commentRequest) {
+	public ResponseEntity<?> postComment(@RequestHeader("authorization") String token,
+			@PathVariable("articleId") Integer articleId, @RequestBody CommentRequest commentRequest) {
+		
 		return commentService.addComment(token.substring(7), articleId, commentRequest);
 	}
-	
+
 }

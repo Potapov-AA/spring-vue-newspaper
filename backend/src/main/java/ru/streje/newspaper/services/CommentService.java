@@ -1,6 +1,5 @@
 package ru.streje.newspaper.services;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -31,6 +30,7 @@ public class CommentService {
 
 	/**
 	 * Метод получения всех комментариев определенной статьи
+	 * 
 	 * @param articleId - индитификатор статьи
 	 * @return CommentResponse или сообщение о отсутствии комментариев
 	 */
@@ -57,11 +57,12 @@ public class CommentService {
 					HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/**
 	 * Метод добавления комментариев
-	 * @param token - токен авторизации
-	 * @param articleId - индитификатор статьи
+	 * 
+	 * @param token          - токен авторизации
+	 * @param articleId      - индитификатор статьи
 	 * @param commentRequest - параметры запроса
 	 * @return сообщение о успешности или провале добавления комментария
 	 */
@@ -71,7 +72,7 @@ public class CommentService {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
 		Article article = articleService.getArticle(articleId);
-		
+
 		comment.setArticle(article);
 		comment.setText(commentRequest.getText());
 		comment.setDate(new Date());

@@ -11,13 +11,13 @@ import ru.streje.newspaper.messages.ErrorMessage;
 
 @ControllerAdvice
 public class DefaultAdvice {
-	
+
 	@ResponseBody
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorMessage> validateExeptions(MethodArgumentNotValidException e) {
-		
+
 		String message = e.getBindingResult().getFieldError().getDefaultMessage();
-		
+
 		return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), message), HttpStatus.BAD_REQUEST);
 	}
 }

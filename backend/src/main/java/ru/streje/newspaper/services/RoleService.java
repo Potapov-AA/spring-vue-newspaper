@@ -10,9 +10,10 @@ import ru.streje.newspaper.repositories.RoleRepository;
 @RequiredArgsConstructor
 public class RoleService {
 	private final RoleRepository roleRepository;
-	
+
 	/**
 	 * Получение экземпляр класса Role с названием USER
+	 * 
 	 * @return экземпляр класса Role
 	 */
 	public Role getUserRole() {

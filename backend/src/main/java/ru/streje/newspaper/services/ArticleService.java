@@ -24,7 +24,7 @@ public class ArticleService {
 	private final ArticleRepository articleRepository;
 
 	private final ThemeService themeService;
-	
+
 	private final int secondsIn24Houres = 86400;
 
 	/**
@@ -33,7 +33,7 @@ public class ArticleService {
 	 * @param article - экземпляр класса Article
 	 * @return экземпляр класса ArticleResponse
 	 */
-	private ArticleResponse fillArticleResponse(Article article) {	
+	private ArticleResponse fillArticleResponse(Article article) {
 		ArticleResponse articleResponse = new ArticleResponse();
 
 		articleResponse.setId(article.getId());
@@ -84,18 +84,20 @@ public class ArticleService {
 		List<ArticleResponse> articles = new ArrayList<>();
 
 		Iterable<Article> iArticles = articleRepository.findAll();
-		
-		for (Article article : iArticles) {			
-			if ((new Date().getTime() - article.getDate().getTime()) / 100 <= secondsIn24Houres) {
-				ArticleResponse articleResponse = fillArticleResponse(article);
-				articles.add(articleResponse);
-			}
+
+		for (Article article : iArticles) {
+			//// УБРАТЬ КОММЕНТАРИИ КОГДА БУДЕТ ПОЛНОСТЬЮ ГОТОВ ФУНКЦИОНАЛ
+//			if ((new Date().getTime() - article.getDate().getTime()) / 100 <= secondsIn24Houres) {
+			ArticleResponse articleResponse = fillArticleResponse(article);
+			articles.add(articleResponse);
+//			}
 		}
 
 		if (articles.size() > 0) {
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "За последнии 24 часа статьей не найдено"),
+			return new ResponseEntity<>(
+					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "За последнии 24 часа статьей не найдено"),
 					HttpStatus.NOT_FOUND);
 		}
 	}
@@ -118,7 +120,6 @@ public class ArticleService {
 					HttpStatus.NOT_FOUND);
 		}
 	}
-	
 
 	/**
 	 * Метод добавления новой статьи в БД
@@ -203,10 +204,11 @@ public class ArticleService {
 		}
 
 	}
-	
+
 	/**
 	 * Метод получение экземпляра Article по id
-	 * @param id - индитификатор 
+	 * 
+	 * @param id - индитификатор
 	 * @return экземпляр Article
 	 */
 	public Article getArticle(int id) {
@@ -216,10 +218,11 @@ public class ArticleService {
 		} catch (Exception e) {
 			return null;
 		}
-	}	
-	
+	}
+
 	/**
 	 * Метод сохранения экземпляра Article в БД
+	 * 
 	 * @param article - экземпляр Article
 	 */
 	public void saveArticle(Article article) {

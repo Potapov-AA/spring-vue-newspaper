@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Comment;
 
-public interface CommentRepository extends CrudRepository<Comment, Integer>{
+public interface CommentRepository extends CrudRepository<Comment, Integer> {
 	Collection<Comment> findByArticle(Article article);
 }

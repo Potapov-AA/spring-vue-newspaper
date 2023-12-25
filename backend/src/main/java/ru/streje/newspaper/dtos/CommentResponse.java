@@ -1,6 +1,5 @@
 package ru.streje.newspaper.dtos;
 
-
 import java.util.Date;
 
 import lombok.Data;

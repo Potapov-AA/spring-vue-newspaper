@@ -25,24 +25,26 @@ public class ArticleController {
 	public ResponseEntity<?> getArticles() {
 		return articleService.getAllArticle();
 	}
-	
+
 	@GetMapping("/article/{id}")
 	public ResponseEntity<?> getArticle(@PathVariable("id") Integer id) {
 		return articleService.getArticleResponse(id);
 	}
-	
+
 	@PostMapping("/newarticle")
 	public ResponseEntity<?> postArticle(@Valid @RequestBody ArticleRequest articleRequest) {
 		return articleService.addNewArticle(articleRequest);
 	}
-	
+
 	@DeleteMapping("/deletearticle/{id}")
 	public ResponseEntity<?> deleteArticle(@PathVariable("id") Integer id) {
 		return articleService.deleteArticle(id);
 	}
-	
+
 	@PutMapping("/changearticle/{id}")
-	public ResponseEntity<?> putArticle(@Valid @RequestBody ArticleRequest articleRequest, @PathVariable("id") Integer id) {
+	public ResponseEntity<?> putArticle(@Valid @RequestBody ArticleRequest articleRequest,
+			@PathVariable("id") Integer id) {
+		
 		return articleService.changeAtricle(articleRequest, id);
 	}
 }
