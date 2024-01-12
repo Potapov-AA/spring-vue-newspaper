@@ -1,6 +1,7 @@
 <script setup>
 import { showContent, hideContent } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
+import { useArticleStore } from '@/stores/articles'
 import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
@@ -20,6 +21,11 @@ function base64ToImage(base64Image, articleId) {
     document.getElementById('imgElem'+articleId).appendChild(image)
   }
   
+}
+
+async function deleteArticle(id, token) {
+  await useArticleStore().deleteArticle(id, token)
+  await useArticleStore().getArticles()
 }
 
 onMounted(() => {
@@ -45,7 +51,10 @@ onMounted(() => {
         </div>
         <div>
           <v-icon v-if="useTokenStore().role == ROLES.ADMIN" class="mr-2">{{ 'mdi-pen' }}</v-icon>
-          <v-icon v-if="useTokenStore().role == ROLES.ADMIN" color="red">{{ 'mdi-delete' }}</v-icon>   
+          
+          <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
+            <v-icon color="red" @click="deleteArticle(props.article.id, useTokenStore().token)">{{ 'mdi-delete' }}</v-icon>   
+          </v-btn>
         </div>     
       </div>
         <h2 class="text-justify">{{ props.article.title }}</h2>      
