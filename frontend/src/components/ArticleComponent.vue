@@ -1,7 +1,7 @@
 <script setup>
 import { showContent, hideContent } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
 
@@ -10,15 +10,33 @@ const props = defineProps({
 })
 
 const date = ref(new Date(props.article.date))
+
+function base64ToImage(base64Image, articleId) {
+  let image = new Image()
+  if(base64Image != null) {
+    image.src = base64Image
+    image.width = 200
+    image.height = 200
+    document.getElementById('imgElem'+articleId).appendChild(image)
+  }
+  
+}
+
+onMounted(() => {
+  base64ToImage(props.article.image, props.article.id)
+})
 </script>
 
 <template>
-  <v-card class="d-flex pt-3 px-2 border solid">
+  <div class="d-flex pt-3 px-2 border solid w-auto" style="max-width: 1100px;">
     <div>
-      <img v-if="props.article.image === null" src="/default-news.png" width="200" height="200" />
-      <img v-else src="/default-news.png" width="200" height="200" />
+      <div v-if="props.article.image === null">
+        <img  src="/default-news.png" width="200" height="200" />
+      </div>
+      <div :id="'imgElem'+props.article.id" v-else> 
+      </div>
     </div>
-    <div>
+    <div class="w-100">
       <div class="d-flex justify-space-between align-center mr-3">
         <div class="d-flex">
           <b v-for="tag in props.article.themes" :key="tag" class="mx-1">
@@ -69,5 +87,5 @@ const date = ref(new Date(props.article.date))
       </div>
       <CommentComponent v-bind:id="props.article.id" />
     </div>
-  </v-card>
+  </div>
 </template>
