@@ -1,18 +1,35 @@
 <script setup>
 import { useTokenStore, ROLES } from '@/stores/token'
-// import { useArticleStore } from '@/stores/articles'
+import { useArticleStore } from '@/stores/articles'
 import { ref } from 'vue'
-
-const dialog = ref(false)
 
 const title = ref('')
 const themes = ref('')
 const text = ref('')
 const image = ref()
 
-function addArticle(title, themes, text, image) {
-    console.log(title)
-    console.log(image)
+const message = ref('')
+
+const showAddArticleDialogWindow = ref(false)
+
+async function addArticle(title, themesString, text, imageFile=null) {
+    let themesArray = []
+    if(themesString != '') {
+        themesArray = themesString.split(';')
+    }
+
+    if (imageFile == null) {
+        message.value = await useArticleStore().addArticle(title, text, null, themesArray, useTokenStore().token)
+        await useArticleStore().getArticles()
+    } else {
+        var reader = new FileReader()
+        reader.readAsDataURL(imageFile[0])
+        reader.onload = async function () {
+            let imageToBase64 = reader.result
+            message.value = await useArticleStore().addArticle(title, text, imageToBase64, themesArray, useTokenStore().token)
+            await useArticleStore().getArticles()
+        }
+    }
 }
 </script>
 
@@ -21,14 +38,14 @@ function addArticle(title, themes, text, image) {
         <v-btn 
             v-if="useTokenStore().role == ROLES.ADMIN"
             color="lime-lighten-5" 
-            @click="dialog = true"
+            @click="showAddArticleDialogWindow = true"
             class="mx-2"
         >
             Добавить статью
         </v-btn>
 
         <v-dialog 
-            v-model="dialog" 
+            v-model="showAddArticleDialogWindow" 
             fullscreen
             :scrim="false"
             transition="dialog-bottom-transition"
@@ -58,21 +75,21 @@ function addArticle(title, themes, text, image) {
                         v-model = image
                         label="Изображение"
                     />
+                    <p>{{ message }}</p>
                 </v-container>
             </v-card-text>
             <v-card-actions  class="d-flex justify-end mb-15 mr-15">
                 <v-btn
                     color="red-darken-1"
                     variant="text"
-                    @click="dialog = false"
+                    @click="showAddArticleDialogWindow = false"
                 >
-                    Отмена
+                    Закрыть
                 </v-btn>
                 <v-btn
                     color="blue-darken-1"
                     variant="text"
                     @click="() => {
-                        dialog = false
                         addArticle(title, themes, text, image)
                     }"
                 >
