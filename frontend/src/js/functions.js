@@ -18,4 +18,16 @@ function hideContent(elementId, btnShowId, btnHideId, btnClass) {
   btnShow.className = btnClass
 }
 
-export { showContent, hideContent }
+// Функция конвертирования base64 в изображение
+function base64ToImage(base64Image, articleId) {
+  let image = new Image()
+  if(base64Image != null) {
+    image.src = base64Image
+    image.width = 200
+    image.height = 200
+    document.getElementById('imgElem'+articleId).innerHTML = ''
+    document.getElementById('imgElem'+articleId).appendChild(image)
+  }
+}
+
+export { showContent, hideContent, base64ToImage }
