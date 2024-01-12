@@ -1,27 +1,18 @@
 <script setup>
-import { showContent, hideContent } from '@/js/functions.js'
+import { showContent, hideContent, base64ToImage } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
 import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
+import UpdateArticleComponent from '@/components/UpdateArticleComponent.vue'
+
 
 const props = defineProps({
   article: Object
 })
 
 const date = ref(new Date(props.article.date))
-
-function base64ToImage(base64Image, articleId) {
-  let image = new Image()
-  if(base64Image != null) {
-    image.src = base64Image
-    image.width = 200
-    image.height = 200
-    document.getElementById('imgElem'+articleId).appendChild(image)
-  }
-  
-}
 
 async function deleteArticle(id, token) {
   await useArticleStore().deleteArticle(id, token)
@@ -39,7 +30,7 @@ onMounted(() => {
       <div v-if="props.article.image === null">
         <img  src="/default-news.png" width="200" height="200" />
       </div>
-      <div :id="'imgElem'+props.article.id" v-else> 
+      <div v-else :id="'imgElem'+props.article.id"> 
       </div>
     </div>
     <div class="w-100">
@@ -49,9 +40,8 @@ onMounted(() => {
             #<i>{{ tag }}</i>
           </b>
         </div>
-        <div>
-          <v-icon v-if="useTokenStore().role == ROLES.ADMIN" class="mr-2">{{ 'mdi-pen' }}</v-icon>
-          
+        <div class="d-flex">
+          <UpdateArticleComponent  v-bind:article="props.article"/>
           <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
             <v-icon color="red" @click="deleteArticle(props.article.id, useTokenStore().token)">{{ 'mdi-delete' }}</v-icon>   
           </v-btn>
