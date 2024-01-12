@@ -6,19 +6,19 @@ const STORE_NAME = 'articles'
 export const useArticleStore = defineStore(STORE_NAME, {
   state: () => ({
     articles: [],
-    errorMessage: ''
+    errorMessage: '',
   }),
 
   actions: {
     async getArticles() {
       try {
         await axios({
-          url: 'http://localhost:8081/api/articles',
+          url: 'http://localhost:8081/api/articles', 
           method: 'get'
         })
           .then((response) => {
             {
-              this.articles = response.data.reverse()
+              this.articles = response.data
               this.errorMessage = ''
             }
           })
@@ -31,9 +31,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       }
     },
 
-    async addArticles(title, text, image, themes, token) {
+    async addArticle(title, text, image, themes, token) {
+      let message = ''
       await axios({
-        url: '127.0.0.1:8081/api/newarticle',
+        url: 'http://localhost:8081/api/newarticle', 
         method: 'post',
         data: {
           title: title,
@@ -45,6 +46,14 @@ export const useArticleStore = defineStore(STORE_NAME, {
           Authorization: token
         }
       })
+        .then((response) => {
+          message = response.data.message
+        })
+        .catch((error) => {
+          message = error.response.data.message
+        })
+
+      return message
     }
   }
 })
