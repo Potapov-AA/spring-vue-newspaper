@@ -30,7 +30,7 @@ public class Article {
 	private String text;
 
 	@Column(name = "image")
-	private byte[] image;
+	private String image;
 
 	@Column(name = "date")
 	private Date date;

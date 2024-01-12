@@ -10,7 +10,7 @@ public class ArticleResponse {
 	Integer id;
 	String title;
 	String text;
-	byte[] image;
+	String image;
 	Date date;
 	List<String> themes;
 	Integer countLikes;
