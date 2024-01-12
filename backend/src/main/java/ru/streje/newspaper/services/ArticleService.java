@@ -84,7 +84,6 @@ public class ArticleService {
 		List<ArticleResponse> articles = new ArrayList<>();
 
 		Iterable<Article> iArticles = articleRepository.findByOrderByIdDesc();
-		
 
 		for (Article article : iArticles) {
 			//// УБРАТЬ КОММЕНТАРИИ КОГДА БУДЕТ ПОЛНОСТЬЮ ГОТОВ ФУНКЦИОНАЛ
