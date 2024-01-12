@@ -54,6 +54,16 @@ export const useArticleStore = defineStore(STORE_NAME, {
         })
 
       return message
-    }
-  }
+    },
+
+    async deleteArticle(id, token) {
+      await axios({
+        url: 'http://localhost:8081/api/deletearticle/'+id,
+        method: 'delete',
+        headers: {
+          Authorization: token
+        }
+      })
+    }  
+  },
 })
