@@ -83,7 +83,8 @@ public class ArticleService {
 	public ResponseEntity<?> getAllArticle() {
 		List<ArticleResponse> articles = new ArrayList<>();
 
-		Iterable<Article> iArticles = articleRepository.findAll();
+		Iterable<Article> iArticles = articleRepository.findByOrderByIdDesc();
+		
 
 		for (Article article : iArticles) {
 			//// УБРАТЬ КОММЕНТАРИИ КОГДА БУДЕТ ПОЛНОСТЬЮ ГОТОВ ФУНКЦИОНАЛ
@@ -134,10 +135,10 @@ public class ArticleService {
 		article.setText(articleRequest.getText());
 		article.setImage(articleRequest.getImage());
 		article.setDate(new Date());
-
+		
 		Collection<Theme> themes = fillThemes(articleRequest);
 		article.setThemes(themes);
-
+		
 		try {
 			articleRepository.save(article);
 			return new ResponseEntity<>(new SuccesMessage("Статья успешно добавлена"), HttpStatus.OK);
