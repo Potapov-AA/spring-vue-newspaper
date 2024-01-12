@@ -11,7 +11,8 @@ public class ArticleRequest {
 	@Size(min = 20, message = "Текст статьи должен быть больше 20 символов")
 	private String text;
 
-	private byte[] image;
-
+	private String image;
+	
+	@Size(min = 1, message = "Статья должна содержать минимум одну тему")
 	private String[] themes;
 }
