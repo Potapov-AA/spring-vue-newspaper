@@ -24,7 +24,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-container class="d-flex fill-height fluid justify-start align-center flex-column">
+  <v-container fluid class="d-flex fill-height fluid justify-start align-center flex-column bck-img">
     <HeaderComponent />
     <div v-if="isArticles">
       <PaginationComponent v-bind:items="useArticleStore().articles" />
@@ -34,3 +34,9 @@ onMounted(async () => {
     </div>
   </v-container>
 </template>
+
+<style scoped>
+.bck-img{
+  background-color: #F8F8FF
+}
+</style>
