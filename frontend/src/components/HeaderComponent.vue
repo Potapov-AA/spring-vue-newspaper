@@ -4,9 +4,9 @@ import NewArticleComponent from '@/components/NewArticleComponent.vue'
 </script>
 
 <template>
-  <v-sheet width="100%" :elevation="4" class="pa-6">
+  <v-sheet width="100%" :elevation="4" class="px-6">
     <div class="d-flex align-center justify-space-between">
-      <p class="title"><b>The Daily Bugle</b></p>
+      <p class="title">The Daily Bugle</p>
       <div v-if="useTokenStore().logined" class="d-flex align-center">
         <div class="mr-4">
           {{ useTokenStore().firstname }}
@@ -32,3 +32,10 @@ import NewArticleComponent from '@/components/NewArticleComponent.vue'
     </div>
   </v-sheet>
 </template>
+
+<style scoped>
+.title {
+  font-family: "SiteTitle";
+  font-size: 100px;
+}
+</style>
