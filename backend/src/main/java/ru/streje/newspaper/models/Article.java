@@ -36,11 +36,14 @@ public class Article {
 	private Date date;
 
 	@ManyToMany
-	@JoinTable(name = "themes_articles", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "theme_id"))
+	@JoinTable(name = "theme_article", 
+		joinColumns = @JoinColumn(name = "article_id"), 
+		inverseJoinColumns = @JoinColumn(name = "theme_id"))
 	private Collection<Theme> themes;
 
 	@ManyToMany
-	@JoinTable(name = "likes", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "likes", 
+		joinColumns = @JoinColumn(name = "article_id"), 
+		inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Collection<User> users;
-
 }
