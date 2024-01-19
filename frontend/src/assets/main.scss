@@ -1,9 +1,12 @@
-$titlefont: 'Montserrat Alternates', 'Vina Sans', sans-serif;
+@font-face {
+  font-family: "SiteTitle"; 
+  // адрес шрифта и тип 
+  src: url("../public/JatmikaTypeface.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+} 
 
-.title {
-  font-family: $titlefont;
-  font-size: 48px;
-}
+
 
 .errorMessage {
   color: red;
