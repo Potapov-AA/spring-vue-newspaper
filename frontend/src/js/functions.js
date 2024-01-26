@@ -59,7 +59,7 @@ async function updateListArticles() {
   console.log("Запретные темы: " + lDislikeThemes)
   
 
-  await useArticleStore().getArticles(lDislikeThemes)
+  await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
 }
 
 export { showContent, hideContent, base64ToImage, updateListArticles }

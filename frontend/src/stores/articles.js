@@ -12,7 +12,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
 
   actions: {
     // Функция удаление запретных тем
-    removeDislikeArticles(dislikeThemes) {
+    removeArticlesWithDislikeThemes(dislikeThemes) {
       let targetsIndex = []
       for(let i in this.articles) {
         for(let j in dislikeThemes) {
@@ -28,9 +28,39 @@ export const useArticleStore = defineStore(STORE_NAME, {
       }
     },
 
-    // TODO сделать функцию сортировки статьей в зависимости от количества любимых тем
+    // Функция сортировки в зависимости от количества любимых тем и даты выхода статьи
+    sortArticlesRelativeLikeThemes(likeThemes) {
+      let lCountLikeThemes = []
+      for(let i in this.articles) {
+        let countThemes = 0
+        for(let j in likeThemes) {
+          if(this.articles[i].themes.find(theme => theme == likeThemes[j].name) != undefined) {
+            countThemes++
+          }
+        }
+        lCountLikeThemes.push({"id":i, "count":countThemes, "date": this.articles[i].date})
+      }
+
+      lCountLikeThemes.sort((a, b) => {
+        if(a.count > b.count) return -1
+        if(a.count < b.count) return 1
+
+        if(new Date(a.date).getTime() > new Date(b.date).getTime()) return -1
+        if(new Date(a.date).getTime() < new Date(b.date).getTime()) return 1
+
+        return 0
+      })
+
+      let sortArticles = []
+      for(let i in lCountLikeThemes){
+        sortArticles.push(this.articles[lCountLikeThemes[i].id])
+      }
+      
+      this.articles = sortArticles
+    },
+
     // Функция формирования списка статьей
-    async getArticles(themes) {
+    async getArticles(dislikeThemes, likeThemes) {
       try {
         await axios({
           url: 'http://localhost:8081/api/articles', 
@@ -49,7 +79,8 @@ export const useArticleStore = defineStore(STORE_NAME, {
             this.httpStatus = 404
           })
 
-          this.removeDislikeArticles(themes)
+          this.removeArticlesWithDislikeThemes(dislikeThemes)
+          this.sortArticlesRelativeLikeThemes(likeThemes)
       } catch (error) {
         this.message = 'Идет загрузка статьей...'
         this.httpStatus = 500
