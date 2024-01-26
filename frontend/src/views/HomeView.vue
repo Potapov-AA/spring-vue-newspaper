@@ -1,4 +1,5 @@
 <script setup>
+import { useThemeStore } from '@/stores/themes'
 import { useArticleStore } from '@/stores/articles'
 import { useTokenStore } from '../stores/token'
 import { onMounted, ref } from 'vue'
@@ -7,19 +8,22 @@ import PaginationComponent from '@/components/PaginationComponent.vue'
 
 const isArticles = ref(false)
 
-function updateArticle() {
-  useArticleStore().getArticles()
+async function getArticles() {
+  
+  let themes = await useThemeStore().getDislikeThemes(useTokenStore().token)
+  await useArticleStore().getArticles(themes)
+
   isArticles.value = useArticleStore().articles.length > 0 ? true : false
 }
 
 onMounted(async () => {
   await useTokenStore().checkTokenStatus()
-  await useArticleStore().getArticles()
+  await getArticles()
 
   isArticles.value = useArticleStore().articles.length > 0 ? true : false
 
-  window.setInterval(updateArticle, 60000)
-  window.setInterval(useTokenStore().checkTokenStatus(), 60000)
+  window.setInterval(await getArticles, 10000)
+  window.setInterval(await useTokenStore().checkTokenStatus(), 60000)
 })
 </script>
 
