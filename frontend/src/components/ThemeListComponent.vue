@@ -1,16 +1,8 @@
 <script setup>
 import { useThemeStore } from '@/stores/themes'
-import { useTokenStore } from '@/stores/token'
-import { onMounted } from 'vue'
 
 import ThemeItemComponent from '@/components/ThemeItemComponent.vue' 
 
-// TODO Сделать отображение новых тем после добавления статьи
-// TODO Сделать отображение новых тем после обновления статьи
-// TODO Сделать отображение новых тем после обновления списка статьей
-onMounted(() => {
-  useThemeStore().getThemes(useTokenStore().token)
-})
 </script>
 
 <template>
