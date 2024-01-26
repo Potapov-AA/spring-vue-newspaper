@@ -88,9 +88,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       
     },
 
-    // TODO добавить статус для результата запроса
+    // Функция добавления статьи
     async addArticle(title, text, image, themes, token) {
       let message = ''
+      let status = 400
       await axios({
         url: 'http://localhost:8081/api/newarticle', 
         method: 'post',
@@ -106,12 +107,14 @@ export const useArticleStore = defineStore(STORE_NAME, {
       })
         .then((response) => {
           message = response.data.message
+          status = 200
         })
         .catch((error) => {
           message = error.response.data.message
+          status = 400
         })
 
-      return message
+      return {message, status}
     },
 
     // TODO добавить статус для результата запроса
@@ -140,6 +143,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
       return message
     },
 
+    // Функция удаления статьи по ID
     async deleteArticle(id, token) {
       await axios({
         url: 'http://localhost:8081/api/deletearticle/'+id,
