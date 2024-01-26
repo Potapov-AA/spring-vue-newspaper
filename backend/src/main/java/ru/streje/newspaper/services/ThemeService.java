@@ -133,4 +133,14 @@ public class ThemeService {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
+	
+	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(String token, Integer themeId) {
+		String email = jwtTokenUtils.getUsername(token);
+		User user = userService.findByEmail(email).get();
+		Theme theme = themeRepository.findById(themeId).get();
+		
+		LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
+		
+		return new ResponseEntity<>(likeDislikeThemes.getStatus(), HttpStatus.OK);
+	}
 }

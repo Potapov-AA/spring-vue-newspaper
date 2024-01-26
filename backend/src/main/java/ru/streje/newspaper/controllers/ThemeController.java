@@ -55,4 +55,11 @@ public class ThemeController {
 		
 		return themeService.deleteUserLikeDislikeTheme(token.substring(7), id);
 	}
+	
+	@GetMapping("/checkstatus/{id}")
+	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(@RequestHeader("authorization") String token, 
+			@PathVariable("id") Integer id) {
+		
+		return themeService.checkUserLikeDislikeThemeStatus(token.substring(7), id);
+	}
 }
