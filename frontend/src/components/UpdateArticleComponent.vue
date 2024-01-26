@@ -56,6 +56,7 @@ onMounted(() => {
 })
 </script>
 
+<!-- TODO сделать на бекенде валидацию по тема, сравнение по нижнему регистру и без пробелов -->
 <template>
     <div>
         <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
