@@ -49,7 +49,6 @@ public class ThemeService {
 	public void addTheme(String name) {
 		Theme theme = new Theme();
 		theme.setName(name);
-
 		themeRepository.save(theme);
 	}
 	
