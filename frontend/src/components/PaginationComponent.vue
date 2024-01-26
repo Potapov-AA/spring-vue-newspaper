@@ -36,8 +36,6 @@ const paginatedData = computed(() => {
   <div class="py-5 px-5">
     <div class="d-flex justify-space-left align-top">
       <ThemeListComponent v-if="useTokenStore().logined" class="mb-4"/>
-      <v-btn class="mb-4 mx-4">Скрыть не понравившиеся темы</v-btn>
-      <v-btn class="mb-4 mx-4">Только избранные темы</v-btn>
       <div class="d-flex  justify-center mb-4">
         <v-btn @click="prevPage" :disabled="pageNumber === 0">
           Назад
