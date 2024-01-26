@@ -1,5 +1,6 @@
 package ru.streje.newspaper.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
+import ru.streje.newspaper.models.Role;
 import ru.streje.newspaper.models.User;
 import ru.streje.newspaper.repositories.UserRepository;
 
@@ -57,7 +59,10 @@ public class UserService implements UserDetailsService {
 		user.setFirstname(registrationUserRequest.getFirstname());
 		user.setLastname(registrationUserRequest.getLastname());
 		user.setPassword(passwordEncoder.encode(registrationUserRequest.getPassword()));
-		user.setRoles(List.of(roleService.getUserRole()));
+		
+		List<Role> roles = new ArrayList<>();
+		roles.add(roleService.getUserRole());
+		user.setRoles(roles);
 		userRepository.save(user);
 	}
 }
