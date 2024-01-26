@@ -62,6 +62,7 @@ public class ArticleService {
 	private Collection<Theme> fillThemes(ArticleRequest articleRequest) {
 		Collection<Theme> themes = new ArrayList<>();
 		for (String themeName : articleRequest.getThemes()) {
+			themeName = themeName.toLowerCase();
 			if (themeService.getTheme(themeName) != null) {
 				Theme theme = themeService.getTheme(themeName);
 				themes.add(theme);
