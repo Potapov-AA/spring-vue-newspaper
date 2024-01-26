@@ -75,7 +75,7 @@ async function registration(firstname, lastname, email, password, confPassword) 
           block
           class="mt-2"
         >
-          Войти
+          Регистрация
         </v-btn>
 
         <div class="mt-4 d-flex justify-space-between">
