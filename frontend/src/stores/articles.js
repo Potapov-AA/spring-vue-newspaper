@@ -6,15 +6,17 @@ const STORE_NAME = 'articles'
 export const useArticleStore = defineStore(STORE_NAME, {
   state: () => ({
     articles: [],
-    errorMessage: '', // TODO поменять имя на просто message
+    message: '',
+    httpStatus: 500
   }),
 
   actions: {
-    removeBadArticles(themes) {
+    // Функция удаление запретных тем
+    removeDislikeArticles(dislikeThemes) {
       let targetsIndex = []
       for(let i in this.articles) {
-        for(let j in themes) {
-          if(this.articles[i].themes.find(theme => theme == themes[j].name) != undefined) {
+        for(let j in dislikeThemes) {
+          if(this.articles[i].themes.find(theme => theme == dislikeThemes[j].name) != undefined) {
             targetsIndex.push(i)
             break
           }
@@ -24,9 +26,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       for(let i in targetsIndex.reverse()) {
         this.articles.splice(targetsIndex[i], 1)
       }
-      console.log(targetsIndex.reverse())
     },
 
+    // TODO сделать функцию сортировки статьей в зависимости от количества любимых тем
+    // Функция формирования списка статьей
     async getArticles(themes) {
       try {
         await axios({
@@ -36,17 +39,20 @@ export const useArticleStore = defineStore(STORE_NAME, {
           .then((response) => {
             {
               this.articles = response.data
-              this.errorMessage = ''
+              this.message = ''
+              this.httpStatus = 200
             }
           })
           .catch((error) => {
-            this.errorMessage = error.response.data.message
             this.articles = []
+            this.message = error.response.data.message
+            this.httpStatus = 404
           })
 
-          this.removeBadArticles(themes)
+          this.removeDislikeArticles(themes)
       } catch (error) {
-        this.errorMessage = 'Идет загрузка статьей...'
+        this.message = 'Идет загрузка статьей...'
+        this.httpStatus = 500
       }
       
     },
