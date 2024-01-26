@@ -1,8 +1,12 @@
 <script setup>
 import { useTokenStore } from '@/stores/token'
 import NewArticleComponent from '@/components/NewArticleComponent.vue'
+import ThemeListComponent from '@/components/ThemeListComponent.vue'
 </script>
 
+<!-- TODO Перенести список тем сюда -->
+<!-- TODO Выбрать более подходящий шрифт -->
+<!-- TODO Сделать красивый блок пользователя, укомповать: имя, фамилию, темы, кнопку выхода -->
 <template>
   <v-sheet width="100%" :elevation="4" class="px-6">
     <div class="d-flex align-center justify-space-between">
@@ -12,7 +16,10 @@ import NewArticleComponent from '@/components/NewArticleComponent.vue'
           {{ useTokenStore().firstname }}
           {{ useTokenStore().lastname }}
         </div>
+        <ThemeListComponent v-if="useTokenStore().logined" class="mb-4"/>
+
         <NewArticleComponent/>
+        
         <v-btn @click="useTokenStore().forgetToken()" type="button">
           Выход
         </v-btn>
@@ -21,11 +28,6 @@ import NewArticleComponent from '@/components/NewArticleComponent.vue'
         <v-btn class="mx-2">
           <router-link :to="{ name: 'login' }" class="link">
             Войти
-          </router-link>
-        </v-btn>
-        <v-btn>
-          <router-link :to="{ name: 'reg' }" class="link">
-            Зарегестрироваться
           </router-link>
         </v-btn>
       </div>

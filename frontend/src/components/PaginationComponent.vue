@@ -1,7 +1,5 @@
 <script setup>
-import { useTokenStore, ROLES } from '@/stores/token'
 import ArticleComponent from '@/components/ArticleComponent.vue'
-import ThemeListComponent from '@/components/ThemeListComponent.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
@@ -35,7 +33,7 @@ const paginatedData = computed(() => {
 <template>
   <div class="py-5 px-5">
     <div class="d-flex justify-space-left align-top">
-      <ThemeListComponent v-if="useTokenStore().logined" class="mb-4"/>
+      
       <div class="d-flex  justify-center mb-4">
         <v-btn @click="prevPage" :disabled="pageNumber === 0">
           Назад
