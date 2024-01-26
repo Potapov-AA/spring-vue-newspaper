@@ -37,8 +37,6 @@ function base64ToImage(base64Image, articleId) {
 
 
 // Функция обновления списка статьей
-// TODO Проверить что нормально вызывается при первоначальной прогрузке страницы
-// TODO Проверить что нормально вызывается после добавленния статьи за админа
 // TODO Проверить что нормально вызывается после обновления/редактирования статьи за админа
 // TODO Проверить что нормально вызывается после выбора любимых тем
 // TODO ПРоверить что нормально вызывается после выбора запретных тем
@@ -52,7 +50,7 @@ async function updateListArticles() {
 
 
   let lDislikeThemes = await useThemeStore().getDislikeThemes(useTokenStore().token)
-  let lLikeThemes = await useThemeStore().getLikeThemes(useTokenStore().token) // TODO Сделать получения любимых тем
+  let lLikeThemes = await useThemeStore().getLikeThemes(useTokenStore().token)
 
   // TODO удалить после всех проверок
   console.log("Фаворитные темы: " + lLikeThemes)
@@ -60,6 +58,7 @@ async function updateListArticles() {
   
 
   await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
+  await useThemeStore().getThemes(useTokenStore().token)
 }
 
 export { showContent, hideContent, base64ToImage, updateListArticles }
