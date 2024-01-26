@@ -100,6 +100,26 @@ export const useThemeStore = defineStore(STORE_NAME, {
         })
 
       return dislikeThemes
+    },
+
+    async getLikeThemes(token) {
+      let likeThemes = []
+
+      await axios({
+        url: 'http://localhost:8081/api/likethemes',
+        method: 'get',
+        headers: {
+          Authorization: token
+        }
+      })
+        .then((response) => {
+          likeThemes = response.data
+        })
+        .catch(() => {
+          likeThemes = []
+        })
+
+      return likeThemes
     }
   }
 })
