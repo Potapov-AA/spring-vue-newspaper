@@ -78,6 +78,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- TODO Сделать кнопку кнопкой, сейчас при наведение курсор меняется некорректно -->
   <div 
     :id="'btn-show-comment-' + props.id"  
     @click="showContent('article-comment-' + props.id, 'btn-show-comment-' + props.id, 'btn-hide-comment-' + props.id, 'mb-3')"
