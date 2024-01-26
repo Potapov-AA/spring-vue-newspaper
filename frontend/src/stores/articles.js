@@ -10,7 +10,24 @@ export const useArticleStore = defineStore(STORE_NAME, {
   }),
 
   actions: {
-    async getArticles() {
+    removeBadArticles(themes) {
+      let targetsIndex = []
+      for(let i in this.articles) {
+        for(let j in themes) {
+          if(this.articles[i].themes.find(theme => theme == themes[j].name) != undefined) {
+            targetsIndex.push(i)
+            break
+          }
+        }
+      }
+
+      for(let i in targetsIndex.reverse()) {
+        this.articles.splice(targetsIndex[i], 1)
+      }
+      console.log(targetsIndex.reverse())
+    },
+
+    async getArticles(themes) {
       try {
         await axios({
           url: 'http://localhost:8081/api/articles', 
@@ -26,9 +43,12 @@ export const useArticleStore = defineStore(STORE_NAME, {
             this.errorMessage = error.response.data.message
             this.articles = []
           })
+
+          this.removeBadArticles(themes)
       } catch (error) {
         this.errorMessage = 'Идет загрузка статьей...'
       }
+      
     },
 
     // TODO добавить статус для результата запроса
