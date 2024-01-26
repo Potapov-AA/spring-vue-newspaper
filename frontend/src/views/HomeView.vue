@@ -17,7 +17,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-container fluid class="d-flex fill-height fluid justify-start align-center flex-column bck-img">
+  <v-container fluid class="bck-img fluid fill-height d-flex justify-start align-center flex-column ">
     <HeaderComponent />
     <div v-if="useArticleStore().httpStatus != 500">  
       <PaginationComponent v-bind:items="useArticleStore().articles" />
