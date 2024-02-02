@@ -53,17 +53,30 @@ async function updateListArticles() {
   // TODO удалить после всех проверок
   console.log("Была вызвана функция обновления списка статьей")
 
+  if(useTokenStore().logined) {
+    // TODO удалить после всех проверок
+    console.log("Пользователь авторизован")
 
-  let lDislikeThemes = await useThemeStore().getDislikeThemes(useTokenStore().token)
-  let lLikeThemes = await useThemeStore().getLikeThemes(useTokenStore().token)
+    let lDislikeThemes = await useThemeStore().getDislikeThemes(useTokenStore().token)
+    let lLikeThemes = await useThemeStore().getLikeThemes(useTokenStore().token)
 
-  // TODO удалить после всех проверок
-  console.log("Фаворитные темы: " + lLikeThemes)
-  console.log("Запретные темы: " + lDislikeThemes)
+    // TODO удалить после всех проверок
+    console.log("Фаворитные темы: " + lLikeThemes)
+    console.log("Запретные темы: " + lDislikeThemes)
+    
+    await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
+    await useThemeStore().getThemes(useTokenStore().token)
+  } else {
+    // TODO удалить после всех проверок
+    console.log("Пользователь не авторизован")
+
+    let lDislikeThemes = []
+    let lLikeThemes = []
+    
+    await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
+    await useThemeStore().getThemes(useTokenStore().token)
+  }
   
-
-  await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
-  await useThemeStore().getThemes(useTokenStore().token)
 }
 
 export { showContent, hideContent, base64ToImage, base64ToFile, updateListArticles }
