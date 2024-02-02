@@ -41,10 +41,9 @@ onMounted(async () => {
 })
 </script>
 
-<!-- TODO добавить другой шрифт для текста, более читабельный -->
 <template>
   <div class="d-flex justify-space-between align-center">
-    <b class="themeName form-text d-inline-block text-truncate">{{ props.theme.name }}</b>
+    <b class="themeName d-inline-block text-truncate">{{ props.theme.name }}</b>
     <div class="ml-4">
         <v-btn @click="addRemoveLikeTheme()" v-if="status == 1" density="compact" icon="mdi-thumb-up"></v-btn>
         <v-btn @click="addRemoveLikeTheme()" v-else density="compact" icon="mdi-thumb-up-outline"></v-btn>
@@ -57,6 +56,7 @@ onMounted(async () => {
 
 <style scoped>
 .themeName {
+  font-family: ThemeName;
   max-width: 250px;
 }
 </style>
