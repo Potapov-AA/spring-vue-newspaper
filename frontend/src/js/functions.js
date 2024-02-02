@@ -27,8 +27,10 @@ function hideContent(elementId, btnShowId, btnHideId, btnClass) {
 function base64ToImage(base64Image, articleId) {
   let image = new Image()
   image.src = base64Image
-  image.width = 200
-  image.height = 200
+  image.width = 185
+  image.height = 185
+  image.style = 'border: medium solid black'
+  image.className = 'mr-4'
   document.getElementById('imgElem'+articleId).innerHTML = ''
   document.getElementById('imgElem'+articleId).appendChild(image)
 }
