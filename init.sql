@@ -59,7 +59,7 @@ CREATE TABLE article (
 	id		serial not null,
 	title 	varchar(100) not null,
 	text 	text not null,
-	image 	text,
+	image 	text not null,
 	date 	timestamp with time zone not null,
 	primary key (id) 
 );
@@ -87,8 +87,8 @@ CREATE TABLE likes (
 	article_id 	serial not null,
 	user_id serial not null,
 	primary key (article_id, user_id),
-	foreign key (user_id) references users (id),
-  	foreign key (article_id) references article (id)
+	foreign key (user_id) references users (id) ON DELETE CASCADE,
+  	foreign key (article_id) references article (id) ON DELETE CASCADE
 );
 
 INSERT INTO likes (article_id, user_id)
@@ -105,8 +105,8 @@ CREATE TABLE comment (
 	user_id 	serial not null,
 	article_id 	serial not null,
 	primary key (id),
-	foreign key (user_id) references users (id),
-  	foreign key (article_id) references article (id)
+	foreign key (user_id) references users (id) ON DELETE CASCADE,
+  	foreign key (article_id) references article (id) ON DELETE CASCADE
 );
 
 INSERT INTO comment (text, date, user_id, article_id)
@@ -137,8 +137,8 @@ CREATE TABLE theme_article (
 	theme_id		serial not null,
 	article_id		serial not null,
 	primary key (theme_id, article_id),
-	foreign key (theme_id) references theme (id),
-  	foreign key (article_id) references article (id)
+	foreign key (theme_id) references theme (id) ON DELETE CASCADE,
+  	foreign key (article_id) references article (id) ON DELETE CASCADE
 );
 
 INSERT INTO theme_article (theme_id, article_id)
@@ -161,8 +161,8 @@ CREATE TABLE user_theme_like_dislike (
 	user_id 	serial not null,
 	status		serial not null,
 	primary key (theme_id, user_id),
-	foreign key (user_id) references users (id),
-  	foreign key (theme_id) references theme (id)
+	foreign key (user_id) references users (id) ON DELETE CASCADE,
+  	foreign key (theme_id) references theme (id) ON DELETE CASCADE
 );
 
 INSERT INTO user_theme_like_dislike (theme_id, user_id, status)
