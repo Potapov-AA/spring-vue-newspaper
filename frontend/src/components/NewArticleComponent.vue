@@ -68,8 +68,7 @@ async function addArticle() {
 <template>
     <div>
         <v-btn 
-            v-if="useTokenStore().role == ROLES.ADMIN"
-            color="lime-lighten-5"
+            color="lime-lighten-5 standart-btn"
             @click="() => {
                 message = ''
                 showAddArticleDialogWindow = true
