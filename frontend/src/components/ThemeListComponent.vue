@@ -1,24 +1,40 @@
 <script setup>
 import { useThemeStore } from '@/stores/themes'
 
-import ThemeItemComponent from '@/components/ThemeItemComponent.vue' 
+import ThemeItemComponent from '@/components/ThemeItemComponent.vue'
+import { ref } from 'vue'
 
+const themeDialog = ref(false)
 </script>
 
 <template>
-  <v-expansion-panels class="h-25">
-    <v-expansion-panel class="h-25">
-      <v-expansion-panel-title> Темы </v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-virtual-scroll
-          :height="useThemeStore().themes.length >= 3 ? 100 : useThemeStore().themes.length * 25"
-          :items="useThemeStore().themes"
-        >
-          <template v-slot:default="{ item }">
-            <ThemeItemComponent :theme="item"/>
-          </template>
-        </v-virtual-scroll>
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-  </v-expansion-panels>
+  <div>
+    <v-btn color="lime-lighten-5" @click="themeDialog = true" class="standart-btn"> Темы </v-btn>
+
+    <v-dialog v-model="themeDialog" width="auto">
+      <v-card :width="400">
+        <v-card-title class="d-flex justify-space-between align-center mt-4"> 
+          <p class="themeListTitle">Темы</p>
+           
+          <v-btn color="red" icon="mdi-close" variant="plain" @click="themeDialog = false"/>
+
+        </v-card-title>
+        
+        <v-card-text>
+          <v-virtual-scroll :height="400" :items="useThemeStore().themes">
+            <template v-slot:default="{ item }">
+              <ThemeItemComponent :theme="item" />
+            </template>
+          </v-virtual-scroll>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
+
+<style scoped>
+.themeListTitle {
+  font-family: LoginTitle;
+  font-size: 48px;
+}
+</style>
