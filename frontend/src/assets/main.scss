@@ -26,6 +26,22 @@
   font-weight: normal; 
 }
 
+@font-face {
+  font-family: "ArticleText";
+  src: url("/Truetypewriter PolyglOTT.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+}
+
+@font-face {
+  font-family: "ThemeName";
+  src: url("/Nimbus Mono.otf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+}
+
+
+
 .errorMessage {
   color: red;
 }
