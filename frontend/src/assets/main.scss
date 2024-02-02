@@ -19,6 +19,13 @@
   font-weight: normal; 
 }
 
+@font-face {
+  font-family: "LoginTitle";
+  src: url("../public/mr_AfronikG.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+}
+
 .errorMessage {
   color: red;
 }
@@ -39,4 +46,19 @@
 .standart-btn {
   font-family: "FontButton";
   font-size: 16px;
+}
+
+.form-title {
+  font-family: LoginTitle;
+  font-size: 48px;
+}
+
+.form-btn {
+  font-family: "FontButton";
+  font-size: 24px;
+}
+
+.form-text {
+  font-family: LoginTitle;
+  font-size: 18px;
 }
