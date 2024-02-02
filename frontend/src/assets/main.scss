@@ -1,6 +1,5 @@
 @font-face {
   font-family: "SiteTitle"; 
-  // адрес шрифта и тип 
   src: url("../public/JatmikaTypeface.ttf") format("truetype"); 
   font-style: normal; 
   font-weight: normal; 
@@ -8,11 +7,17 @@
 
 @font-face {
   font-family: "UserHeader";
-  src: url("../public/grachy-firatte-2.ttf") format("truetype"); 
+  src: url("../public/NeverSmile.otf") format("truetype"); 
   font-style: normal; 
   font-weight: normal; 
 }
 
+@font-face {
+  font-family: "FontButton";
+  src: url("../public/Colatemta.otf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+}
 
 .errorMessage {
   color: red;
@@ -29,4 +34,9 @@
 
 .hidden {
   display: none;
+}
+
+.standart-btn {
+  font-family: "FontButton";
+  font-size: 16px;
 }
