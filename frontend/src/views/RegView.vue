@@ -40,7 +40,7 @@ async function registration(firstname, lastname, email, password, confPassword) 
   <v-container class="d-flex fill-height fluid justify-center">
     <v-sheet :elevation="9" :width="500" class="mx-auto rounded-lg pa-6">
       <v-form>
-        <h2 align="center" class="mb-3">РЕГИСТРАЦИЯ</h2>
+        <h2 align="center" class="form-title mb-3">РЕГИСТРАЦИЯ</h2>
 
         <v-text-field v-model="firstname" type="text" label="Имя" placeholder="Иван" />
         <v-text-field 
@@ -66,21 +66,21 @@ async function registration(firstname, lastname, email, password, confPassword) 
           placeholder="Подтвердите пароль"
         />
 
-        <p align="center" :class="{ errorMessage: !isSuccess, successMessage: isSuccess, 'mb-4': true }">
+        <p align="center" :class="{ errorMessage: !isSuccess, successMessage: isSuccess, 'form-text mb-4': true }">
           {{ responseMessage }}
         </p>
 
         <v-btn
           @click="registration(firstname, lastname, email, password, confirmPassword)"
           block
-          class="mt-2"
+          class="form-btn mt-2"
         >
           Регистрация
         </v-btn>
 
         <div class="mt-4 d-flex justify-space-between">
-          <router-link :to="{ name: 'login' }">Назад</router-link>
-          <router-link :to="{ name: 'home' }">На главную</router-link>
+          <router-link :to="{ name: 'login' }" class="form-text">Назад</router-link>
+          <router-link :to="{ name: 'home' }" class="form-text">На главную</router-link>
         </div>
       </v-form>
     </v-sheet>

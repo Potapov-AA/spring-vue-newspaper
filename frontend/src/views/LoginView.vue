@@ -38,11 +38,11 @@ function exit() {
 </script>
 
 <template>
-  <v-container class="d-flex fill-height fluid justify-center">
+  <v-container class="fill-height fluid d-flex justify-center">
     <div v-if="!useTokenStore().logined">
       <v-sheet :elevation="9" :width="500" class="mx-auto rounded-lg pa-6">
         <v-form>
-          <h2 align="center" class="mb-3">АВТОРИЗАЦИЯ</h2>
+          <h2 align="center" class="form-title mb-3">АВТОРИЗАЦИЯ</h2>
           <v-text-field
             v-model="email"
             type="email"
@@ -55,11 +55,11 @@ function exit() {
             label="Пароль"
             placeholder="Введите пароль"
           />
-          <p class="errorMessage mb-4">{{ responseMessage }}</p>
-          <v-btn @click="login(email, password)" block class="mt-2"> Войти </v-btn>
+          <p class="form-text errorMessage mb-4">{{ responseMessage }}</p>
+          <v-btn @click="login(email, password)" block class="form-btn mt-2"> Войти </v-btn>
           <div class="mt-4 d-flex justify-space-between">
-            <router-link :to="{ name: 'home' }">Назад</router-link>
-            <router-link :to="{ name: 'reg' }">Регистрация</router-link>
+            <router-link :to="{ name: 'home' }" class="form-text">Назад</router-link>
+            <router-link :to="{ name: 'reg' }" class="form-text">Регистрация</router-link>
           </div>
         </v-form>
       </v-sheet>
@@ -67,11 +67,15 @@ function exit() {
     <div v-else>
       <v-sheet :elevation="9" :width="300" class="mx-auto rounded-lg pa-6">
         <v-form>
-          <h2 align="center" class="mb-3">АВТОРИЗАЦИЯ</h2>
-          <p align="center" class="successMessage mb-4">{{ responseMessage }}</p>
-          <v-btn @click="exit()" block class="mt-2">Выход</v-btn>
+          <h2 align="center" class="form-title mb-3">АВТОРИЗАЦИЯ</h2>
+          <p align="center" class="form-text successMessage mb-4">{{ responseMessage }}</p>
+          <v-btn @click="exit()" block class="form-btn mt-2">Выход</v-btn>
         </v-form>
       </v-sheet>
     </div>
   </v-container>
 </template>
+
+<style scoped>
+
+</style>
