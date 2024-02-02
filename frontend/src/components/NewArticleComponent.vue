@@ -7,7 +7,7 @@ import { ref } from 'vue'
 const title = ref('')
 const themes = ref('')
 const text = ref('')
-const image = ref()
+const image = ref(null)
 
 const message = ref('')
 const status = ref()
@@ -29,6 +29,8 @@ function clearField() {
     themes.value = ''
     text.value = ''
     image.value = null
+
+    status.value = 0
 }
 
 async function addArticle() {
@@ -42,12 +44,17 @@ async function addArticle() {
         let result = await useArticleStore().addArticle(title.value, text.value, null, themesArray, useTokenStore().token)
         message.value = result.message
         status.value = result.status
-        
+
+        if(status.value == 200) {
+            closeDialog()
+        }        
     } else {
-        var reader = new FileReader()
+        let reader = new FileReader()
         reader.readAsDataURL(image.value[0])
-        reader.onload = async function () {
-            let imageToBase64 = reader.result
+
+        reader.addEventListener('load', async (e) => {
+            let imageToBase64 = e.target.result
+
             let result  = await useArticleStore().addArticle(title.value, text.value, imageToBase64, themesArray, useTokenStore().token)
             message.value = result.message
             status.value = result.status
@@ -55,12 +62,8 @@ async function addArticle() {
             if(status.value == 200) {
                 closeDialog()
             }
-        }
-    }
-
-    if(status.value == 200) {
-        closeDialog()
-    }
+        })
+    }    
 }
 </script>
 
