@@ -56,7 +56,6 @@ async function addArticle() {
                 closeDialog()
             }
         }
-        reader.readyState = FileReader.DONE
     }
 
     if(status.value == 200) {
@@ -105,7 +104,7 @@ async function addArticle() {
                             label="Текст" 
                         />
                         <v-file-input v-model="image" accept="image/*" label="Изображение" />
-                        <p class="form-text">{{ message }}</p>
+                        <p v-if="status != 200" class="form-text">{{ message }}</p>
                     </v-container>
                 </v-card-text>
 
