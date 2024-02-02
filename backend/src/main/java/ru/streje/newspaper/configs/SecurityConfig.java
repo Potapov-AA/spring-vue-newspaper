@@ -59,6 +59,7 @@ public class SecurityConfig {
 			.requestMatchers("/article/{id}").hasRole("ADMIN")
 			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
 			.requestMatchers("/changearticle/{id}").hasRole("ADMIN")
+			.requestMatchers("/deletecomment/{commentId}").hasRole("ADMIN")
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
