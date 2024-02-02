@@ -66,12 +66,12 @@ async function addArticle() {
 <template>
     <div>
         <v-btn 
-            color="lime-lighten-5 standart-btn"
+            color="lime-lighten-5"
             @click="() => {
                 message = ''
                 showAddArticleDialogWindow = true
             }"
-            class="mx-2"
+            class="mx-2 standart-btn"
         >
             Добавить статью
         </v-btn>
