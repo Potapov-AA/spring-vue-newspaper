@@ -26,13 +26,11 @@ function hideContent(elementId, btnShowId, btnHideId, btnClass) {
 // Функция конвертирования base64 в изображение
 function base64ToImage(base64Image, articleId) {
   let image = new Image()
-  if(base64Image != null) {
-    image.src = base64Image
-    image.width = 200
-    image.height = 200
-    document.getElementById('imgElem'+articleId).innerHTML = ''
-    document.getElementById('imgElem'+articleId).appendChild(image)
-  }
+  image.src = base64Image
+  image.width = 200
+  image.height = 200
+  document.getElementById('imgElem'+articleId).innerHTML = ''
+  document.getElementById('imgElem'+articleId).appendChild(image)
 }
 
 // Функция конвертирования base64 в File
@@ -47,7 +45,6 @@ async function base64ToFile(base64Image) {
 
 
 // Функция обновления списка статьей
-// TODO Проверить что нормально вызывается после обновления/редактирования статьи за админа
 // TODO Проверить что нормально вызывается после выбора любимых тем
 // TODO ПРоверить что нормально вызывается после выбора запретных тем
 // TODO Проверить что нормально вызывается после удаления из любимых тем
