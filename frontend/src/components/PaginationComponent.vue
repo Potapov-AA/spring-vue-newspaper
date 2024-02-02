@@ -34,17 +34,16 @@ const paginatedData = computed(() => {
 
 <template>
   <div class="py-5 px-5">
-    <div class="d-flex justify-space-left align-top">
-      
+    <div class="d-flex justify-center align-top">
       <div class="d-flex  justify-center mb-4">
-        <v-btn @click="prevPage" :disabled="pageNumber === 0">
+        <v-btn @click="prevPage" :disabled="pageNumber === 0" class="standart-btn">
           Назад
         </v-btn>
-        <p class="mx-5 mt-1 text-h5">{{ pageNumber + 1 }}</p>
-        <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1">
+        <p class="paginationNumber mx-5 mt-1">{{ pageNumber + 1 }}</p>
+        <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1" class="standart-btn">
           Далее
         </v-btn>
-        <ThemeListComponent v-if="useTokenStore().logined" class="mb-4"/>
+        <ThemeListComponent v-if="useTokenStore().logined" class="ml-5"/>
       </div>
     </div>
     <div v-for="item in paginatedData" :key="item.id" class="mb-4">
@@ -52,3 +51,10 @@ const paginatedData = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.paginationNumber {
+  font-family: LoginTitle;
+  font-size: 24px;
+}
+</style>
