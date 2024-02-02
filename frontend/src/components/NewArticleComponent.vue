@@ -30,7 +30,7 @@ function clearField() {
     text.value = ''
     image.value = null
 
-    status.value = 0
+    status.value = -1
 }
 
 async function addArticle() {
@@ -43,11 +43,7 @@ async function addArticle() {
     if (image.value == null) {
         let result = await useArticleStore().addArticle(title.value, text.value, null, themesArray, useTokenStore().token)
         message.value = result.message
-        status.value = result.status
-
-        if(status.value == 200) {
-            closeDialog()
-        }        
+        status.value = result.status     
     } else {
         let reader = new FileReader()
         reader.readAsDataURL(image.value[0])
