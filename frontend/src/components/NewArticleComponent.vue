@@ -86,7 +86,7 @@ async function addArticle() {
         >
             <v-card>
                 <v-card-title class="d-flex justify-center mt-5">
-                    <span class="text-h5">Добавление новой статьи</span>
+                    <span class="form-title">Добавление новой статьи</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
@@ -104,8 +104,8 @@ async function addArticle() {
                             v-model="text" 
                             label="Текст" 
                         />
-                        <v-file-input v-model="image" label="Изображение" />
-                        <p>{{ message }}</p>
+                        <v-file-input v-model="image" accept="image/*" label="Изображение" />
+                        <p class="form-text">{{ message }}</p>
                     </v-container>
                 </v-card-text>
 
@@ -117,6 +117,7 @@ async function addArticle() {
                         clearField()
                         showAddArticleDialogWindow = false
                     }"
+                    class="form-btn"
                 >
                     Закрыть
                 </v-btn>
@@ -124,6 +125,7 @@ async function addArticle() {
                     color="blue-darken-1"
                     variant="text"
                     @click="addArticle()"
+                    class="form-btn"
                 >
                     Добавить
                 </v-btn>
@@ -131,19 +133,19 @@ async function addArticle() {
             </v-card>
         </v-dialog>
 
-        <div class="text-center">
         <v-snackbar v-model="snackbar" :timeout="2000">
-            {{ message }}
+            <p class="form-text mt-2">{{ message }}</p>
+            
             <template v-slot:actions>
                 <v-btn 
                     color="blue" 
                     variant="text" 
                     @click="snackbar = false"
+                    class="form-btn"
                 > 
                     Закрыть 
                 </v-btn>
             </template>
         </v-snackbar>
-        </div>
     </div>
 </template>
