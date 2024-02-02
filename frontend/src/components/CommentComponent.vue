@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios'
 import { showContent, hideContent } from '@/js/functions.js'
-import { useTokenStore } from '@/stores/token'
+import { useTokenStore, ROLES } from '@/stores/token'
 import { onMounted, ref } from 'vue'
 
 const props = defineProps({
@@ -11,6 +11,7 @@ const props = defineProps({
 const countCommentShow = ref(3)
 
 const comments = ref([])
+
 
 async function getAllComment() {
   await axios({
@@ -68,11 +69,23 @@ async function addComment(textComment) {
   })
   
   this.textComment = ''
-  getAllComment()
+  await getAllComment()
 }
 
-onMounted(() => {
-  getAllComment()
+async function deleteComment(id) {
+  await axios({
+    url: 'http://localhost:8081/api/deletecomment/' + id,
+    method: 'delete',
+    headers: {
+      Authorization: useTokenStore().token
+    }
+  })
+  
+  await getAllComment()
+}
+
+onMounted(async () => {
+  await getAllComment()
   window.setInterval(getAllComment, 10000)
 })
 </script>
@@ -107,6 +120,11 @@ onMounted(() => {
         <div>
           {{ comment.text }}
         </div>
+        <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
+            <v-icon color="red" @click="deleteComment(comment.id)">{{
+              'mdi-delete'
+            }}</v-icon>
+          </v-btn>
       </div>
       <div v-if="countCommentShow < comments.length" class="mb-3">
         <p @click="countCommentShow += 3" align="center" style="color: royalblue;">
