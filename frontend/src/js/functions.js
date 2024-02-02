@@ -35,6 +35,16 @@ function base64ToImage(base64Image, articleId) {
   }
 }
 
+// Функция конвертирования base64 в File
+async function base64ToFile(base64Image) {
+  const res = await fetch(base64Image)
+  const blob = await res.blob()
+  const array = []
+  array.push(new File([blob], 'old image', {type: blob.type}))
+
+  return array
+}
+
 
 // Функция обновления списка статьей
 // TODO Проверить что нормально вызывается после обновления/редактирования статьи за админа
@@ -59,4 +69,4 @@ async function updateListArticles() {
   await useThemeStore().getThemes(useTokenStore().token)
 }
 
-export { showContent, hideContent, base64ToImage, updateListArticles }
+export { showContent, hideContent, base64ToImage, base64ToFile, updateListArticles }
