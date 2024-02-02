@@ -11,7 +11,7 @@ const props = defineProps({
 const title = ref(props.article.title)
 const themes = ref(props.article.themes.join('; '))
 const text = ref(props.article.text)
-const image = ref()
+const image = ref(null)
 
 const showUpdateArticleDialogWindow = ref(false)
 const snackbar = ref(false)
@@ -32,13 +32,8 @@ async function clearField() {
     title.value = props.article.title
     themes.value = props.article.themes.join('; ')
     text.value = props.article.text
-
-    if(image.value != null || image.value.length != 0) {
-        image.value = await base64ToFile(props.article.image)
-    } else {
-        image.value = null
-    }
-    
+    image.value = await base64ToFile(props.article.image)
+    status.value = -1
 }
 
 async function updateArticle() {
@@ -48,29 +43,32 @@ async function updateArticle() {
         themesArray = themes.value.split(';')
     }
 
-    if (image.value == null || image.value.length == 0 ) {
+    if (image.value == null) {
         let result = await useArticleStore().updateArticle(title.value, text.value, null, themesArray, props.article.id, useTokenStore().token)
         message.value = result.message
         status.value = result.status
-    } else {
+    } else if (image.value.length == 0) {
+        let result = await useArticleStore().updateArticle(title.value, text.value, null, themesArray, props.article.id, useTokenStore().token)
+        message.value = result.message
+        status.value = result.status
+    }
+     else {
         var reader = new FileReader()
         reader.readAsDataURL(image.value[0])
-        reader.onload = async function () {
-            let imageToBase64 = reader.result
+
+        reader.addEventListener('load', async (e) => {
+            let imageToBase64 = e.target.result
+
             let result = await useArticleStore().updateArticle(title.value, text.value, imageToBase64, themesArray, props.article.id, useTokenStore().token)
+
             message.value = result.message
             status.value = result.status
 
             if(status.value == 200) {
-                base64ToImage(props.article.image, props.article.id)
+                await base64ToImage(imageToBase64, props.article.id)
                 await closeDialog()
-                
             }
-        }
-    }
-
-    if(status.value == 200) {
-        await closeDialog()
+        })
     }
 }
 
@@ -118,9 +116,10 @@ onMounted(async () => {
                     />
                     <v-file-input
                         v-model = image
+                        accept="image/*" 
                         label="Изображение" 
                     />
-                    <p class="form-text">{{ message }}</p>
+                    <p v-if="status != 200 && status != -1" class="form-text">{{ message }}</p>
                 </v-container>
             </v-card-text>
             <v-card-actions  class="d-flex justify-end mb-15 mr-15">
