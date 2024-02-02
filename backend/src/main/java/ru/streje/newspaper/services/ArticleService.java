@@ -186,9 +186,7 @@ public class ArticleService {
 				article.setText(articleRequest.getText());
 			}
 
-			if (articleRequest.getImage() != null) {
-				article.setImage(articleRequest.getImage());
-			}
+			article.setImage(articleRequest.getImage());
 
 			if (articleRequest.getThemes() != null) {
 				Collection<Theme> themes = fillThemes(articleRequest);
