@@ -43,6 +43,7 @@ public class CommentService {
 
 		for (Comment comment : comments) {
 			CommentResponse commentResponse = new CommentResponse();
+			commentResponse.setId(comment.getId());
 			commentResponse.setFirstName(comment.getUser().getFirstname());
 			commentResponse.setLastName(comment.getUser().getLastname());
 			commentResponse.setDate(comment.getDate());
@@ -85,6 +86,24 @@ public class CommentService {
 			return new ResponseEntity<>(
 					new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий"),
 					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/***
+	 * Метод удаления комментариев
+	 * 
+	 * @param commentId - индификатор комментария
+	 * @return сообщение о успешности или провале удаления комментария
+	 */
+	public ResponseEntity<?> deleteComment(int commentId) {
+		try {
+			Comment comment = commentRepository.findById(commentId).get();
+			commentRepository.delete(comment);
+			return new ResponseEntity<>(new SuccesMessage("Комментарий успешно удалена"), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален"),
+					HttpStatus.NOT_FOUND);
 		}
 	}
 }
