@@ -1,5 +1,5 @@
 <script setup>
-import { base64ToImage } from '@/js/functions.js'
+import { updateListArticles, base64ToImage, base64ToFile } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
 import { onMounted, ref } from 'vue'
@@ -13,50 +13,74 @@ const themes = ref(props.article.themes.join('; '))
 const text = ref(props.article.text)
 const image = ref()
 
-async function base64ToFile() {
-    if(props.article.image != null) {
-        const res = await fetch(props.article.image)
-        const blob = await res.blob()
-        const array = []
-        array.push(new File([blob], 'old image', {type: blob.type}))
-        image.value = array
-    }
-}
+const showUpdateArticleDialogWindow = ref(false)
+const snackbar = ref(false)
 
 const message = ref('')
+const status = ref()
 
-const showUpdateArticleDialogWindow = ref(false)
+// Функция закрывания окна добавления статьи
+async function closeDialog() {
+    await clearField()    
+    snackbar.value = true
+    showUpdateArticleDialogWindow.value = false
+    await updateListArticles()
+}
 
-async function updateArticle(title, themesString, text, imageFile=null) {
+// Функция очистки полей
+async function clearField() {
+    title.value = props.article.title
+    themes.value = props.article.themes.join('; ')
+    text.value = props.article.text
+
+    if(image.value != null || image.value.length != 0) {
+        image.value = await base64ToFile(props.article.image)
+    } else {
+        image.value = null
+    }
+    
+}
+
+async function updateArticle() {
     let themesArray = []
-    if(themesString != '') {
-        themesArray = themesString.split(';')
+    if (themes.value != '') {
+        themes.value = themes.value.replaceAll(' ', '')
+        themesArray = themes.value.split(';')
     }
 
-    if (imageFile == null) {
-        message.value = await useArticleStore().updateArticle(title, text, null, themesArray, props.article.id, useTokenStore().token)
-        await useArticleStore().getArticles()
+    if (image.value == null || image.value.length == 0 ) {
+        let result = await useArticleStore().updateArticle(title.value, text.value, null, themesArray, props.article.id, useTokenStore().token)
+        message.value = result.message
+        status.value = result.status
     } else {
         var reader = new FileReader()
-        reader.readAsDataURL(imageFile[0])
+        reader.readAsDataURL(image.value[0])
         reader.onload = async function () {
             let imageToBase64 = reader.result
-            message.value = await useArticleStore().updateArticle(title, text, imageToBase64, themesArray, props.article.id, useTokenStore().token)
-            await useArticleStore().getArticles()
+            let result = await useArticleStore().updateArticle(title.value, text.value, imageToBase64, themesArray, props.article.id, useTokenStore().token)
+            message.value = result.message
+            status.value = result.status
 
-            if(message.value == 'Статья успешно изменена') {
+            if(status.value == 200) {
                 base64ToImage(props.article.image, props.article.id)
+                await closeDialog()
+                
             }
         }
     }
+
+    if(status.value == 200) {
+        await closeDialog()
+    }
 }
 
-onMounted(() => {
-    base64ToFile() 
+onMounted(async () => {
+    if(props.article.image != null) {
+        image.value = await base64ToFile(props.article.image)
+    }
 })
 </script>
 
-<!-- TODO сделать на бекенде валидацию по тема, сравнение по нижнему регистру и без пробелов -->
 <template>
     <div>
         <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
@@ -74,7 +98,7 @@ onMounted(() => {
             
         <v-card>
             <v-card-title class="d-flex justify-center mt-5">
-                <span class="text-h5">Редактирование статьи IDIIDIDIDDIDIDI</span>
+                <span class="form-title">Редактирование статьи {{props.article.title}}</span>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -96,14 +120,18 @@ onMounted(() => {
                         v-model = image
                         label="Изображение" 
                     />
-                    <p>{{ message }}</p>
+                    <p class="form-text">{{ message }}</p>
                 </v-container>
             </v-card-text>
             <v-card-actions  class="d-flex justify-end mb-15 mr-15">
                 <v-btn
                     color="red-darken-1"
                     variant="text"
-                    @click="showUpdateArticleDialogWindow = false"
+                    @click="() => {
+                        clearField()
+                        showUpdateArticleDialogWindow = false
+                    }"
+                    class="form-btn"
                 >
                     Закрыть
                 </v-btn>
@@ -112,13 +140,29 @@ onMounted(() => {
                     variant="text"
                     id="file_input"
                     @click="() => {
-                        updateArticle(title, themes, text, image)
+                        updateArticle()
                     }"
+                    class="form-btn"
                 >
                     Обновить
                 </v-btn>
             </v-card-actions>
         </v-card>
         </v-dialog>
+
+        <v-snackbar v-model="snackbar" :timeout="2000">
+            <p class="form-text mt-2">{{ message }}</p>
+            
+            <template v-slot:actions>
+                <v-btn 
+                    color="blue" 
+                    variant="text" 
+                    @click="snackbar = false"
+                    class="form-btn"
+                > 
+                    Закрыть 
+                </v-btn>
+            </template>
+        </v-snackbar>
   </div>
 </template>
