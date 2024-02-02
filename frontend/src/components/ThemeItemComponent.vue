@@ -41,6 +41,7 @@ onMounted(async () => {
 })
 </script>
 
+<!-- TODO добавить другой шрифт для текста, более читабельный -->
 <template>
   <div class="d-flex justify-space-between align-center">
     <b class="themeName form-text d-inline-block text-truncate">{{ props.theme.name }}</b>
