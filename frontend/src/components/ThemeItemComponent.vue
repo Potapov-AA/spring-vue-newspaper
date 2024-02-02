@@ -57,6 +57,7 @@ onMounted(async () => {
 <style scoped>
 .themeName {
   font-family: ThemeName;
+  font-size: 20px;
   max-width: 250px;
 }
 </style>
