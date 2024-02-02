@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CommentResponse {
+	Integer id;
 	String firstName;
 	String lastName;
 	String text;

@@ -2,6 +2,7 @@ package ru.streje.newspaper.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,9 @@ public class CommentController {
 		
 		return commentService.addComment(token.substring(7), articleId, commentRequest);
 	}
-
+	
+	@DeleteMapping("/deletecomment/{commentId}")
+	public ResponseEntity<?> deleteComment(@PathVariable("commentId") Integer commentId) {
+		return commentService.deleteComment(commentId);
+	}
 }
