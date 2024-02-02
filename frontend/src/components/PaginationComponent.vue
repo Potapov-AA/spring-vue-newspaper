@@ -1,5 +1,7 @@
 <script setup>
+import { useTokenStore } from '@/stores/token'
 import ArticleComponent from '@/components/ArticleComponent.vue'
+import ThemeListComponent from '@/components/ThemeListComponent.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
@@ -42,6 +44,7 @@ const paginatedData = computed(() => {
         <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1">
           Далее
         </v-btn>
+        <ThemeListComponent v-if="useTokenStore().logined" class="mb-4"/>
       </div>
     </div>
     <div v-for="item in paginatedData" :key="item.id" class="mb-4">
