@@ -24,65 +24,63 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="d-flex pt-3 px-2 border solid">
+  <div class="d-flex pt-2 px-2">
     <div :id="'imgElem' + props.article.id"></div>
+
     <v-card :width="1400">
-      <v-card-title>
-        {{ props.article.title }}
+      <v-card-title class="mt-1 d-flex justify-space-between align-center">
+        <b class="articleTitle">{{ props.article.title }}</b>
         <div class="d-flex">
           <UpdateArticleComponent v-bind:article="props.article" />
-          <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text">
-            <v-icon color="red" @click="deleteArticle(props.article.id, useTokenStore().token)">{{
-              'mdi-delete'
-            }}</v-icon>
-          </v-btn>
+          <v-btn
+            color="red"
+            icon="mdi-delete"
+            v-if="useTokenStore().role == ROLES.ADMIN"
+            variant="text"
+            @click="deleteArticle(props.article.id, useTokenStore().token)"
+          />
         </div>
       </v-card-title>
 
       <v-card-subtitle>
-        <b v-for="tag in props.article.themes" :key="tag" class="mx-1">
-            #<i>{{ tag }}</i>
-          </b>
+        <b v-for="tag in props.article.themes" :key="tag" class="mx-1 articleSubtitle">
+          #<i>{{ tag }}</i>
+        </b>
       </v-card-subtitle>
 
       <v-card-text>
-        <div class="text-justify">
-        {{ props.article.text.slice(0, 250) }}
-        <span :id="'article-' + props.article.id" class="hidden">
-          {{ props.article.text.slice(250) }}
-        </span>
-      </div>
-      </v-card-text>
-      <v-card-actions>
-        <button
-          :id="'btn-show-' + props.article.id"
-          @click="
-            showContent(
-              'article-' + props.article.id,
-              'btn-show-' + props.article.id,
-              'btn-hide-' + props.article.id,
-              'v-btn border pa-2'
-            )
-          "
-          class="v-btn border pa-2"
-        >
-          Показать больше
-        </button>
-        <button
-          :id="'btn-hide-' + props.article.id"
+        <div class="text-justify articleText">
+          {{ props.article.text.slice(0, 250) }}
+          <button
+            :id="'btn-show-' + props.article.id"
+            @click="
+              showContent(
+                'article-' + props.article.id,
+                'btn-show-' + props.article.id,
+                'btn-hide-' + props.article.id,
+                'v-btn text-blue'
+              )
+            "
+            class="v-btn text-blue"
+            >Читать далее</button
+          >
+          <span :id="'article-' + props.article.id" class="hidden">
+            {{ props.article.text.slice(250) }}
+          </span><br>
+          <button :id="'btn-hide-' + props.article.id"
           @click="
             hideContent(
               'article-' + props.article.id,
               'btn-show-' + props.article.id,
               'btn-hide-' + props.article.id,
-              'v-btn border pa-2'
+              'v-btn text-blue'
             )
           "
-          class="hidden"
-        >
-          Показать меньше
-        </button>
-
+          class="hidden">Скрыть текст</button>
+        </div>
+      </v-card-text>
+      <v-card-actions class="mx-2 d-flex justify-space-between">
+        <CommentComponent v-bind:id="props.article.id" />
         <div class="d-flex align-center">
           <p align="right" class="mr-2">
             {{ date.getDate() }}-{{ date.getMonth() + 1 }}-{{ date.getFullYear() }}
@@ -95,7 +93,23 @@ onMounted(() => {
           <LikeComponent v-bind:id="props.article.id" />
         </div>
       </v-card-actions>
-      <CommentComponent v-bind:id="props.article.id" />
     </v-card>
   </div>
 </template>
+
+<style scoped>
+.articleTitle {
+  font-family: ArticleTitle;
+  font-size: 28px;
+}
+
+.articleSubtitle {
+  font-family: ThemeName;
+  font-size: 16px;
+}
+
+.articleText {
+  font-family: ArticleText;
+  font-size: 16px;
+}
+</style>
