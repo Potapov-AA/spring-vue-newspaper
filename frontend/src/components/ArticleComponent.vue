@@ -27,10 +27,8 @@ onMounted(() => {
 <template>
   <div class="d-flex pt-3 px-2 border solid w-auto" style="max-width: 1100px;">
     <div>
-      <div v-if="props.article.image === null">
-        <img  src="/default-news.png" width="200" height="200" />
-      </div>
-      <div v-else :id="'imgElem'+props.article.id"> 
+      <div :id="'imgElem'+props.article.id">
+        <img v-if="props.article.image === null" src="/default-news.png" width="200" height="200" />
       </div>
     </div>
     <div class="w-100">
