@@ -138,8 +138,12 @@ public class ThemeService {
 		User user = userService.findByEmail(email).get();
 		Theme theme = themeRepository.findById(themeId).get();
 		
-		LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
+		try {
+			LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
+			return new ResponseEntity<>(likeDislikeThemes.getStatus(), HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(0, HttpStatus.OK);
+		}
 		
-		return new ResponseEntity<>(likeDislikeThemes.getStatus(), HttpStatus.OK);
 	}
 }
