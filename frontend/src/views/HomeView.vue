@@ -22,9 +22,8 @@ onMounted(async () => {
     <div v-if="useArticleStore().httpStatus != 500">  
       <PaginationComponent v-bind:items="useArticleStore().articles" />
     </div>
-    <!-- TODO поменять на крутящуюся загрузку по центру контейнера -->
     <div v-else class="py-10 px-5">
-      {{ useArticleStore().message }}
+      <div class="spinner"></div>
     </div>
   </v-container>
 </template>
