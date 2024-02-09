@@ -55,7 +55,7 @@ public class CommentService {
 			return new ResponseEntity<>(commentResponses, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Комментарии не найдены"),
-					HttpStatus.NOT_FOUND);
+					HttpStatus.OK);
 		}
 	}
 
