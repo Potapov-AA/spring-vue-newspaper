@@ -47,31 +47,14 @@ async function base64ToFile(base64Image) {
 
 
 // Функция обновления списка статьей
-// TODO Проверить что нормально вызывается после выбора любимых тем
-// TODO ПРоверить что нормально вызывается после выбора запретных тем
-// TODO Проверить что нормально вызывается после удаления из любимых тем
-// TODO Проверить что нормально вызывается после удаления из запретных тем
 async function updateListArticles() {
-  // TODO удалить после всех проверок
-  console.log("Была вызвана функция обновления списка статьей")
-
   if(useTokenStore().logined) {
-    // TODO удалить после всех проверок
-    console.log("Пользователь авторизован")
-
     let lDislikeThemes = await useThemeStore().getDislikeThemes(useTokenStore().token)
     let lLikeThemes = await useThemeStore().getLikeThemes(useTokenStore().token)
-
-    // TODO удалить после всех проверок
-    console.log("Фаворитные темы: " + lLikeThemes)
-    console.log("Запретные темы: " + lDislikeThemes)
     
     await useArticleStore().getArticles(lDislikeThemes, lLikeThemes)
     await useThemeStore().getThemes(useTokenStore().token)
   } else {
-    // TODO удалить после всех проверок
-    console.log("Пользователь не авторизован")
-
     let lDislikeThemes = []
     let lLikeThemes = []
     
@@ -81,4 +64,52 @@ async function updateListArticles() {
   
 }
 
-export { showContent, hideContent, base64ToImage, base64ToFile, updateListArticles }
+// Преобразование даты в нужный формат
+function getStringDate(date) {
+  let result = ''
+  const newDate = new Date(date)
+
+  let year = newDate.getFullYear().toString()
+
+  let day
+  if(newDate.getDate() < 10) {
+    day = '0' + newDate.getDate().toString()
+  } else {
+    day = newDate.getDate().toString()
+  }
+
+
+  let month
+  if(newDate.getMonth() < 10) {
+    month = '0' + newDate.getMonth().toString()
+  } else {
+    month = newDate.getMonth().toString()
+  }
+
+  let hours
+  if (newDate.getHours() < 10) {
+    hours = '0' + newDate.getHours().toString()
+  } else {
+    hours = newDate.getHours().toString()
+  }
+
+  let minutes
+  if (newDate.getMinutes() < 10) {
+    minutes = '0' + newDate.getMinutes().toString()
+  } else {
+    minutes = newDate.getMinutes().toString()
+  }
+
+  result = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes
+
+  return result 
+}
+
+export { 
+  showContent, 
+  hideContent, 
+  base64ToImage, 
+  base64ToFile, 
+  updateListArticles, 
+  getStringDate 
+}

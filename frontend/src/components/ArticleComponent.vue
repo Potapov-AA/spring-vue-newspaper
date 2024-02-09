@@ -1,5 +1,5 @@
 <script setup>
-import { showContent, hideContent, base64ToImage } from '@/js/functions.js'
+import { showContent, hideContent, base64ToImage, getStringDate } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
 import { onMounted, ref } from 'vue'
@@ -49,7 +49,7 @@ onMounted(() => {
       </v-card-subtitle>
 
       <v-card-text>
-        <div class="text-justify articleText">
+        <div v-if="article.text.length > 250" class="text-justify articleText">
           {{ props.article.text.slice(0, 250) }}
           <button
             :id="'btn-show-' + props.article.id"
@@ -62,33 +62,36 @@ onMounted(() => {
               )
             "
             class="v-btn text-blue"
-            >Читать далее</button
           >
+            Читать далее
+          </button>
           <span :id="'article-' + props.article.id" class="hidden">
-            {{ props.article.text.slice(250) }}
-          </span><br>
-          <button :id="'btn-hide-' + props.article.id"
-          @click="
-            hideContent(
-              'article-' + props.article.id,
-              'btn-show-' + props.article.id,
-              'btn-hide-' + props.article.id,
-              'v-btn text-blue'
-            )
-          "
-          class="hidden">Скрыть текст</button>
+            {{ props.article.text.slice(250) }} </span
+          ><br />
+          <button
+            :id="'btn-hide-' + props.article.id"
+            @click="
+              hideContent(
+                'article-' + props.article.id,
+                'btn-show-' + props.article.id,
+                'btn-hide-' + props.article.id,
+                'v-btn text-blue'
+              )
+            "
+            class="hidden"
+          >
+            Скрыть текст
+          </button>
+        </div>
+        <div v-else class="text-justify articleText">
+          {{ props.article.text }}
         </div>
       </v-card-text>
-      <v-card-actions class="mx-2 d-flex justify-space-between">
+      <v-card-actions class="mx-2 d-flex justify-space-between align-start">
         <CommentComponent v-bind:id="props.article.id" />
         <div class="d-flex align-center">
           <p align="right" class="mr-2">
-            {{ date.getDate() }}-{{ date.getMonth() + 1 }}-{{ date.getFullYear() }}
-            {{ date.getHours() }}:
-            <span v-if="date.getMinutes() < 10"> 0{{ date.getMinutes() }} </span>
-            <span v-else>
-              {{ date.getMinutes() }}
-            </span>
+            {{ getStringDate(date) }}
           </p>
           <LikeComponent v-bind:id="props.article.id" />
         </div>
