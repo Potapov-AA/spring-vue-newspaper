@@ -1,5 +1,7 @@
 package ru.streje.newspaper.services;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -87,11 +89,16 @@ public class ArticleService {
 		Iterable<Article> iArticles = articleRepository.findByOrderByIdDesc();
 
 		for (Article article : iArticles) {
-			//// УБРАТЬ КОММЕНТАРИИ КОГДА БУДЕТ ПОЛНОСТЬЮ ГОТОВ ФУНКЦИОНАЛ
-//			if ((new Date().getTime() - article.getDate().getTime()) / 100 <= secondsIn24Houres) {
+			
+			Instant instantArticleDate = article.getDate().toInstant();
+			Instant instantCurrentDate = new Date().toInstant();
+			 
+			Duration duration = Duration.between(instantArticleDate, instantCurrentDate);
+			
+			if (duration.getSeconds() <= secondsIn24Houres) {
 			ArticleResponse articleResponse = fillArticleResponse(article);
-			articles.add(articleResponse);
-//			}
+				articles.add(articleResponse);
+			}
 		}
 
 		if (articles.size() > 0) {
