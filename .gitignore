@@ -89,3 +89,5 @@ pnpm-debug.log*
 *.sw?
 
 *.docx
+
+var
