@@ -1,6 +1,6 @@
 package ru.streje.newspaper.dtos;
 
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data

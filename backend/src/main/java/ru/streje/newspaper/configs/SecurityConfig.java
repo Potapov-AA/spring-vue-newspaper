@@ -38,28 +38,27 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf().disable()
-			.cors().and()
-			.authorizeRequests()
-			.requestMatchers("/articles").permitAll() 
-			.requestMatchers("/comments/{articleId}").permitAll()
-			.requestMatchers("/countlikes/{articleId}").permitAll()
-			.requestMatchers("/addcomment/{articleId}").authenticated()
-			.requestMatchers("/addremovelike/{articleId}").authenticated()
-			.requestMatchers("/likestatus/{articleId}").authenticated()	
-			.requestMatchers("/likethemes").authenticated() 
-			.requestMatchers("/allthemes").authenticated() 
-			.requestMatchers("/dislikethemes").authenticated()
-			.requestMatchers("/addliketheme/{id}").authenticated()
-			.requestMatchers("/adddisliketheme/{id}").authenticated()
-			.requestMatchers("/deletelikedislikethemes/{id}").authenticated()
-			.requestMatchers("/checkstatus/{id}").authenticated()
-			.requestMatchers("/checktoken").authenticated()
-			.requestMatchers("/newarticle").hasRole("ADMIN")
-			.requestMatchers("/article/{id}").hasRole("ADMIN")
-			.requestMatchers("/deletearticle/{id}").hasRole("ADMIN")
-			.requestMatchers("/changearticle/{id}").hasRole("ADMIN")
-			.requestMatchers("/deletecomment/{commentId}").hasRole("ADMIN")
+			.cors().and().csrf().disable()
+			.authorizeRequests()	
+			.antMatchers("/articles").permitAll() 
+			.antMatchers("/comments/{articleId}").permitAll()
+			.antMatchers("/countlikes/{articleId}").permitAll()
+			.antMatchers("/addcomment/{articleId}").authenticated()
+			.antMatchers("/addremovelike/{articleId}").authenticated()
+			.antMatchers("/likestatus/{articleId}").authenticated()	
+			.antMatchers("/likethemes").authenticated() 
+			.antMatchers("/allthemes").authenticated() 
+			.antMatchers("/dislikethemes").authenticated()
+			.antMatchers("/addliketheme/{id}").authenticated()
+			.antMatchers("/adddisliketheme/{id}").authenticated()
+			.antMatchers("/deletelikedislikethemes/{id}").authenticated()
+			.antMatchers("/checkstatus/{id}").authenticated()
+			.antMatchers("/checktoken").authenticated()
+			.antMatchers("/newarticle").hasRole("ADMIN")
+			.antMatchers("/article/{id}").hasRole("ADMIN")
+			.antMatchers("/deletearticle/{id}").hasRole("ADMIN")
+			.antMatchers("/changearticle/{id}").hasRole("ADMIN")
+			.antMatchers("/deletecomment/{commentId}").hasRole("ADMIN")
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
@@ -84,6 +83,7 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

@@ -3,6 +3,7 @@ package ru.streje.newspaper.configs;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,18 +11,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
+	@Autowired
 	private final JwtTokenUtils jwtTokenUtils;
 	
 	@Override
@@ -37,9 +37,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				username = jwtTokenUtils.getUsername(jwt);
 			} catch (ExpiredJwtException e) {
-				log.debug("Время жизни токена вышло");
+				System.out.println("Время жизни токена вышло");
 			} catch (SecurityException e) {
-				log.debug("Неправильная подпись");
+				System.out.println("Неправильная подпись");
 			}
 		}
 		
