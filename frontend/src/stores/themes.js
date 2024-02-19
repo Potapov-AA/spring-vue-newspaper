@@ -6,11 +6,13 @@ const STORE_NAME = 'themes'
 export const useThemeStore = defineStore(STORE_NAME, {
   state: () => ({
     themes: [],
-    errorMessage: '' // TODO поменять имя на просто message
+    message: ''
   }),
 
   actions: {
+    // Функция получения всех тем
     async getThemes(token) {
+
       await axios({
         url: 'http://localhost:8081/api/allthemes',
         method: 'get',
@@ -21,16 +23,19 @@ export const useThemeStore = defineStore(STORE_NAME, {
         .then((response) => {
           {
             this.themes = response.data
-            this.errorMessage = ''
+            this.message = ''
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message
+          this.message = error.response.data.message
           this.themes = []
         })
     },
 
+
+    // Функция проеврка статуса темы (1 - является избранной, -1 - является запретной)
     async checkStatusThemes(token, themeId) {
+
       let status = 0
 
       await axios({
@@ -52,7 +57,10 @@ export const useThemeStore = defineStore(STORE_NAME, {
         return status
     },
 
+
+    // Функция добавления понравившихся тем
     async addLikeTheme(token, themeId) {
+
       await axios({
         url: 'http://localhost:8081/api/addliketheme/'+themeId,
         method: 'post',
@@ -62,7 +70,10 @@ export const useThemeStore = defineStore(STORE_NAME, {
       })
     },
 
+
+    // Функция добавления запретных тем
     async addDislikeTheme(token, themeId) {
+
       await axios({
         url: 'http://localhost:8081/api/adddisliketheme/'+themeId,
         method: 'post',
@@ -72,7 +83,10 @@ export const useThemeStore = defineStore(STORE_NAME, {
       })
     },
 
+
+    // Функция удаления тем из понравившихся/запретных
     async removeLikeDislikeTheme(token, themeId) {
+
       await axios({
         url: 'http://localhost:8081/api/deletelikedislikethemes/'+themeId,
         method: 'delete',
@@ -82,7 +96,10 @@ export const useThemeStore = defineStore(STORE_NAME, {
       })
     },
 
+
+    // Функция получения запретных тем
     async getDislikeThemes(token) {
+
       let dislikeThemes = []
 
       await axios({
@@ -102,7 +119,10 @@ export const useThemeStore = defineStore(STORE_NAME, {
       return dislikeThemes
     },
 
+
+    // Функция получения понравившихся тем
     async getLikeThemes(token) {
+
       let likeThemes = []
 
       await axios({

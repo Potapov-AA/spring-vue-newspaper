@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
+
 const responseMessage = ref('')
 const isSuccess = ref(false)
 
@@ -11,7 +12,10 @@ const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 
+
+// Функция регистрации
 async function registration(firstname, lastname, email, password, confPassword) {
+
   await axios({
     url: 'http://localhost:8081/api/registration',
     method: 'post',
@@ -38,21 +42,32 @@ async function registration(firstname, lastname, email, password, confPassword) 
 
 <template>
   <v-container class="d-flex fill-height fluid justify-center">
-    <v-sheet :elevation="9" :width="500" class="mx-auto rounded-lg pa-6">
+    <v-sheet 
+      :elevation="9" 
+      :width="500" 
+      class="mx-auto rounded-lg pa-6"
+    >
       <v-form>
         <h2 align="center" class="form-title mb-3">РЕГИСТРАЦИЯ</h2>
 
-        <v-text-field v-model="firstname" type="text" label="Имя" placeholder="Иван" />
+        <v-text-field 
+          v-model="firstname" 
+          type="text" 
+          label="Имя" 
+          placeholder="Иван" 
+        />
         <v-text-field 
           v-model="lastname" 
           type="text" 
           label="Фамилия" 
-          placeholder="Иванов" />
+          placeholder="Иванов" 
+        />
         <v-text-field 
           v-model="email" 
           type="email" 
           label="Почта" 
-          placeholder="johndoe@gmail.com" />
+          placeholder="johndoe@gmail.com" 
+        />
         <v-text-field
           v-model="password"
           type="password"
@@ -66,7 +81,10 @@ async function registration(firstname, lastname, email, password, confPassword) 
           placeholder="Подтвердите пароль"
         />
 
-        <p align="center" :class="{ errorMessage: !isSuccess, successMessage: isSuccess, 'form-text mb-4': true }">
+        <p 
+          align="center" 
+          :class="{ errorMessage: !isSuccess, successMessage: isSuccess, 'form-text mb-4': true }"
+        >
           {{ responseMessage }}
         </p>
 

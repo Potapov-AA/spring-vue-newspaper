@@ -1,8 +1,9 @@
 <script setup>
-import { updateListArticles, base64ToImage, base64ToFile } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
+import { updateListArticles, base64ToImage, base64ToFile } from '@/js/functions.js'
 import { onMounted, ref } from 'vue'
+
 
 const props = defineProps({
   article: Object
@@ -19,16 +20,20 @@ const snackbar = ref(false)
 const message = ref('')
 const status = ref()
 
+
 // Функция закрывания окна добавления статьи
 async function closeDialog() {
+
   await clearField()
   snackbar.value = true
   showUpdateArticleDialogWindow.value = false
   await updateListArticles()
 }
 
+
 // Функция очистки полей
 async function clearField() {
+
   title.value = props.article.title
   themes.value = props.article.themes.join('; ')
   text.value = props.article.text
@@ -36,7 +41,10 @@ async function clearField() {
   status.value = -1
 }
 
+
+// Функция обновления статьи
 async function updateArticle() {
+
   let themesArray = []
   if (themes.value != '') {
     themes.value = themes.value.replaceAll(' ', '')
@@ -92,6 +100,7 @@ async function updateArticle() {
   }
 }
 
+
 onMounted(async () => {
   if (props.article.image != null) {
     image.value = await base64ToFile(props.article.image)
@@ -129,9 +138,20 @@ onMounted(async () => {
               label="Название"
               placeholder="Человек-Паук снова актакует!"
             />
-            <v-text-field v-model="themes" label="Темы" placeholder="Паук; DC; Marvel" />
-            <v-textarea v-model="text" label="Текст" />
-            <v-file-input v-model="image" accept="image/*" label="Изображение" />
+            <v-text-field 
+              v-model="themes" 
+              label="Темы" 
+              placeholder="Паук; DC; Marvel" 
+            />
+            <v-textarea 
+              v-model="text" 
+              label="Текст" 
+            />
+            <v-file-input 
+              v-model="image" 
+              accept="image/*" 
+              label="Изображение" 
+            />
             <p v-if="status != 200 && status != -1" class="form-text">{{ message }}</p>
           </v-container>
         </v-card-text>

@@ -1,11 +1,12 @@
 <script setup>
-import { showContent, hideContent, base64ToImage, getStringDate } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
+import { showContent, hideContent, base64ToImage, getStringDate } from '@/js/functions.js'
 import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
 import UpdateArticleComponent from '@/components/UpdateArticleComponent.vue'
+
 
 const props = defineProps({
   article: Object
@@ -13,6 +14,8 @@ const props = defineProps({
 
 const date = ref(new Date(props.article.date))
 
+
+// Функция удаления статьи
 async function deleteArticle(id, token) {
   await useArticleStore().deleteArticle(id, token)
   await useArticleStore().getArticles()

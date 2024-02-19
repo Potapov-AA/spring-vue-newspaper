@@ -1,7 +1,8 @@
 <script setup>
-import axios from 'axios'
 import { useTokenStore } from '@/stores/token'
+import axios from 'axios'
 import { onMounted, ref } from 'vue'
+
 
 const props = defineProps({
   id: Number
@@ -10,7 +11,10 @@ const props = defineProps({
 const userLikeStatus = ref(-1)
 const countLikes = ref(0)
 
+
+// Функция получения статуса лайка
 async function getLikeStatus() {
+
   await axios({
     url: 'http://localhost:8081/api/likestatus/' + props.id,
     method: 'get',
@@ -26,7 +30,10 @@ async function getLikeStatus() {
     })
 }
 
+
+// Функция изменения статуса лайка (поставить/убрать лайк)
 async function changeLikeStatus() {
+
   await axios({
     url: 'http://localhost:8081/api/addremovelike/' + props.id,
     method: 'post',
@@ -45,7 +52,10 @@ async function changeLikeStatus() {
     })
 }
 
+
+// Функция получения количества лайков
 async function getCountLikes() {
+  
   await axios({
     url: 'http://localhost:8081/api/countlikes/' + props.id,
     method: 'get'

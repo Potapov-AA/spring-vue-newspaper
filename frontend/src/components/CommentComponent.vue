@@ -1,8 +1,9 @@
 <script setup>
-import axios from 'axios'
-import { showContent, hideContent, getStringDate } from '@/js/functions.js'
 import { useTokenStore, ROLES } from '@/stores/token'
+import { showContent, hideContent, getStringDate } from '@/js/functions.js'
+import axios from 'axios'
 import { onMounted, ref } from 'vue'
+
 
 const props = defineProps({
   id: Number
@@ -12,7 +13,10 @@ const countCommentShow = ref(3)
 
 const comments = ref([])
 
+
+// Функция получения всех комментариев к статье
 async function getAllComment() {
+
   await axios({
     url: 'http://localhost:8081/api/comments/' + props.id,
     method: 'get'
@@ -27,9 +31,12 @@ async function getAllComment() {
     })
 }
 
+
 const textComment = ref('')
 
+// Функция добавления комментариев
 async function addComment(textComment) {
+
   await axios({
     url: 'http://localhost:8081/api/addcomment/' + props.id,
     method: 'post',
@@ -45,7 +52,10 @@ async function addComment(textComment) {
   await getAllComment()
 }
 
+
+// Функция удаления комментариев
 async function deleteComment(id) {
+
   await axios({
     url: 'http://localhost:8081/api/deletecomment/' + id,
     method: 'delete',
@@ -56,6 +66,7 @@ async function deleteComment(id) {
 
   await getAllComment()
 }
+
 
 onMounted(async () => {
   await getAllComment()
@@ -98,11 +109,20 @@ onMounted(async () => {
     </button>
     <div :id="'article-comment-' + props.id" class="hidden">
       <div v-if="comments.length > 0">
-        <div v-for="comment in comments.slice(0, countCommentShow)" :key="comment" class="mb-3 d-flex flex-column">
+        <div 
+          v-for="comment in comments.slice(0, countCommentShow)" 
+          :key="comment" 
+          class="mb-3 d-flex flex-column"
+        >
           <div class="d-flex align-center">
             <b>{{ comment.firstName }} {{ comment.lastName }}</b> 
 
-            <v-btn icon v-if="useTokenStore().role == ROLES.ADMIN" variant="text" class="ml-2">
+            <v-btn 
+              icon 
+              v-if="useTokenStore().role == ROLES.ADMIN" 
+              variant="text" 
+              class="ml-2"
+            >
               <v-icon color="red" @click="deleteComment(comment.id)">{{ 'mdi-delete' }}</v-icon>
             </v-btn>
           </div>
@@ -114,7 +134,13 @@ onMounted(async () => {
           </div>
         </div>
         <div v-if="countCommentShow < comments.length" class="mb-3">
-          <p @click="countCommentShow += 3" align="center" style="color: royalblue">Показать еще</p>
+          <p 
+            @click="countCommentShow += 3" 
+            align="center" 
+            style="color: royalblue"
+          >
+            Показать еще
+          </p>
         </div>
       </div>
       <div v-else class="mb-3">Комментариев пока что нет, будь первым</div>

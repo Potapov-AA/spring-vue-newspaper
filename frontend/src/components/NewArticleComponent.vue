@@ -1,8 +1,9 @@
 <script setup>
-import { updateListArticles } from '@/js/functions.js'
 import { useTokenStore } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
+import { updateListArticles } from '@/js/functions.js'
 import { ref } from 'vue'
+
 
 const title = ref('')
 const themes = ref('')
@@ -15,16 +16,20 @@ const status = ref()
 const showAddArticleDialogWindow = ref(false)
 const snackbar = ref(false)
 
+
 // Функция закрывания окна добавления статьи
 async function closeDialog() {
+
     clearField()    
     snackbar.value = true
     showAddArticleDialogWindow.value = false
     await updateListArticles()
 }
 
+
 // Функция очистки полей
 function clearField() {
+
     title.value = ''
     themes.value = ''
     text.value = ''
@@ -33,18 +38,24 @@ function clearField() {
     status.value = -1
 }
 
+
+// Функция добавления статьи
 async function addArticle() {
+
     let themesArray = []
     if (themes.value != '') {
+
         themes.value = themes.value.replaceAll(' ', '')
         themesArray = themes.value.split(';')
     }
 
     if (image.value == null) {
+        
         let result = await useArticleStore().addArticle(title.value, text.value, null, themesArray, useTokenStore().token)
         message.value = result.message
         status.value = result.status     
     } else {
+        
         let reader = new FileReader()
         reader.readAsDataURL(image.value[0])
 

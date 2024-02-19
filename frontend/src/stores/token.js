@@ -17,7 +17,10 @@ const getDefaultParametrs = () => ({
   lastname: ''
 })
 
+
+// Функция парсинга JWT
 function parseJWT(token) {
+
   let base64Url = token.split('.')[1]
   let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
 
@@ -32,13 +35,17 @@ function parseJWT(token) {
   return JSON.parse(jsonPayload)
 }
 
+
 export const useTokenStore = defineStore(STORE_NAME, {
   state: () => ({
     token:
       localStorage.getItem('token') === null
         ? getDefaultParametrs().token
         : localStorage.getItem('token'),
-    logined: localStorage.getItem('token') === null ? getDefaultParametrs().logined : true,
+    logined: 
+      localStorage.getItem('token') === null 
+        ? getDefaultParametrs().logined 
+        : true,
     role:
       localStorage.getItem('token') === null
         ? getDefaultParametrs().role
@@ -54,7 +61,9 @@ export const useTokenStore = defineStore(STORE_NAME, {
   }),
 
   actions: {
+    // Функция запоминания токена
     rememberToken(token) {
+
       this.token = 'Bearer ' + token
       this.logined = true
       this.role = parseJWT(token).roles[0]
@@ -64,7 +73,10 @@ export const useTokenStore = defineStore(STORE_NAME, {
       localStorage.setItem('token', this.token)
     },
 
+
+    // Функция забывания токена
     forgetToken() {
+
       this.token = ''
       this.logined = false
       this.role = ROLES.ANONIM
@@ -74,7 +86,10 @@ export const useTokenStore = defineStore(STORE_NAME, {
       localStorage.removeItem('token')
     },
 
+
+    // Функция проверки статуса токена
     async checkTokenStatus() {
+      
       await axios({
         url: 'http://localhost:8081/api/checktoken',
         method: 'post',
