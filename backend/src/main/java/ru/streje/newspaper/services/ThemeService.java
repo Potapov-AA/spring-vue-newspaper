@@ -72,6 +72,7 @@ public class ThemeService {
 	public ResponseEntity<?> getUserLikesDislikeTheme(String token, Integer status) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
+		
 		Collection<LikeDislikeTheme> likeDislikeTheme = likeDislikeThemeRepository.findByUser(user);
 
 		List<Theme> themes =  new ArrayList<>();
@@ -107,16 +108,11 @@ public class ThemeService {
 	public ResponseEntity<?> addUserLikeDislikeTheme(String token, Integer themeId, Integer status) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
-		Theme theme;
-		
-		try {
-			theme = themeRepository.findById(themeId).get();	
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>("Данной тематики не существует", HttpStatus.BAD_REQUEST);
-		}
+		Theme theme = themeRepository.findById(themeId).get();
 		
 		try {
 			LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
+			
 			likeDislikeThemeRepository.delete(likeDislikeThemes);
 			likeDislikeThemes.setStatus(status);
 			likeDislikeThemeRepository.save(likeDislikeThemes);
@@ -127,6 +123,8 @@ public class ThemeService {
 			likeDislikeThemes.setStatus(status);
 			likeDislikeThemes.setTheme(theme);
 			likeDislikeThemes.setUser(user);
+			likeDislikeThemes.setThemeId(theme.getId());
+			likeDislikeThemes.setUserId(user.getId());
 			
 			likeDislikeThemeRepository.save(likeDislikeThemes);
 			return new ResponseEntity<>(HttpStatus.OK);
