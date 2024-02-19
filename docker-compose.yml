@@ -1,19 +1,66 @@
-version: '3'
+version: '3.6'
 
 services:
   db:
     image: postgres:latest
-    restart: always
-    ports:
-      - "5435:5435"
+    container_name: newspaper-db
+    network_mode: bridge
     environment:
       POSTGRES_DB: 'newspaper'
-      POSTGRES_USER: 'streje'
-      POSTGRES_PASSWORD: 'secret'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+        mode: host
     volumes:
-      - ./DB/var/pgdata:/var/lib/postgresql/data
       - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
+    expose:
+      - 5432
+    restart: unless-stopped
 
-volumes:
-  database_data:
-    driver: local
+  backend:
+    image: newspaper-backend
+    container_name: newspaper-backend
+    network_mode: bridge
+    build: ./backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/newspaper
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    links:
+      - db
+    expose:
+      - 8081
+    restart: unless-stopped
+
+  client:
+    image: newspaper-frontend
+    container_name: newspaper-frontend
+    network_mode: bridge
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    links:
+      - backend
+    expose:
+      - 8080
+    restart: unless-stopped
+    
+  # client:
+  #   build: ./frontend/
+  #   command: http-server dist -p 8080 -c 1 --push-state
+  #   depends_on:
+  #     - db
+  #   ports: 
+  #   - "8080:8080"
+
+
