@@ -1,7 +1,7 @@
 <script setup>
-import { updateListArticles } from '@/js/functions.js'
 import { useArticleStore } from '@/stores/articles'
 import { useTokenStore } from '@/stores/token'
+import { updateListArticles } from '@/js/functions.js'
 import { onMounted} from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
@@ -11,8 +11,8 @@ onMounted(async () => {
   await useTokenStore().checkTokenStatus()
   await updateListArticles()
 
-  window.setInterval(await useTokenStore().checkTokenStatus, 60000)
-  window.setInterval(await updateListArticles, 60000)
+  window.setInterval(await useTokenStore().checkTokenStatus, 600000)
+  window.setInterval(await updateListArticles, 600000)
 })
 </script>
 

@@ -4,7 +4,11 @@ import NewArticleComponent from '@/components/NewArticleComponent.vue'
 </script>
 
 <template>
-  <v-sheet width="100%" :elevation="6" class="header px-6">
+  <v-sheet 
+    width="100%" 
+    :elevation="6" 
+    class="header px-6"
+  >
     <div class="d-flex align-center justify-space-between">
       <p class="title">The Daily Bugle</p>
 

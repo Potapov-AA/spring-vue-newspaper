@@ -13,6 +13,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
   actions: {
     // Функция удаление запретных тем
     removeArticlesWithDislikeThemes(dislikeThemes) {
+
       let targetsIndex = []
       for(let i in this.articles) {
         for(let j in dislikeThemes) {
@@ -28,8 +29,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       }
     },
 
+
     // Функция сортировки в зависимости от количества любимых тем и даты выхода статьи
     sortArticlesRelativeLikeThemes(likeThemes) {
+
       let lCountLikeThemes = []
       for(let i in this.articles) {
         let countThemes = 0
@@ -59,8 +62,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       this.articles = sortArticles
     },
 
+
     // Функция формирования списка статьей
     async getArticles(dislikeThemes, likeThemes) {
+
       try {
         await axios({
           url: 'http://localhost:8081/api/articles', 
@@ -88,8 +93,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       
     },
 
+
     // Функция добавления статьи
     async addArticle(title, text, image, themes, token) {
+
       let message = ''
       let status = 400
       await axios({
@@ -117,8 +124,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
       return {message, status}
     },
 
+
     // Функция обновления статьи
     async updateArticle(title, text, image, themes, id, token) {
+
       let message = ''
       let status = 400
       await axios({
@@ -146,8 +155,10 @@ export const useArticleStore = defineStore(STORE_NAME, {
         return {message, status}
     },
 
+
     // Функция удаления статьи по ID
     async deleteArticle(id, token) {
+      
       await axios({
         url: 'http://localhost:8081/api/deletearticle/'+id,
         method: 'delete',

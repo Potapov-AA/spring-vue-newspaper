@@ -54,13 +54,3 @@ services:
     expose:
       - 8080
     restart: unless-stopped
-    
-  # client:
-  #   build: ./frontend/
-  #   command: http-server dist -p 8080 -c 1 --push-state
-  #   depends_on:
-  #     - db
-  #   ports: 
-  #   - "8080:8080"
-
-

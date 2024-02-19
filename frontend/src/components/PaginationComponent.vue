@@ -1,8 +1,9 @@
 <script setup>
 import { useTokenStore } from '@/stores/token'
+import { computed, ref } from 'vue'
 import ArticleComponent from '@/components/ArticleComponent.vue'
 import ThemeListComponent from '@/components/ThemeListComponent.vue'
-import { computed, ref } from 'vue'
+
 
 const props = defineProps({
   items: Array
@@ -19,10 +20,12 @@ function prevPage() {
   pageNumber.value--
 }
 
+
 const pageCount = computed(() => {
   let itemsCount = props.items.length
   return Math.ceil(itemsCount / countItemsOnPage.value)
 })
+
 
 const paginatedData = computed(() => {
   let start = pageNumber.value * countItemsOnPage.value
@@ -36,11 +39,19 @@ const paginatedData = computed(() => {
   <div class="py-5 px-5">
     <div class="d-flex justify-center align-top">
       <div class="d-flex  justify-center mb-4">
-        <v-btn @click="prevPage" :disabled="pageNumber === 0" class="standart-btn">
+        <v-btn 
+          @click="prevPage" 
+          :disabled="pageNumber === 0" 
+          class="standart-btn"
+        >
           Назад
         </v-btn>
         <p class="paginationNumber mx-5 mt-1">{{ pageNumber + 1 }}</p>
-        <v-btn @click="nextPage" :disabled="pageNumber === pageCount-1" class="standart-btn">
+        <v-btn 
+          @click="nextPage" 
+          :disabled="pageNumber === pageCount-1" 
+          class="standart-btn"
+        >
           Далее
         </v-btn>
         <ThemeListComponent v-if="useTokenStore().logined" class="ml-5"/>

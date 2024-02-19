@@ -1,22 +1,33 @@
 <script setup>
 import { useThemeStore } from '@/stores/themes'
-
-import ThemeItemComponent from '@/components/ThemeItemComponent.vue'
 import { ref } from 'vue'
+import ThemeItemComponent from '@/components/ThemeItemComponent.vue'
+
 
 const themeDialog = ref(false)
 </script>
 
 <template>
   <div>
-    <v-btn color="lime-lighten-5" @click="themeDialog = true" class="standart-btn"> Темы </v-btn>
+    <v-btn 
+      color="lime-lighten-5" 
+      @click="themeDialog = true" 
+      class="standart-btn"
+    > 
+      Темы 
+    </v-btn>
 
     <v-dialog v-model="themeDialog" width="auto">
       <v-card :width="400">
         <v-card-title class="d-flex justify-space-between align-center mt-4"> 
           <p class="themeListTitle">Темы</p>
            
-          <v-btn color="red" icon="mdi-close" variant="plain" @click="themeDialog = false"/>
+          <v-btn 
+            @click="themeDialog = false"
+            color="red" 
+            icon="mdi-close" 
+            variant="plain"
+          />
 
         </v-card-title>
         
