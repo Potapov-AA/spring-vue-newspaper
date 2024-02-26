@@ -13,7 +13,7 @@
 - PostgreSQL
 
 ### Схема БД
-![Схема БД](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/scheme.jpg){600px}
+![Схема БД](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/scheme.jpg)
 
 ---
 
@@ -41,11 +41,12 @@
 
 <i>Примечание:</i> по умолчанию все пользователи создаются с ролью USER, роль ADMIN задается только через БД.
 
-Запустить проект можно следующими спосабами<!-- Вставить ссылку на инциализацю проекта -->
-
+Запустить проект можно следующими спосабами:
+1. [Через Docker](#DOCKER)
+2. [Через запуск отдельных приложений](#APP)
 ---
 
-## Запуск через Docker
+## Запуск через Docker <a name="DOCKER"></a> 
 Чтобы запустить через Docker необходимо сдлеать следюущие действия
 
 1. Сформировать .jar файл для бекенда, сделать это можно несколькими спосабами:
@@ -59,18 +60,8 @@
 
 ---
 
-## Запуск отдельными приложениями
+## Запуск отдельными приложениями <a name="APP"></a> 
 1. Заполнить БД с помощью файла [init.sql](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/DB/init.sql). Подключение идет к БД <b>newspaper</b>, если используется другое имя, то следует это поменять в [application.yml](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/backend/src/main/resources/application.yml).
 2. Изменить остальные данные для подключения к БД в [application.yml](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/backend/src/main/resources/application.yml). При необходимости отображения SQL запросов поменять <b>show-sql</b> на true.
 3. Запустить проект Java из папки backend. Приложение запуститься на порту <b>8081</b>, его можно также поменять в [application.yml](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/backend/src/main/resources/application.yml).
 4. Запустить Vue-проект из папки frontend с помощью команды <b>npm run dev</b>. Приложение запуститься на порту <b>8000</b>, поменять его можно в файле [vite.config](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/frontend/vite.config.js).
-
-
-
-<!-- TODO: отдельный блок для БД, приложить схему БД -->
-
-<!-- TODO: отдельный блок для Docker, о том как запустить -->
-
-<!-- TODO: отдельный блок о том как запустить проект без DOCKER -->
-
-<!-- TODO: в блоке про запуск привести пример application.yml -->
