@@ -12,6 +12,9 @@
 - Spring Boot 2.7.13
 - PostgreSQL
 
+### Схема БД
+![Схема БД](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/scheme.jpg)
+
 ---
 
 ## Реализован следующий функционал:
