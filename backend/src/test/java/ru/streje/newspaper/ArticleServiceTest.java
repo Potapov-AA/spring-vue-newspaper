@@ -171,23 +171,36 @@ public class ArticleServiceTest {
 	}
 	
 	
-//	@Test
-//	public void changeAtricle_returnResponseEntity() {
-//		
-//		ArticleRequest articleRequest = new ArticleRequest();
-//		articleRequest.setImage("image");
-//		articleRequest.setText("text");
-//		
-//		String[] themes = new String[] {"тема 1", "тема 2"};
-//		articleRequest.setThemes(themes);
-//		
-//		articleRequest.setTitle("Заголовок");
-//		
-//		ResponseEntity<?> responseEntity = articleService.changeAtricle(articleRequest, 1);
-//		
-//		assertNotNull(responseEntity);
-//		assertEquals(HttpStatus.NOT_MODIFIED, responseEntity.getStatusCode());
-//	}
+	@Test
+	public void changeAtricle_returnResponseEntity() {
+		
+		Article article = new Article();
+		
+		Collection<Theme> themes = new ArrayList<Theme>();
+		article.setThemes(themes);
+		
+		Collection<User> users = new ArrayList<User>();
+		article.setUsers(users);
+		
+		article.setDate(new Date());
+		
+		Optional<Article> oArticle = Optional.of(article);
+		
+		doReturn(oArticle)
+		.when(articleRepository)
+		.findById(1);
+		
+		ArticleRequest articleRequest = new ArticleRequest();
+		articleRequest.setImage("image");
+		articleRequest.setText("text");
+		articleRequest.setThemes(new String[] {"тема 1", "тема 2"});
+		articleRequest.setTitle("Заголовок");
+		
+		ResponseEntity<?> responseEntity = articleService.changeAtricle(articleRequest, 1);
+		
+		assertNotNull(responseEntity);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
 }
 
 
