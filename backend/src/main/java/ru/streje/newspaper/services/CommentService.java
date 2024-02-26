@@ -28,6 +28,7 @@ public class CommentService {
 	private final ArticleService articleService;
 	private final UserService userService;
 
+	
 	/**
 	 * Метод получения всех комментариев определенной статьи
 	 * 
@@ -59,6 +60,7 @@ public class CommentService {
 		}
 	}
 
+	
 	/**
 	 * Метод добавления комментариев
 	 * 
@@ -88,6 +90,7 @@ public class CommentService {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 	
 	/***
 	 * Метод удаления комментариев
