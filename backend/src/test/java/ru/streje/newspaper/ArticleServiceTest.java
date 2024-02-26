@@ -2,7 +2,6 @@ package ru.streje.newspaper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ru.streje.newspaper.dtos.ArticleRequest;
-import ru.streje.newspaper.dtos.ArticleResponse;
-import ru.streje.newspaper.messages.ErrorMessage;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.models.User;
@@ -147,16 +144,33 @@ public class ArticleServiceTest {
 	}
 	
 	
-//	@Test
-//	public void deleteArticle_returnResponseEntity() {
-//		
-//		ResponseEntity<?> responseEntity = articleService.deleteArticle(1);
-//		
-//		assertNotNull(responseEntity);
-//		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-//	}
-//	
-//	
+	@Test
+	public void deleteArticle_returnResponseEntity() {
+		
+		Article article = new Article();
+		
+		Collection<Theme> themes = new ArrayList<Theme>();
+		article.setThemes(themes);
+		
+		Collection<User> users = new ArrayList<User>();
+		article.setUsers(users);
+		
+		article.setDate(new Date());
+		
+		Optional<Article> oArticle = Optional.of(article);
+		
+		doReturn(oArticle)
+		.when(articleRepository)
+		.findById(1);
+		
+		
+		ResponseEntity<?> responseEntity = articleService.deleteArticle(1);
+		
+		assertNotNull(responseEntity);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+	
+	
 //	@Test
 //	public void changeAtricle_returnResponseEntity() {
 //		
