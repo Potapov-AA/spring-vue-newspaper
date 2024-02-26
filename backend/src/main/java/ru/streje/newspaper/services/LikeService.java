@@ -19,6 +19,7 @@ public class LikeService {
 	private final UserService userService;
 	private final JwtTokenUtils jwtTokenUtils;
 
+	
 	/**
 	 * Метод добавления/удаления лайков к статье
 	 * 
@@ -51,6 +52,7 @@ public class LikeService {
 		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
 	}
 
+	
 	/**
 	 * Метод получения статуса лайка пользователя
 	 * 
