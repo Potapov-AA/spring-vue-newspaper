@@ -29,6 +29,7 @@ public class ArticleService {
 
 	private final int secondsIn24Houres = 86400;
 
+	
 	/**
 	 * Метод заполняет и возвращает экземпляр класса ArticleResponse
 	 * 
@@ -55,6 +56,7 @@ public class ArticleService {
 		return articleResponse;
 	}
 
+	
 	/**
 	 * Метод заполняет коллекцию тем
 	 * 
@@ -77,6 +79,7 @@ public class ArticleService {
 		return themes;
 	}
 
+	
 	/**
 	 * Метод возвращает все статьи при их наличии, иначе возвращает сообщение, что
 	 * статьи не найдены
@@ -86,7 +89,7 @@ public class ArticleService {
 	public ResponseEntity<?> getAllArticle() {
 		List<ArticleResponse> articles = new ArrayList<>();
 
-		Iterable<Article> iArticles = articleRepository.findByOrderByIdDesc();
+		Collection<Article> iArticles = articleRepository.findByOrderByIdDesc();
 
 		for (Article article : iArticles) {
 			
@@ -110,6 +113,7 @@ public class ArticleService {
 		}
 	}
 
+	
 	/**
 	 * Метод поиска статьи по ID
 	 * 
@@ -129,6 +133,7 @@ public class ArticleService {
 		}
 	}
 
+	
 	/**
 	 * Метод добавления новой статьи в БД
 	 * 
@@ -156,6 +161,7 @@ public class ArticleService {
 		}
 	}
 
+	
 	/**
 	 * Метод удаления статьи по ID
 	 * 
@@ -174,6 +180,7 @@ public class ArticleService {
 		}
 	}
 
+	
 	/**
 	 * Метод обновления статьи по ID
 	 * 
@@ -211,6 +218,7 @@ public class ArticleService {
 
 	}
 
+	
 	/**
 	 * Метод получение экземпляра Article по id
 	 * 
@@ -226,6 +234,7 @@ public class ArticleService {
 		}
 	}
 
+	
 	/**
 	 * Метод сохранения экземпляра Article в БД
 	 * 
