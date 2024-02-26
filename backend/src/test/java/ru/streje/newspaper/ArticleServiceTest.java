@@ -132,25 +132,21 @@ public class ArticleServiceTest {
 	}
 	
 	
-//	@Test
-//	public void addNewArticle_returnResponseEntity() {
-//		
-//		ArticleRequest articleRequest = new ArticleRequest();
-//		articleRequest.setImage("image");
-//		articleRequest.setText("text");
-//		
-//		String[] themes = new String[] {"тема 1", "тема 2"};
-//		articleRequest.setThemes(themes);
-//		
-//		articleRequest.setTitle("Заголовок");
-//		
-//		ResponseEntity<?> responseEntity = articleService.addNewArticle(articleRequest);
-//		
-//		assertNotNull(responseEntity);
-//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//	}
-//	
-//	
+	@Test
+	public void addNewArticle_returnResponseEntity() {
+		
+		ArticleRequest articleRequest = new ArticleRequest();
+		
+		String[] themes = new String[] {"тема 1", "тема 2"};
+		articleRequest.setThemes(themes);
+		
+		ResponseEntity<?> responseEntity = articleService.addNewArticle(articleRequest);
+		
+		assertNotNull(responseEntity);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+	
+	
 //	@Test
 //	public void deleteArticle_returnResponseEntity() {
 //		
