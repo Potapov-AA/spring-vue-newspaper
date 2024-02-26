@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,18 +88,50 @@ public class ArticleServiceTest {
 	}
 	
 	
-//	@Test
-//	public void getArticleResponse_returnResponseEntity() {
-//		
-//		ResponseEntity<?> responseEntity = articleService.getArticleResponse(1);
-//		
-//		assertNotNull(responseEntity);
-//		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-//		
-//		verify(articleRepository, times(1)).findById(1);
-//	}
-//	
-//	
+	@Test
+	public void getArticleResponse_returnResponseEntity_OK() {
+		
+		Article article = new Article();
+		
+		Collection<Theme> themes = new ArrayList<Theme>();
+		article.setThemes(themes);
+		
+		Collection<User> users = new ArrayList<User>();
+		article.setUsers(users);
+		
+		article.setDate(new Date());
+		
+		Optional<Article> oArticle = Optional.of(article);
+		
+		doReturn(oArticle)
+		.when(articleRepository)
+		.findById(1);
+		
+		ResponseEntity<?> responseEntity = articleService.getArticleResponse(1);
+		
+		assertNotNull(responseEntity);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		
+		verify(articleRepository, times(1)).findById(1);
+	}
+	
+	
+	@Test
+	public void getArticleResponse_returnResponseEntity_NOT_FOUND() {
+		
+		doReturn(Optional.empty())
+		.when(articleRepository)
+		.findById(2);
+		
+		ResponseEntity<?> responseEntity = articleService.getArticleResponse(2);
+		
+		assertNotNull(responseEntity);
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		
+		verify(articleRepository, times(1)).findById(2);
+	}
+	
+	
 //	@Test
 //	public void addNewArticle_returnResponseEntity() {
 //		
