@@ -201,36 +201,27 @@ public class ArticleServiceTest {
 		assertNotNull(responseEntity);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
+	
+	
+	@Test
+	public void getArticle_returnArticle() {
+		
+		Article article_test = new Article();
+		article_test.setId(1);
+		article_test.setImage("image");
+		article_test.setText("text");
+		
+		Optional<Article> oArticle = Optional.of(article_test);
+
+		doReturn(oArticle)
+		.when(articleRepository)
+		.findById(1);
+		
+		Article article = articleService.getArticle(1);
+		
+		assertNotNull(article);
+		assertEquals(1, article.getId());
+		assertEquals("image", article.getImage());
+		assertEquals("text", article.getText());
+	}
 }
-
-
-
-
-//Article article = new Article();
-//
-//Theme theme1 = new Theme();
-//theme1.setId(1);
-//theme1.setName("Тема 1");
-//
-//Theme theme2 = new Theme();
-//theme1.setId(2);
-//theme1.setName("Тема 2");
-//
-//User user1 = new User();
-//User user2 = new User();
-//
-//Collection<User> users = new ArrayList<User>();
-//users.add(user1);
-//users.add(user2);
-//
-//Collection<Theme> themes = new ArrayList<Theme>();
-//themes.add(theme1);
-//themes.add(theme2);
-//
-//article.setId(1);
-//article.setTitle("Заголовок");
-//article.setImage("image test");
-//article.setText("Текст");
-//article.setThemes(themes);
-//article.setUsers(users);
-//article.setDate(new Date(1212121212121L));
