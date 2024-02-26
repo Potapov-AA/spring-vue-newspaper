@@ -13,7 +13,7 @@
 - PostgreSQL
 
 ### Схема БД
-![Схема БД](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/scheme.jpg)
+![Схема БД](https://github.com/Potapov-AA/spring-vue-newspaper/blob/master/scheme.jpg){600}px
 
 ---
 
