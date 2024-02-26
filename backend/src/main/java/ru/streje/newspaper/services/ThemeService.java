@@ -25,6 +25,7 @@ public class ThemeService {
 	private final JwtTokenUtils jwtTokenUtils;
 	private final UserService userService;
 
+	
 	/**
 	 * Метод получения экземпляра Theme по переданому имени, если темы с данным
 	 * именем нет, то возвращает null
@@ -41,6 +42,7 @@ public class ThemeService {
 		}
 	}
 
+	
 	/**
 	 * Метод добавления новой темы
 	 * 
@@ -53,6 +55,11 @@ public class ThemeService {
 	}
 	
 	
+	/***
+	 * Метод получения всех тем
+	 * 
+	 * @return Список всех тем
+	 */
 	public ResponseEntity<?> getAllTheme() {
 		Iterable<Theme> itThemes = themeRepository.findAll(); 
 		
@@ -69,7 +76,16 @@ public class ThemeService {
 	}
 	
 	
+	/***
+	 * Метод получения запретных/любимых тем пользователя
+	 * 
+	 * @param token  - токен авторизации
+	 * @param status - статус тем (-1 - запретные темы, 1 - любимые темы)
+	 * 
+	 * @return List<Theme> или статус NOT_FOUND 
+	 */
 	public ResponseEntity<?> getUserLikesDislikeTheme(String token, Integer status) {
+		
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
 		
@@ -90,6 +106,15 @@ public class ThemeService {
 		}
 	}
 	
+	
+	/***
+	 * Метод удаления статуса любимой/запретной темы
+	 * 
+	 * @param token   - токен авторизации
+	 * @param themeId - ID темы
+	 * 
+	 * @return статус OK/NOT_FOUND
+	 */
 	public ResponseEntity<?> deleteUserLikeDislikeTheme(String token, Integer themeId) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
@@ -105,6 +130,16 @@ public class ThemeService {
 		
 	}
 	
+	
+	/***
+	 * Метод добавления запретных/любимых тем пользователя
+	 * 
+	 * @param token   - токен авторизации
+	 * @param themeId - ID темы
+	 * @param status  - статус тем (-1 - запретные темы, 1 - любимые темы)
+	 * 
+	 * @return статус OK
+	 */
 	public ResponseEntity<?> addUserLikeDislikeTheme(String token, Integer themeId, Integer status) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
@@ -131,6 +166,15 @@ public class ThemeService {
 		}
 	}
 	
+	
+	/***
+	 * Метод проверки статуса темы, является ли она запретной/любимой
+	 * 
+	 * @param token   - токен авторизации
+	 * @param themeId - ID темы
+	 * 
+	 * @return статус темы (-1 - запретные темы, 1 - любимые темы, 0 - обычная)
+	 */
 	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(String token, Integer themeId) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
