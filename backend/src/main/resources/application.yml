@@ -12,9 +12,10 @@ spring:
     username: postgres
     password: 123SOMBIO321 
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
+        ddl-auto: create-drop
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
