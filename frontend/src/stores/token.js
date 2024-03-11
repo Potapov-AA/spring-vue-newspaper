@@ -35,6 +35,7 @@ function parseJWT(token) {
   return JSON.parse(jsonPayload)
 }
 
+var fParseToken = localStorage.getItem('token') !== null ? parseJWT(localStorage.getItem('token').substring(6)) : null
 
 export const useTokenStore = defineStore(STORE_NAME, {
   state: () => ({
@@ -49,15 +50,15 @@ export const useTokenStore = defineStore(STORE_NAME, {
     role:
       localStorage.getItem('token') === null
         ? getDefaultParametrs().role
-        : parseJWT(localStorage.getItem('token').substring(6)).roles[0],
+        : fParseToken.roles[0],
     firstname:
       localStorage.getItem('token') === null
         ? getDefaultParametrs().firstname
-        : parseJWT(localStorage.getItem('token').substring(6)).firstname,
+        : fParseToken.firstname,
     lastname:
       localStorage.getItem('token') === null
         ? getDefaultParametrs().lastname
-        : parseJWT(localStorage.getItem('token').substring(6)).lastname
+        : fParseToken.lastname
   }),
 
   actions: {
