@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
 		String firstName = userService.findByEmail(authRequest.getEmail()).get().getFirstname();
 		String lastName = userService.findByEmail(authRequest.getEmail()).get().getLastname();
 		String token = jwtTokenUtils.generateToken(userDetails, firstName, lastName);
-		return ResponseEntity.ok(new JwtResponse(token));
+		return new ResponseEntity<JwtResponse>(new JwtResponse(token), HttpStatus.OK);
 	}
 
 	/**
