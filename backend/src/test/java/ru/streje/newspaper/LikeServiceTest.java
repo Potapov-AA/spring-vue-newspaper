@@ -22,6 +22,7 @@ import ru.streje.newspaper.models.User;
 import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.LikeService;
 import ru.streje.newspaper.services.UserService;
+import ru.streje.newspaper.services.impl.ArticleServiceImpl;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 @SpringBootTest

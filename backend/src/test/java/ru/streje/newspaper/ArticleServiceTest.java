@@ -26,6 +26,7 @@ import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.models.User;
 import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.services.ArticleService;
+import ru.streje.newspaper.services.impl.ArticleServiceImpl;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
