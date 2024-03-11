@@ -15,7 +15,6 @@ spring:
     show-sql: false
     properties:
       hibernate:
-        ddl-auto: create-drop
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
