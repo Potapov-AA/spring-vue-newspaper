@@ -92,7 +92,7 @@ export const useTokenStore = defineStore(STORE_NAME, {
     async checkTokenStatus() {
       
       await axios({
-        url: 'http://localhost:8081/api/checktoken',
+        url: '/api/checktoken',
         method: 'post',
         headers: {
           Authorization: this.token

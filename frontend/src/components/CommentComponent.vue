@@ -18,7 +18,7 @@ const comments = ref([])
 async function getAllComment() {
 
   await axios({
-    url: 'http://localhost:8081/api/comments/' + props.id,
+    url: '/api/comments/' + props.id,
     method: 'get'
   })
     .then((response) => {
@@ -38,7 +38,7 @@ const textComment = ref('')
 async function addComment(textComment) {
 
   await axios({
-    url: 'http://localhost:8081/api/addcomment/' + props.id,
+    url: '/api/addcomment/' + props.id,
     method: 'post',
     data: {
       text: textComment
@@ -57,7 +57,7 @@ async function addComment(textComment) {
 async function deleteComment(id) {
 
   await axios({
-    url: 'http://localhost:8081/api/deletecomment/' + id,
+    url: '/api/deletecomment/' + id,
     method: 'delete',
     headers: {
       Authorization: useTokenStore().token

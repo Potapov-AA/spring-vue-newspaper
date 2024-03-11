@@ -16,7 +16,7 @@ const countLikes = ref(0)
 async function getLikeStatus() {
 
   await axios({
-    url: 'http://localhost:8081/api/likestatus/' + props.id,
+    url: '/api/likestatus/' + props.id,
     method: 'get',
     headers: {
       Authorization: useTokenStore().token
@@ -35,7 +35,7 @@ async function getLikeStatus() {
 async function changeLikeStatus() {
 
   await axios({
-    url: 'http://localhost:8081/api/addremovelike/' + props.id,
+    url: '/api/addremovelike/' + props.id,
     method: 'post',
     headers: {
       Authorization: useTokenStore().token
@@ -57,7 +57,7 @@ async function changeLikeStatus() {
 async function getCountLikes() {
   
   await axios({
-    url: 'http://localhost:8081/api/countlikes/' + props.id,
+    url: '/api/countlikes/' + props.id,
     method: 'get'
   })
     .then((response) => {

@@ -68,7 +68,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
 
       try {
         await axios({
-          url: 'http://localhost:8081/api/articles', 
+          url: '/api/articles', 
           method: 'get'
         })
           .then((response) => {
@@ -100,7 +100,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
       let message = ''
       let status = 400
       await axios({
-        url: 'http://localhost:8081/api/newarticle', 
+        url: '/api/newarticle', 
         method: 'post',
         data: {
           title: title,
@@ -131,7 +131,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
       let message = ''
       let status = 400
       await axios({
-        url: 'http://localhost:8081/api/changearticle/'+id, 
+        url: '/api/changearticle/' + id, 
         method: 'put',
         data: {
           title: title,
@@ -160,7 +160,7 @@ export const useArticleStore = defineStore(STORE_NAME, {
     async deleteArticle(id, token) {
       
       await axios({
-        url: 'http://localhost:8081/api/deletearticle/'+id,
+        url: '/api/deletearticle/' + id,
         method: 'delete',
         headers: {
           Authorization: token

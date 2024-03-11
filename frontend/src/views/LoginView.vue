@@ -13,7 +13,7 @@ const password = ref('')
 async function login(email, password) {
 
   await axios({
-    url: 'http://localhost:8081/api/auth',
+    url: '/api/auth',
     method: 'post',
     data: {
       email: email,

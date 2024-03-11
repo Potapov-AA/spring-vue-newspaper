@@ -17,7 +17,7 @@ const confirmPassword = ref('')
 async function registration(firstname, lastname, email, password, confPassword) {
 
   await axios({
-    url: 'http://localhost:8081/api/registration',
+    url: '/api/registration',
     method: 'post',
     data: {
       firstname: firstname,

@@ -14,7 +14,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
     async getThemes(token) {
 
       await axios({
-        url: 'http://localhost:8081/api/allthemes',
+        url: '/api/allthemes',
         method: 'get',
         headers: {
           Authorization: token
@@ -39,7 +39,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
       let status = 0
 
       await axios({
-        url: 'http://localhost:8081/api/checkstatus/'+themeId,
+        url: '/api/checkstatus/' + themeId,
         method: 'get',
         headers: {
           Authorization: token
@@ -62,7 +62,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
     async addLikeTheme(token, themeId) {
 
       await axios({
-        url: 'http://localhost:8081/api/addliketheme/'+themeId,
+        url: '/api/addliketheme/' + themeId,
         method: 'post',
         headers: {
           Authorization: token
@@ -75,7 +75,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
     async addDislikeTheme(token, themeId) {
 
       await axios({
-        url: 'http://localhost:8081/api/adddisliketheme/'+themeId,
+        url: '/api/adddisliketheme/' + themeId,
         method: 'post',
         headers: {
           Authorization: token
@@ -88,7 +88,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
     async removeLikeDislikeTheme(token, themeId) {
 
       await axios({
-        url: 'http://localhost:8081/api/deletelikedislikethemes/'+themeId,
+        url: '/api/deletelikedislikethemes/' + themeId,
         method: 'delete',
         headers: {
           Authorization: token
@@ -103,7 +103,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
       let dislikeThemes = []
 
       await axios({
-        url: 'http://localhost:8081/api/dislikethemes',
+        url: '/api/dislikethemes',
         method: 'get',
         headers: {
           Authorization: token
@@ -126,7 +126,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
       let likeThemes = []
 
       await axios({
-        url: 'http://localhost:8081/api/likethemes',
+        url: '/api/likethemes',
         method: 'get',
         headers: {
           Authorization: token
