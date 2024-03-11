@@ -14,13 +14,14 @@ import ru.streje.newspaper.dtos.JwtResponse;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
 import ru.streje.newspaper.messages.ErrorMessage;
 import ru.streje.newspaper.messages.SuccesMessage;
+import ru.streje.newspaper.services.AuthService;
 import ru.streje.newspaper.services.UserService;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
 
 	private final UserService userService;
 	private final JwtTokenUtils jwtTokenUtils;
