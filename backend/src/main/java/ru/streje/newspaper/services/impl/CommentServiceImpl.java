@@ -23,7 +23,6 @@ import ru.streje.newspaper.services.CommentService;
 import ru.streje.newspaper.services.UserService;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
-//TODO: Добавить реализацию сервиса
 
 @Service
 @RequiredArgsConstructor
