@@ -18,6 +18,7 @@ import ru.streje.newspaper.services.CommentService;
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
+	
 	private final CommentService commentService;
 
 	@GetMapping("/comments/{articleId}")
