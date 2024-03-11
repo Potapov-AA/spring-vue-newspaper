@@ -25,7 +25,6 @@ import ru.streje.newspaper.repositories.CommentRepository;
 import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.CommentService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.services.impl.ArticleServiceImpl;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 @SpringBootTest
