@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -87,6 +89,7 @@ public class ThemeServiceImpl implements ThemeService {
 	 * 
 	 * @return List<Theme> или статус NOT_FOUND 
 	 */
+	@Transactional
 	public ResponseEntity<?> getUserLikesDislikeTheme(String token, Integer status) {
 		
 		String email = jwtTokenUtils.getUsername(token);
@@ -118,6 +121,7 @@ public class ThemeServiceImpl implements ThemeService {
 	 * 
 	 * @return статус OK/NOT_FOUND
 	 */
+	@Transactional
 	public ResponseEntity<?> deleteUserLikeDislikeTheme(String token, Integer themeId) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
@@ -143,6 +147,7 @@ public class ThemeServiceImpl implements ThemeService {
 	 * 
 	 * @return статус OK
 	 */
+	@Transactional
 	public ResponseEntity<?> addUserLikeDislikeTheme(String token, Integer themeId, Integer status) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
@@ -178,6 +183,7 @@ public class ThemeServiceImpl implements ThemeService {
 	 * 
 	 * @return статус темы (-1 - запретные темы, 1 - любимые темы, 0 - обычная)
 	 */
+	@Transactional
 	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(String token, Integer themeId) {
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();

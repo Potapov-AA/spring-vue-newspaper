@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class CommentServiceImpl implements CommentService {
 	 * @param articleId - индитификатор статьи
 	 * @return CommentResponse или сообщение о отсутствии комментариев
 	 */
+	@Transactional
 	public ResponseEntity<?> getComments(int articleId) {
 
 		Article article = articleService.getArticle(articleId);
@@ -73,6 +76,7 @@ public class CommentServiceImpl implements CommentService {
 	 * @param commentRequest - параметры запроса
 	 * @return сообщение о успешности или провале добавления комментария
 	 */
+	@Transactional
 	public ResponseEntity<?> addComment(String token, int articleId, CommentRequest commentRequest) {
 		Comment comment = new Comment();
 

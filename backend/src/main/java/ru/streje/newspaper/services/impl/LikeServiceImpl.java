@@ -2,6 +2,8 @@ package ru.streje.newspaper.services.impl;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class LikeServiceImpl implements LikeService {
 	 * @param articleId - индитификатор статьи
 	 * @return LikeRespone(countLike:int, userStatus:int)
 	 */
+	@Transactional
 	public ResponseEntity<?> addRemoveLike(String token, int articleId) {
 		LikeResponse likeResponse = new LikeResponse();
 
@@ -64,6 +67,7 @@ public class LikeServiceImpl implements LikeService {
 	 * @param articleId - индитификатор статьи
 	 * @return LikeRespone(countLike:int, userStatus:int)
 	 */
+	@Transactional
 	public ResponseEntity<?> getUserLikeStatus(String token, int articleId) {
 		LikeResponse likeResponse = new LikeResponse();
 
