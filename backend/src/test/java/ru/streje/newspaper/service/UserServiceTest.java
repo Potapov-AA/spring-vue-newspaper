@@ -19,19 +19,20 @@ public class UserServiceTest {
 	@Autowired
 	UserService userService;
 	
-	@Transactional
 	@Test
 	public void createNewUser_and_findThisUserByEmail_NotNull() {
 		RegistrationUserRequest registrationUserRequest = new RegistrationUserRequest();
 		registrationUserRequest.setFirstname("FIRST NAME");
 		registrationUserRequest.setLastname("LAST NAME");
-		registrationUserRequest.setPassword("noop");
+		registrationUserRequest.setPassword("testtest");
 		registrationUserRequest.setConfirmPassword("testtest");
-		registrationUserRequest.setEmail("test@test.ru");
+		registrationUserRequest.setEmail("testUser@test.ru");
 		
 		userService.createNewUser(registrationUserRequest);
 		
-		User user = userService.findByEmail("test@test.ru").get();
+		User user = userService.findByEmail("testUser@test.ru").get();
+		
+		System.out.println(user);
 		
 		String userRole = null;
 		for (Role role : user.getRoles()) {
@@ -45,7 +46,7 @@ public class UserServiceTest {
 		// У нового пользователя должна быть роль "ROLE_USER"
 		assertEquals("FIRST NAME", user.getFirstname());
 		assertEquals("LAST NAME", user.getLastname());
-		assertEquals("test@test.ru", user.getEmail());
+		assertEquals("testUser@test.ru", user.getEmail());
 		assertEquals("ROLE_USER", userRole);
 	}
 }
