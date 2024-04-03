@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	
 
-	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
