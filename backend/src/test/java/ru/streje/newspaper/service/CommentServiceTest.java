@@ -33,7 +33,6 @@ public class CommentServiceTest {
 	
 	
 	@Test
-	@Transactional
 	public void getCommentsForArticle_returnResponseEntity_OK() {
 				
 		ResponseEntity<?> responseEntity = commentService.getComments(1);		
@@ -46,7 +45,6 @@ public class CommentServiceTest {
 	}
 	
 	@Test
-	@Transactional
 	public void addComment_returnResponseEntity_OK() {
 		
 		// Добавление комментария к первой статье
