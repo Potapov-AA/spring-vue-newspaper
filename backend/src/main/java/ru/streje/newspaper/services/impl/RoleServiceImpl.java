@@ -15,11 +15,12 @@ public class RoleServiceImpl implements RoleService {
 	private final RoleRepository roleRepository;
 
 	/**
-	 * Получение экземпляр класса Role с названием USER
+	 * Получение экземпляр класса Role с типом USER
 	 * 
-	 * @return экземпляр класса Role
+	 * @return Role
 	 */
 	public Role getUserRole() {
+		
 		return roleRepository.findByName("ROLE_USER").get();
 	}
 }
