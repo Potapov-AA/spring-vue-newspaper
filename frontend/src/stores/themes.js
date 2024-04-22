@@ -47,7 +47,7 @@ export const useThemeStore = defineStore(STORE_NAME, {
       })
         .then((response) => {
           {
-            status = response.data
+            status = response.data.status
           }
         })
         .catch(() => {
