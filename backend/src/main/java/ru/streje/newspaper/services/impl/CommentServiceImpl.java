@@ -37,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
 	 * Метод получения комментариев статьи
 	 * 
 	 * @param articleId - индитификатор статьи
+	 * 
 	 * @return List<CommentResponse>
 	 */
 	@Transactional
@@ -68,7 +69,8 @@ public class CommentServiceImpl implements CommentService {
 	 * @param token          - токен авторизации
 	 * @param articleId      - индитификатор статьи
 	 * @param commentRequest - параметры запроса
-	 * @return сообщение о успешности или провале добавления комментария
+	 * 
+	 * @return InfoMessage
 	 */
 	@Transactional
 	public InfoMessage addComment(String token, int articleId, CommentRequest commentRequest) {
@@ -99,7 +101,8 @@ public class CommentServiceImpl implements CommentService {
 	 * Метод удаления комментария
 	 * 
 	 * @param commentId - индификатор комментария
-	 * @return сообщение о успешности или провале удаления комментария
+	 * 
+	 * @return InfoMessage
 	 */
 	public InfoMessage deleteComment(int commentId) {
 		
