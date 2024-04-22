@@ -1,5 +1,7 @@
 package ru.streje.newspaper.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
+import ru.streje.newspaper.dtos.CommentResponse;
+import ru.streje.newspaper.dtos.InfoMessage;
 import ru.streje.newspaper.services.CommentService;
 
 @CrossOrigin
@@ -22,13 +26,16 @@ public class CommentController {
 	private final CommentService commentService;
 
 	@GetMapping("/comments/{articleId}")
-	public ResponseEntity<?> getComments(@PathVariable("articleId") Integer articleId) {	
+	public List<CommentResponse> getComments(@PathVariable("articleId") Integer articleId) {
+		
 		return commentService.getComments(articleId);
 	}
 
 	@PostMapping("/addcomment/{articleId}")
-	public ResponseEntity<?> postComment(@RequestHeader("authorization") String token,
-			@PathVariable("articleId") Integer articleId, @RequestBody CommentRequest commentRequest) {
+	public InfoMessage postComment(
+			@RequestHeader("authorization") String token,
+			@PathVariable("articleId") Integer articleId, 
+			@RequestBody CommentRequest commentRequest) {
 		
 		return commentService.addComment(token.substring(7), articleId, commentRequest);
 	}

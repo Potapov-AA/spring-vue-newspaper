@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
+import ru.streje.newspaper.dtos.InfoMessage;
 import ru.streje.newspaper.messages.ErrorMessage;
 import ru.streje.newspaper.messages.SuccesMessage;
 import ru.streje.newspaper.models.Article;
@@ -36,13 +37,13 @@ public class CommentServiceImpl implements CommentService {
 
 	
 	/**
-	 * Метод получения всех комментариев определенной статьи
+	 * Метод получения комментариев статьи
 	 * 
 	 * @param articleId - индитификатор статьи
-	 * @return CommentResponse или сообщение о отсутствии комментариев
+	 * @return List<CommentResponse>
 	 */
 	@Transactional
-	public ResponseEntity<?> getComments(int articleId) {
+	public List<CommentResponse> getComments(int articleId) {
 
 		Article article = articleService.getArticle(articleId);
 		Collection<Comment> comments = commentRepository.findByArticle(article);
@@ -58,16 +59,12 @@ public class CommentServiceImpl implements CommentService {
 			commentResponse.setText(comment.getText());
 			commentResponses.add(commentResponse);
 		}
-
-		if (commentResponses.size() > 0) {
-			return new ResponseEntity<>(commentResponses, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Комментарии не найдены"),
-					HttpStatus.OK);
-		}
+		
+		return commentResponses;
 	}
 
 	
+	//TODO: Поправить момент с обращением к несуществующей статьи
 	/**
 	 * Метод добавления комментариев
 	 * 
@@ -77,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
 	 * @return сообщение о успешности или провале добавления комментария
 	 */
 	@Transactional
-	public ResponseEntity<?> addComment(String token, int articleId, CommentRequest commentRequest) {
+	public InfoMessage addComment(String token, int articleId, CommentRequest commentRequest) {
 		Comment comment = new Comment();
 
 		String email = jwtTokenUtils.getUsername(token);
@@ -91,11 +88,9 @@ public class CommentServiceImpl implements CommentService {
 
 		try {
 			commentRepository.save(comment);
-			return new ResponseEntity<>(new SuccesMessage("Комментарий успешно добавлен"), HttpStatus.OK);
+			return new InfoMessage(HttpStatus.CREATED.value(), "Комментарий успешно добавлен");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий"),
-					HttpStatus.BAD_REQUEST);
+			return new InfoMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий");
 		}
 	}
 	
