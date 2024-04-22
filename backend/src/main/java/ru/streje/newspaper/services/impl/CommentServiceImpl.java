@@ -8,15 +8,12 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
 import ru.streje.newspaper.dtos.InfoMessage;
-import ru.streje.newspaper.messages.ErrorMessage;
-import ru.streje.newspaper.messages.SuccesMessage;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Comment;
 import ru.streje.newspaper.models.User;
@@ -75,6 +72,7 @@ public class CommentServiceImpl implements CommentService {
 	 */
 	@Transactional
 	public InfoMessage addComment(String token, int articleId, CommentRequest commentRequest) {
+		
 		Comment comment = new Comment();
 
 		String email = jwtTokenUtils.getUsername(token);
@@ -101,15 +99,14 @@ public class CommentServiceImpl implements CommentService {
 	 * @param commentId - индификатор комментария
 	 * @return сообщение о успешности или провале удаления комментария
 	 */
-	public ResponseEntity<?> deleteComment(int commentId) {
+	public InfoMessage deleteComment(int commentId) {
+		
 		try {
 			Comment comment = commentRepository.findById(commentId).get();
 			commentRepository.delete(comment);
-			return new ResponseEntity<>(new SuccesMessage("Комментарий успешно удалена"), HttpStatus.OK);
+			return new InfoMessage(HttpStatus.OK.value(), "Комментарий успешно удален");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален"),
-					HttpStatus.NOT_FOUND);
+			return new InfoMessage(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален");
 		}
 	}
 }
