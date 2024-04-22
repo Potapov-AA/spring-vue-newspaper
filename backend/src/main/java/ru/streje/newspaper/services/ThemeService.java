@@ -2,8 +2,6 @@ package ru.streje.newspaper.services;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-
 import ru.streje.newspaper.dtos.InfoMessage;
 import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.Theme;
