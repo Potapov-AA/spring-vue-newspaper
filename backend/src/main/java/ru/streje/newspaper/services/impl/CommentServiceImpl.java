@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
 	
 	//TODO: Поправить момент с обращением к несуществующей статьи
 	/**
-	 * Метод добавления комментариев
+	 * Метод добавления комментария
 	 * 
 	 * @param token          - токен авторизации
 	 * @param articleId      - индитификатор статьи
@@ -77,6 +77,8 @@ public class CommentServiceImpl implements CommentService {
 
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
+		
+		//TODO: Поправить данный вызов
 		Article article = articleService.getArticle(articleId);
 
 		comment.setArticle(article);
@@ -94,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
 	
 	
 	/***
-	 * Метод удаления комментариев
+	 * Метод удаления комментария
 	 * 
 	 * @param commentId - индификатор комментария
 	 * @return сообщение о успешности или провале удаления комментария
