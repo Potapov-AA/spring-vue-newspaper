@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -27,16 +25,19 @@ public class LikeServiceImpl implements LikeService {
 
 	
 	/**
-	 * Метод добавления/удаления лайков к статье
+	 * Метод добавления/удаления лайка к статье
 	 * 
 	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:int)
+	 * 
+	 * @return LikeResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> addRemoveLike(String token, int articleId) {
+	public LikeResponse addRemoveLike(String token, int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
+		
+		//TODO: Поправить вызов
 		Article article = articleService.getArticle(articleId);
 		Collection<User> users = article.getUsers();
 
@@ -55,8 +56,8 @@ public class LikeServiceImpl implements LikeService {
 
 		article.setUsers(users);
 		articleService.saveArticle(article);
-
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		
+		return likeResponse;
 	}
 
 	
@@ -65,12 +66,15 @@ public class LikeServiceImpl implements LikeService {
 	 * 
 	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:int)
+	 * 
+	 * @return LikeResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> getUserLikeStatus(String token, int articleId) {
+	public LikeResponse getUserLikeStatus(String token, int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
+		
+		//TODO: Поправить вызов
 		Article article = articleService.getArticle(articleId);
 		Collection<User> users = article.getUsers();
 
@@ -85,24 +89,26 @@ public class LikeServiceImpl implements LikeService {
 			likeResponse.setUserStatus(-1);
 		}
 
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		return likeResponse;
 	}
 
 	/**
 	 * Получение количества лайков
 	 * 
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:-1 (доступно не авторизованым
-	 *         пользователям))
+	 * 
+	 * @return LikeResponse
 	 */
-	public ResponseEntity<?> getCountLikes(int articleId) {
+	public LikeResponse getCountLikes(int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
+		
+		//TODO: Поправить вызов
 		Article article = articleService.getArticle(articleId);
 		Collection<User> users = article.getUsers();
 
 		likeResponse.setCountLike(users.size());
 
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		return likeResponse;
 	}
 }
