@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.LikeResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.User;
-import ru.streje.newspaper.services.ArticleService;
+import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.services.LikeService;
 import ru.streje.newspaper.services.UserService;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
@@ -19,7 +19,7 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 @Service
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
-	private final ArticleService articleService;
+	private final ArticleRepository articleRepository;
 	private final UserService userService;
 	private final JwtTokenUtils jwtTokenUtils;
 
@@ -37,8 +37,7 @@ public class LikeServiceImpl implements LikeService {
 		
 		LikeResponse likeResponse = new LikeResponse();
 		
-		//TODO: Поправить вызов
-		Article article = articleService.getArticle(articleId);
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
 		String email = jwtTokenUtils.getUsername(token);
@@ -55,7 +54,7 @@ public class LikeServiceImpl implements LikeService {
 		}
 
 		article.setUsers(users);
-		articleService.saveArticle(article);
+		articleRepository.save(article);
 		
 		return likeResponse;
 	}
@@ -74,8 +73,7 @@ public class LikeServiceImpl implements LikeService {
 		
 		LikeResponse likeResponse = new LikeResponse();
 		
-		//TODO: Поправить вызов
-		Article article = articleService.getArticle(articleId);
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
 		String email = jwtTokenUtils.getUsername(token);
@@ -103,8 +101,7 @@ public class LikeServiceImpl implements LikeService {
 		
 		LikeResponse likeResponse = new LikeResponse();
 		
-		//TODO: Поправить вызов
-		Article article = articleService.getArticle(articleId);
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
 		likeResponse.setCountLike(users.size());

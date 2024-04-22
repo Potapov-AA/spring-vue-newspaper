@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
-import ru.streje.newspaper.dtos.InfoMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Comment;
 import ru.streje.newspaper.models.User;
+import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.repositories.CommentRepository;
-import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.CommentService;
 import ru.streje.newspaper.services.UserService;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
@@ -28,8 +28,8 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 	private final CommentRepository commentRepository;
+	private final ArticleRepository articleRepository;
 	private final JwtTokenUtils jwtTokenUtils;
-	private final ArticleService articleService;
 	private final UserService userService;
 
 	
@@ -43,8 +43,8 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	public List<CommentResponse> getComments(int articleId) {
 
-		Article article = articleService.getArticle(articleId);
-		Collection<Comment> comments = commentRepository.findByArticle(article);
+		Article article = articleRepository.findById(articleId).get();
+		Collection<Comment> comments = commentRepository.findByArticleId(article.getId());
 
 		List<CommentResponse> commentResponses = new ArrayList<>();
 
@@ -62,7 +62,6 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	
-	//TODO: Поправить момент с обращением к несуществующей статьи
 	/**
 	 * Метод добавления комментария
 	 * 
@@ -70,29 +69,26 @@ public class CommentServiceImpl implements CommentService {
 	 * @param articleId      - индитификатор статьи
 	 * @param commentRequest - параметры запроса
 	 * 
-	 * @return InfoMessage
+	 * @return InfoMessageResponse
 	 */
 	@Transactional
-	public InfoMessage addComment(String token, int articleId, CommentRequest commentRequest) {
+	public InfoMessageResponse addComment(String token, int articleId, CommentRequest commentRequest) {
 		
 		Comment comment = new Comment();
 
 		String email = jwtTokenUtils.getUsername(token);
 		User user = userService.findByEmail(email).get();
-		
-		//TODO: Поправить данный вызов
-		Article article = articleService.getArticle(articleId);
 
-		comment.setArticle(article);
+		comment.setArticle(articleRepository.findById(articleId).get());
 		comment.setText(commentRequest.getText());
 		comment.setDate(new Date());
 		comment.setUser(user);
 
 		try {
 			commentRepository.save(comment);
-			return new InfoMessage(HttpStatus.CREATED.value(), "Комментарий успешно добавлен");
+			return new InfoMessageResponse(HttpStatus.CREATED.value(), "Комментарий успешно добавлен");
 		} catch (Exception e) {
-			return new InfoMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий");
+			return new InfoMessageResponse(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий");
 		}
 	}
 	
@@ -102,16 +98,16 @@ public class CommentServiceImpl implements CommentService {
 	 * 
 	 * @param commentId - индификатор комментария
 	 * 
-	 * @return InfoMessage
+	 * @return InfoMessageResponse
 	 */
-	public InfoMessage deleteComment(int commentId) {
+	public InfoMessageResponse deleteComment(int commentId) {
 		
 		try {
 			Comment comment = commentRepository.findById(commentId).get();
 			commentRepository.delete(comment);
-			return new InfoMessage(HttpStatus.OK.value(), "Комментарий успешно удален");
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Комментарий успешно удален");
 		} catch (Exception e) {
-			return new InfoMessage(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален");
+			return new InfoMessageResponse(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален");
 		}
 	}
 }
