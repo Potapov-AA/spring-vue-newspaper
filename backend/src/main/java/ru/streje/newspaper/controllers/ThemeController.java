@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import ru.streje.newspaper.dtos.InfoMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.services.ThemeService;
@@ -41,7 +41,7 @@ public class ThemeController {
 	}
 	
 	@PostMapping("/addliketheme/{id}")
-	public InfoMessage addUserLikeTheme(
+	public InfoMessageResponse addUserLikeTheme(
 			@RequestHeader("authorization") String token, 
 			@PathVariable("id") Integer id) {
 		
@@ -49,7 +49,7 @@ public class ThemeController {
 	}
 	
 	@PostMapping("/adddisliketheme/{id}")
-	public InfoMessage addUserDislikeTheme(
+	public InfoMessageResponse addUserDislikeTheme(
 			@RequestHeader("authorization") String token, 
 			@PathVariable("id") Integer id) {
 		
@@ -57,7 +57,7 @@ public class ThemeController {
 	}
 	
 	@DeleteMapping("/deletelikedislikethemes/{id}")
-	public InfoMessage deleteUserLikeDislikeTheme(
+	public InfoMessageResponse deleteUserLikeDislikeTheme(
 			@RequestHeader("authorization") String token, 
 			@PathVariable("id") Integer id) {
 		

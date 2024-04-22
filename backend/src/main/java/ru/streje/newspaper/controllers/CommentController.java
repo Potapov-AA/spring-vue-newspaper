@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
-import ru.streje.newspaper.dtos.InfoMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.services.CommentService;
 
 @CrossOrigin
@@ -31,7 +31,7 @@ public class CommentController {
 	}
 
 	@PostMapping("/addcomment/{articleId}")
-	public InfoMessage postComment(
+	public InfoMessageResponse postComment(
 			@RequestHeader("authorization") String token,
 			@PathVariable("articleId") Integer articleId, 
 			@RequestBody CommentRequest commentRequest) {
@@ -40,7 +40,7 @@ public class CommentController {
 	}
 	
 	@DeleteMapping("/deletecomment/{commentId}")
-	public InfoMessage deleteComment(@PathVariable("commentId") Integer commentId) {
+	public InfoMessageResponse deleteComment(@PathVariable("commentId") Integer commentId) {
 		
 		return commentService.deleteComment(commentId);
 	}

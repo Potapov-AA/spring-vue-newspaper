@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
 import ru.streje.newspaper.models.Role;
@@ -46,9 +45,11 @@ public class UserServiceImpl implements UserService {
 	 * Метод поиска пользователя по email
 	 * 
 	 * @param email - почта пользователя
+	 * 
 	 * @return экземпляр User
 	 */
 	public Optional<User> findByEmail(String email) {
+		
 		return userRepository.findByEmail(email);
 	}
 	
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
 	 * @param registrationUserRequest - параметры для создания нового пользователя
 	 */
 	public void createNewUser(RegistrationUserRequest registrationUserRequest) {
+		
 		User user = new User();
 		user.setEmail(registrationUserRequest.getEmail());
 		user.setFirstname(registrationUserRequest.getFirstname());

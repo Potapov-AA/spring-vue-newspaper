@@ -2,7 +2,7 @@ package ru.streje.newspaper.services;
 
 import java.util.List;
 
-import ru.streje.newspaper.dtos.InfoMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.Theme;
 
@@ -17,9 +17,9 @@ public interface ThemeService {
 	
 	public List<Theme> getUserLikesDislikeTheme(String token, Integer status);
 	
-	public InfoMessage deleteUserLikeDislikeTheme(String token, Integer themeId);
+	public InfoMessageResponse deleteUserLikeDislikeTheme(String token, Integer themeId);
 	
-	public InfoMessage addUserLikeDislikeTheme(String token, Integer themeId, Integer status);
+	public InfoMessageResponse addUserLikeDislikeTheme(String token, Integer themeId, Integer status);
 	
 	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(String token, Integer themeId);
 }

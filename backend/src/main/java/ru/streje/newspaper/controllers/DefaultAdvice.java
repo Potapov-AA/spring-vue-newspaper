@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ru.streje.newspaper.messages.ErrorMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 
 @ControllerAdvice
 public class DefaultAdvice {
 
 	@ResponseBody
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorMessage> validateExeptions(MethodArgumentNotValidException e) {
+	public ResponseEntity<InfoMessageResponse> validateExeptions(MethodArgumentNotValidException e) {
 
 		String message = e.getBindingResult().getFieldError().getDefaultMessage();
 
-		return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), message), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new InfoMessageResponse(HttpStatus.BAD_REQUEST.value(), message), HttpStatus.BAD_REQUEST);
 	}
 }
