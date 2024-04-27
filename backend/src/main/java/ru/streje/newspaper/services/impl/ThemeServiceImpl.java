@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import ru.streje.newspaper.repositories.LikeDislikeThemeRepository;
 import ru.streje.newspaper.repositories.ThemeRepository;
 import ru.streje.newspaper.services.ThemeService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
@@ -28,7 +28,6 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 public class ThemeServiceImpl implements ThemeService {
 	private final ThemeRepository themeRepository;
 	private final LikeDislikeThemeRepository likeDislikeThemeRepository;
-	private final JwtTokenUtils jwtTokenUtils;
 	private final UserService userService;
 
 	
@@ -85,15 +84,14 @@ public class ThemeServiceImpl implements ThemeService {
 	/***
 	 * Метод получения запретных/любимых тем пользователя
 	 * 
-	 * @param token  - токен авторизации
 	 * @param status - статус тем (-1 - запретные темы, 1 - любимые темы)
 	 * 
 	 * @return List<Theme>
 	 */
 	@Transactional
-	public List<Theme> getUserLikesDislikeTheme(String token, Integer status) {
+	public List<Theme> getUserLikesDislikeTheme(Integer status) {
 		
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		
 		Collection<LikeDislikeTheme> likeDislikeTheme = likeDislikeThemeRepository.findByUser(user);
@@ -112,15 +110,14 @@ public class ThemeServiceImpl implements ThemeService {
 	/***
 	 * Метод удаления статуса любимой/запретной темы
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * 
 	 * @return InfoMessageResponse
 	 */
 	@Transactional
-	public InfoMessageResponse deleteUserLikeDislikeTheme(String token, Integer themeId) {
+	public InfoMessageResponse deleteUserLikeDislikeTheme(Integer themeId) {
 		
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		
 		try {
@@ -139,15 +136,14 @@ public class ThemeServiceImpl implements ThemeService {
 	/***
 	 * Метод добавления запретных/любимых тем пользователя
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * @param status  - статус тем (-1 - запретные темы, 1 - любимые темы)
 	 * 
 	 * @return InfoMessageResponse
 	 */
-	public InfoMessageResponse addUserLikeDislikeTheme(String token, Integer themeId, Integer status) {
+	public InfoMessageResponse addUserLikeDislikeTheme(Integer themeId, Integer status) {
 		
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		Theme theme = themeRepository.findById(themeId).get();
 		
@@ -176,15 +172,14 @@ public class ThemeServiceImpl implements ThemeService {
 	/***
 	 * Метод проверки статуса темы, является ли она запретной/любимой
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * 
 	 * @return LikeDislikeThemeResponse
 	 */
 	@Transactional
-	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(String token, Integer themeId) {
+	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(Integer themeId) {
 		
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		Theme theme = themeRepository.findById(themeId).get();
 		

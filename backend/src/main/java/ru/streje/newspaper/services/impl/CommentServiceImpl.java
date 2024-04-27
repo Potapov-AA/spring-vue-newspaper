@@ -8,6 +8,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,6 @@ import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.repositories.CommentRepository;
 import ru.streje.newspaper.services.CommentService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
@@ -29,7 +29,6 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 public class CommentServiceImpl implements CommentService {
 	private final CommentRepository commentRepository;
 	private final ArticleRepository articleRepository;
-	private final JwtTokenUtils jwtTokenUtils;
 	private final UserService userService;
 
 	
@@ -65,20 +64,19 @@ public class CommentServiceImpl implements CommentService {
 	/**
 	 * Метод добавления комментария
 	 * 
-	 * @param token          - токен авторизации
 	 * @param articleId      - индитификатор статьи
 	 * @param commentRequest - параметры запроса
 	 * 
 	 * @return InfoMessageResponse
 	 */
 	@Transactional
-	public InfoMessageResponse addComment(String token, int articleId, CommentRequest commentRequest) {
+	public InfoMessageResponse addComment(int articleId, CommentRequest commentRequest) {
 		
 		Comment comment = new Comment();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
-
+		
 		comment.setArticle(articleRepository.findById(articleId).get());
 		comment.setText(commentRequest.getText());
 		comment.setDate(new Date());

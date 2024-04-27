@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -24,20 +23,22 @@ public class CommentController {
 	
 	private final CommentService commentService;
 
+	
 	@GetMapping("/comments/{articleId}")
 	public List<CommentResponse> getComments(@PathVariable("articleId") Integer articleId) {
 		
 		return commentService.getComments(articleId);
 	}
 
+	
 	@PostMapping("/addcomment/{articleId}")
 	public InfoMessageResponse postComment(
-			@RequestHeader("authorization") String token,
 			@PathVariable("articleId") Integer articleId, 
 			@RequestBody CommentRequest commentRequest) {
 		
-		return commentService.addComment(token.substring(7), articleId, commentRequest);
+		return commentService.addComment(articleId, commentRequest);
 	}
+	
 	
 	@DeleteMapping("/deletecomment/{commentId}")
 	public InfoMessageResponse deleteComment(@PathVariable("commentId") Integer commentId) {

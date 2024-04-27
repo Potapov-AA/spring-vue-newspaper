@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import ru.streje.newspaper.models.User;
 import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.services.LikeService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
@@ -21,26 +21,24 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 public class LikeServiceImpl implements LikeService {
 	private final ArticleRepository articleRepository;
 	private final UserService userService;
-	private final JwtTokenUtils jwtTokenUtils;
 
 	
 	/**
 	 * Метод добавления/удаления лайка к статье
 	 * 
-	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
 	 * 
 	 * @return LikeResponse
 	 */
 	@Transactional
-	public LikeResponse addRemoveLike(String token, int articleId) {
+	public LikeResponse addRemoveLike(int articleId) {
 		
 		LikeResponse likeResponse = new LikeResponse();
 		
 		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User targetUser = userService.findByEmail(email).get();
 
 		if (users.contains(targetUser)) {
@@ -63,20 +61,19 @@ public class LikeServiceImpl implements LikeService {
 	/**
 	 * Метод получения статуса лайка пользователя
 	 * 
-	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
 	 * 
 	 * @return LikeResponse
 	 */
 	@Transactional
-	public LikeResponse getUserLikeStatus(String token, int articleId) {
+	public LikeResponse getUserLikeStatus(int articleId) {
 		
 		LikeResponse likeResponse = new LikeResponse();
 		
 		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User targetUser = userService.findByEmail(email).get();
 
 		likeResponse.setCountLike(users.size());
@@ -90,6 +87,7 @@ public class LikeServiceImpl implements LikeService {
 		return likeResponse;
 	}
 
+	
 	/**
 	 * Получение количества лайков
 	 * 

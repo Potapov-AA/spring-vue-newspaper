@@ -15,11 +15,11 @@ public interface ThemeService {
 	
 	public List<Theme> getAllTheme();
 	
-	public List<Theme> getUserLikesDislikeTheme(String token, Integer status);
+	public List<Theme> getUserLikesDislikeTheme(Integer status);
 	
-	public InfoMessageResponse deleteUserLikeDislikeTheme(String token, Integer themeId);
+	public InfoMessageResponse deleteUserLikeDislikeTheme(Integer themeId);
 	
-	public InfoMessageResponse addUserLikeDislikeTheme(String token, Integer themeId, Integer status);
+	public InfoMessageResponse addUserLikeDislikeTheme(Integer themeId, Integer status);
 	
-	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(String token, Integer themeId);
+	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(Integer themeId);
 }

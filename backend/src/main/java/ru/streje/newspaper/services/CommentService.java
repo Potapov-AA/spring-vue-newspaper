@@ -10,7 +10,7 @@ public interface CommentService {
 	
 	public List<CommentResponse> getComments(int articleId);
 	
-	public InfoMessageResponse addComment(String token, int articleId, CommentRequest commentRequest);
+	public InfoMessageResponse addComment(int articleId, CommentRequest commentRequest);
 	
 	public InfoMessageResponse deleteComment(int commentId);
 }

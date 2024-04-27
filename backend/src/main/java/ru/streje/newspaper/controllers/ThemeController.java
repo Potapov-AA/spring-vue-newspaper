@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,53 +21,52 @@ import ru.streje.newspaper.services.ThemeService;
 public class ThemeController {
 	final private ThemeService themeService;
 	
+	
 	@GetMapping("/allthemes")
 	public List<Theme> getAllTheme() {
 		
 		return themeService.getAllTheme();
 	}
 	
+	
 	@GetMapping("/likethemes")
-	public List<Theme> getUserLikesTheme(@RequestHeader("authorization") String token) {
+	public List<Theme> getUserLikesTheme() {
 		
-		return themeService.getUserLikesDislikeTheme(token.substring(7), 1);
+		return themeService.getUserLikesDislikeTheme(1);
 	}
+	
 	
 	@GetMapping("/dislikethemes")
-	public List<Theme> getUserDislikesTheme(@RequestHeader("authorization") String token) {
+	public List<Theme> getUserDislikesTheme() {
 
-		return themeService.getUserLikesDislikeTheme(token.substring(7), -1);
+		return themeService.getUserLikesDislikeTheme(-1);
 	}
+	
 	
 	@PostMapping("/addliketheme/{id}")
-	public InfoMessageResponse addUserLikeTheme(
-			@RequestHeader("authorization") String token, 
-			@PathVariable("id") Integer id) {
+	public InfoMessageResponse addUserLikeTheme(@PathVariable("id") Integer id) {
 		
-		return themeService.addUserLikeDislikeTheme(token.substring(7), id, 1);
+		return themeService.addUserLikeDislikeTheme(id, 1);
 	}
+	
 	
 	@PostMapping("/adddisliketheme/{id}")
-	public InfoMessageResponse addUserDislikeTheme(
-			@RequestHeader("authorization") String token, 
-			@PathVariable("id") Integer id) {
+	public InfoMessageResponse addUserDislikeTheme(@PathVariable("id") Integer id) {
 		
-		return themeService.addUserLikeDislikeTheme(token.substring(7), id, -1);
+		return themeService.addUserLikeDislikeTheme(id, -1);
 	}
+	
 	
 	@DeleteMapping("/deletelikedislikethemes/{id}")
-	public InfoMessageResponse deleteUserLikeDislikeTheme(
-			@RequestHeader("authorization") String token, 
-			@PathVariable("id") Integer id) {
+	public InfoMessageResponse deleteUserLikeDislikeTheme(@PathVariable("id") Integer id) {
 		
-		return themeService.deleteUserLikeDislikeTheme(token.substring(7), id);
+		return themeService.deleteUserLikeDislikeTheme(id);
 	}
 	
+	
 	@GetMapping("/checkstatus/{id}")
-	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(
-			@RequestHeader("authorization") String token, 
-			@PathVariable("id") Integer id) {
+	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(@PathVariable("id") Integer id) {
 		
-		return themeService.checkUserLikeDislikeThemeStatus(token.substring(7), id);
+		return themeService.checkUserLikeDislikeThemeStatus(id);
 	}
 }
