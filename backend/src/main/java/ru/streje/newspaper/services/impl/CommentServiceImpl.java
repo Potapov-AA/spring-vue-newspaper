@@ -7,11 +7,11 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
@@ -25,11 +25,16 @@ import ru.streje.newspaper.services.UserService;
 
 
 @Service
-@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-	private final CommentRepository commentRepository;
-	private final ArticleRepository articleRepository;
-	private final UserService userService;
+	
+	@Autowired
+	private CommentRepository commentRepository;
+	
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**

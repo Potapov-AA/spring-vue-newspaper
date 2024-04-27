@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.LikeResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.User;
@@ -17,10 +17,13 @@ import ru.streje.newspaper.services.UserService;
 
 
 @Service
-@RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
-	private final ArticleRepository articleRepository;
-	private final UserService userService;
+	
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**

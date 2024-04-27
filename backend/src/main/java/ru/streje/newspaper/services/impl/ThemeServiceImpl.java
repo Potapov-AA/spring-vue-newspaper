@@ -7,11 +7,11 @@ import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.LikeDislikeTheme;
@@ -24,11 +24,16 @@ import ru.streje.newspaper.services.UserService;
 
 
 @Service
-@RequiredArgsConstructor
 public class ThemeServiceImpl implements ThemeService {
-	private final ThemeRepository themeRepository;
-	private final LikeDislikeThemeRepository likeDislikeThemeRepository;
-	private final UserService userService;
+	
+	@Autowired
+	private ThemeRepository themeRepository;
+	
+	@Autowired
+	private LikeDislikeThemeRepository likeDislikeThemeRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**

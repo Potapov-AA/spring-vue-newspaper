@@ -1,12 +1,12 @@
 package ru.streje.newspaper.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.dtos.JwtRequest;
 import ru.streje.newspaper.dtos.JwtResponse;
@@ -17,12 +17,16 @@ import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
-	private final UserService userService;
-	private final JwtTokenUtils jwtTokenUtils;
-	private final AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private JwtTokenUtils jwtTokenUtils;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	
 	/**

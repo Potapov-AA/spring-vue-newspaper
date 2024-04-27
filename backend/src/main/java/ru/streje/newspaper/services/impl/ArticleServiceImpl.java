@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.ArticleRequest;
 import ru.streje.newspaper.dtos.ArticleResponse;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
@@ -22,12 +22,14 @@ import ru.streje.newspaper.services.ThemeService;
 
 
 @Service
-@RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 	
-	private final ArticleRepository articleRepository;
-
-	private final ThemeService themeService;
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private ThemeService themeService;
+	
 	private final int secondsIn24Houres = 86400;
 
 	

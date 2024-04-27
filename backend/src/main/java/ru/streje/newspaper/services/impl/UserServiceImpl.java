@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.RegistrationUserRequest;
 import ru.streje.newspaper.models.Role;
 import ru.streje.newspaper.models.User;
@@ -21,12 +21,16 @@ import ru.streje.newspaper.services.UserService;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	
-	private final UserRepository userRepository;
-	private final RoleService roleService;
-	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 
 	@Override

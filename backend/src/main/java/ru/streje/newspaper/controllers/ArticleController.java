@@ -1,5 +1,6 @@
 package ru.streje.newspaper.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.ArticleRequest;
 import ru.streje.newspaper.dtos.ArticleResponse;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
@@ -20,9 +20,10 @@ import ru.streje.newspaper.services.ArticleService;
 
 @CrossOrigin
 @RestController
-@RequiredArgsConstructor
 public class ArticleController {
-	final private ArticleService articleService;
+	
+	@Autowired
+	private ArticleService articleService;
 
 	
 	@GetMapping("/articles")

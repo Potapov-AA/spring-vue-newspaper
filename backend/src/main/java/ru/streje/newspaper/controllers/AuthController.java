@@ -1,5 +1,6 @@
 package ru.streje.newspaper.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.dtos.JwtRequest;
 import ru.streje.newspaper.dtos.JwtResponse;
@@ -18,9 +18,10 @@ import ru.streje.newspaper.services.AuthService;
 
 @CrossOrigin
 @RestController
-@RequiredArgsConstructor
 public class AuthController {
-	private final AuthService authService;
+	
+	@Autowired
+	private AuthService authService;
 
 	
 	@PostMapping("/auth")

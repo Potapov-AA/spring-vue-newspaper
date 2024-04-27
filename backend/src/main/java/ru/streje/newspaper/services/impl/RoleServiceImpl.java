@@ -1,18 +1,18 @@
 package ru.streje.newspaper.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.models.Role;
 import ru.streje.newspaper.repositories.RoleRepository;
 import ru.streje.newspaper.services.RoleService;
 
 
 @Service
-@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 	
-	private final RoleRepository roleRepository;
+	@Autowired
+	private RoleRepository roleRepository;
 
 	
 	/**

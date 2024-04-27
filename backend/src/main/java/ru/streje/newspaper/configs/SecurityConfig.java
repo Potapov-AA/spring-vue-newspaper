@@ -21,18 +21,11 @@ import ru.streje.newspaper.services.UserService;
 @EnableWebSecurity
 public class SecurityConfig {
 	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-	
-	@Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-	
-	@Autowired
-	public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {
-		this.jwtRequestFilter = jwtRequestFilter;
-	}
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
