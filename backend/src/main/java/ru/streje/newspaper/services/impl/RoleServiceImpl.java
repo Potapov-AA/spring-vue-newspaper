@@ -14,6 +14,7 @@ public class RoleServiceImpl implements RoleService {
 	
 	private final RoleRepository roleRepository;
 
+	
 	/**
 	 * Получение экземпляр класса Role с типом USER
 	 * 

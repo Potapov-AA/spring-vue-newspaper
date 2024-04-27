@@ -24,32 +24,38 @@ import ru.streje.newspaper.services.ArticleService;
 public class ArticleController {
 	final private ArticleService articleService;
 
+	
 	@GetMapping("/articles")
 	public List<ArticleResponse> getArticles() {
 		
 		return articleService.getAllArticle();
 	}
 
+	
 	@GetMapping("/article/{id}")
 	public ArticleResponse getArticle(@PathVariable("id") Integer id) {
 		
 		return articleService.getArticle(id);
 	}
 
+	
 	@PostMapping("/newarticle")
 	public InfoMessageResponse postArticle(@Valid @RequestBody ArticleRequest articleRequest) {
 		
 		return articleService.addNewArticle(articleRequest);
 	}
 
+	
 	@DeleteMapping("/deletearticle/{id}")
 	public InfoMessageResponse deleteArticle(@PathVariable("id") Integer id) {
 		
 		return articleService.deleteArticle(id);
 	}
 
+	
 	@PutMapping("/changearticle/{id}")
-	public InfoMessageResponse putArticle(@Valid @RequestBody ArticleRequest articleRequest,
+	public InfoMessageResponse putArticle(
+			@Valid @RequestBody ArticleRequest articleRequest,
 			@PathVariable("id") Integer id) {
 		
 		return articleService.changeAtricle(articleRequest, id);

@@ -24,6 +24,7 @@ public class AuthServiceImpl implements AuthService {
 	private final JwtTokenUtils jwtTokenUtils;
 	private final AuthenticationManager authenticationManager;
 
+	
 	/**
 	 * Метод получения токена авторизации
 	 * 
@@ -43,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
 		return new JwtResponse(token);
 	}
 
+	
 	/**
 	 * Метод регистрации нового пользователя
 	 * 

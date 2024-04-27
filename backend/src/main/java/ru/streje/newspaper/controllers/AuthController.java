@@ -5,7 +5,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +22,7 @@ import ru.streje.newspaper.services.AuthService;
 public class AuthController {
 	private final AuthService authService;
 
+	
 	@PostMapping("/auth")
 	public JwtResponse createAuthToken(@RequestBody JwtRequest authRequest) {
 		
@@ -34,14 +34,17 @@ public class AuthController {
 	    }
 	}
 
+	
 	@PostMapping("/registration")
 	public InfoMessageResponse createNewUser(@Valid @RequestBody RegistrationUserRequest registrationUserRequest) {
 		
 		return authService.createNewUser(registrationUserRequest);
 	}
 
+	
 	@PostMapping("/checktoken")
-	public InfoMessageResponse checkTokenStatus(@RequestHeader("authorization") String token) {
+	public InfoMessageResponse checkTokenStatus() {
+		
 		return authService.checkTokenStatus();
 	}
 }
