@@ -1,7 +1,7 @@
 <script setup>
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
-import { showContent, hideContent, base64ToImage, getStringDate } from '@/js/functions.js'
+import { showContent, hideContent, base64ToImage, getStringDate, updateListArticles } from '@/js/functions.js'
 import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
@@ -14,11 +14,13 @@ const props = defineProps({
 
 const date = ref(new Date(props.article.date))
 
+const showDeleteConfirm = ref(false)
 
 // Функция удаления статьи
 async function deleteArticle(id, token) {
   await useArticleStore().deleteArticle(id, token)
   await useArticleStore().getArticles()
+  await updateListArticles()
 }
 
 onMounted(() => {
@@ -40,8 +42,39 @@ onMounted(() => {
             icon="mdi-delete"
             v-if="useTokenStore().role == ROLES.ADMIN"
             variant="text"
-            @click="deleteArticle(props.article.id, useTokenStore().token)"
+            @click="
+              () => {
+                showDeleteConfirm = true
+              }
+            "
           />
+          <v-dialog
+            v-model="showDeleteConfirm"
+            width="auto"
+          >
+            <v-card
+              max-width="400"
+            >
+              <template v-slot:actions>
+                <v-btn
+                  class="ms-auto"
+                  color="red"
+                  text="Удалить"
+                  @click="
+                    () => {
+                      deleteArticle(props.article.id, useTokenStore().token)
+                      showDeleteConfirm = false
+                    }
+                  "
+                ></v-btn>
+                <v-btn
+                  class="ms-auto"
+                  text="Отмена"
+                  @click="showDeleteConfirm = false"
+                ></v-btn>
+              </template>
+            </v-card>
+          </v-dialog>
         </div>
       </v-card-title>
 

@@ -7,11 +7,13 @@ import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
+import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.LikeDislikeTheme;
 import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.models.User;
@@ -19,16 +21,19 @@ import ru.streje.newspaper.repositories.LikeDislikeThemeRepository;
 import ru.streje.newspaper.repositories.ThemeRepository;
 import ru.streje.newspaper.services.ThemeService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
-@RequiredArgsConstructor
 public class ThemeServiceImpl implements ThemeService {
-	private final ThemeRepository themeRepository;
-	private final LikeDislikeThemeRepository likeDislikeThemeRepository;
-	private final JwtTokenUtils jwtTokenUtils;
-	private final UserService userService;
+	
+	@Autowired
+	private ThemeRepository themeRepository;
+	
+	@Autowired
+	private LikeDislikeThemeRepository likeDislikeThemeRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**
@@ -36,9 +41,11 @@ public class ThemeServiceImpl implements ThemeService {
 	 * именем нет, то возвращает null
 	 * 
 	 * @param name - название темы
-	 * @return экземпляр Theme / null
+	 * 
+	 * @return Theme / null
 	 */
 	public Theme getTheme(String name) {
+		
 		try {
 			Theme theme = themeRepository.findByName(name).get();
 			return theme;
@@ -47,13 +54,14 @@ public class ThemeServiceImpl implements ThemeService {
 		}
 	}
 
-	
+
 	/**
 	 * Метод добавления новой темы
 	 * 
 	 * @param name - название темы
 	 */
 	public void addTheme(String name) {
+		
 		Theme theme = new Theme();
 		theme.setName(name);
 		themeRepository.save(theme);
@@ -61,95 +69,79 @@ public class ThemeServiceImpl implements ThemeService {
 	
 	
 	/***
-	 * Метод получения всех тем
+	 * Метод получения списка всех тем
 	 * 
-	 * @return Список всех тем
+	 * @return List<Theme>
 	 */
-	public ResponseEntity<?> getAllTheme() {
-		Iterable<Theme> itThemes = themeRepository.findAll(); 
+	public List<Theme> getAllTheme() {
 		
-		List<Theme> themes  =  new ArrayList<>();
-		for(Theme theme: itThemes) {
-			themes.add(theme);
-		}
-		
-		if (themes.size() > 0) {
-			return new ResponseEntity<>(themes, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return (List<Theme>) themeRepository.findAll();
 	}
 	
 	
 	/***
 	 * Метод получения запретных/любимых тем пользователя
 	 * 
-	 * @param token  - токен авторизации
 	 * @param status - статус тем (-1 - запретные темы, 1 - любимые темы)
 	 * 
-	 * @return List<Theme> или статус NOT_FOUND 
+	 * @return List<Theme>
 	 */
 	@Transactional
-	public ResponseEntity<?> getUserLikesDislikeTheme(String token, Integer status) {
+	public List<Theme> getUserLikesDislikeTheme(Integer status) {
 		
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		
 		Collection<LikeDislikeTheme> likeDislikeTheme = likeDislikeThemeRepository.findByUser(user);
-
+		
 		List<Theme> themes =  new ArrayList<>();
 		for(LikeDislikeTheme theme: likeDislikeTheme) {
-			if(theme.getStatus() == status) {
+			if(theme.getStatus().intValue() == status.intValue()) {
 				themes.add(theme.getTheme());
 			}
 		}
 		
-		if (themes.size() > 0) {
-			return new ResponseEntity<>(themes, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(
-					HttpStatus.NOT_FOUND);
-		}
+		return themes;
 	}
 	
 	
 	/***
 	 * Метод удаления статуса любимой/запретной темы
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * 
-	 * @return статус OK/NOT_FOUND
+	 * @return InfoMessageResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> deleteUserLikeDislikeTheme(String token, Integer themeId) {
-		String email = jwtTokenUtils.getUsername(token);
+	public InfoMessageResponse deleteUserLikeDislikeTheme(Integer themeId) {
+		
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		
 		try {
 			Theme theme = themeRepository.findById(themeId).get();
 			LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
 			likeDislikeThemeRepository.delete(likeDislikeThemes);
-			return new ResponseEntity<>(HttpStatus.OK);
+			
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Тематика успешно убрана из понравившихся/запретных");
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Не удалось найти данную тематику");
 		}
 		
-	}
+	} 
 	
 	
 	/***
 	 * Метод добавления запретных/любимых тем пользователя
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * @param status  - статус тем (-1 - запретные темы, 1 - любимые темы)
 	 * 
-	 * @return статус OK
+	 * @return InfoMessageResponse
 	 */
-	@Transactional
-	public ResponseEntity<?> addUserLikeDislikeTheme(String token, Integer themeId, Integer status) {
-		String email = jwtTokenUtils.getUsername(token);
+	public InfoMessageResponse addUserLikeDislikeTheme(Integer themeId, Integer status) {
+		
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		Theme theme = themeRepository.findById(themeId).get();
 		
@@ -160,7 +152,7 @@ public class ThemeServiceImpl implements ThemeService {
 			likeDislikeThemes.setStatus(status);
 			likeDislikeThemeRepository.save(likeDislikeThemes);
 			
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Тема успешно добавлена в понравившиеся/запретные");
 		} catch (NoSuchElementException e) {
 			LikeDislikeTheme likeDislikeThemes = new LikeDislikeTheme();
 			likeDislikeThemes.setStatus(status);
@@ -170,7 +162,7 @@ public class ThemeServiceImpl implements ThemeService {
 			likeDislikeThemes.setUserId(user.getId());
 			
 			likeDislikeThemeRepository.save(likeDislikeThemes);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Тема успешно добавлена в понравившиеся/запретные");
 		}
 	}
 	
@@ -178,22 +170,27 @@ public class ThemeServiceImpl implements ThemeService {
 	/***
 	 * Метод проверки статуса темы, является ли она запретной/любимой
 	 * 
-	 * @param token   - токен авторизации
 	 * @param themeId - ID темы
 	 * 
-	 * @return статус темы (-1 - запретные темы, 1 - любимые темы, 0 - обычная)
+	 * @return LikeDislikeThemeResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(String token, Integer themeId) {
-		String email = jwtTokenUtils.getUsername(token);
+	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(Integer themeId) {
+		
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
 		Theme theme = themeRepository.findById(themeId).get();
 		
+		LikeDislikeThemeResponse dislikeThemeResponse = new LikeDislikeThemeResponse();
+		
 		try {
 			LikeDislikeTheme likeDislikeThemes = likeDislikeThemeRepository.findByUserAndTheme(user, theme).get();
-			return new ResponseEntity<>(likeDislikeThemes.getStatus(), HttpStatus.OK);
+			
+			dislikeThemeResponse.setStatus(likeDislikeThemes.getStatus());
+			return dislikeThemeResponse;
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(0, HttpStatus.OK);
+			dislikeThemeResponse.setStatus(0);
+			return dislikeThemeResponse;
 		}
 		
 	}

@@ -15,25 +15,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.services.UserService;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-	
-	@Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-	
-	@Autowired
-	public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {
-		this.jwtRequestFilter = jwtRequestFilter;
-	}
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -7,29 +7,33 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.ArticleRequest;
 import ru.streje.newspaper.dtos.ArticleResponse;
-import ru.streje.newspaper.messages.ErrorMessage;
-import ru.streje.newspaper.messages.SuccesMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.repositories.ArticleRepository;
+import ru.streje.newspaper.repositories.ThemeRepository;
 import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.ThemeService;
 
 
 @Service
-@RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 	
-	private final ArticleRepository articleRepository;
-
-	private final ThemeService themeService;
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private ThemeService themeService;
+	
+	@Autowired
+	private ThemeRepository themeRepository;
+	
 	private final int secondsIn24Houres = 86400;
 
 	
@@ -37,9 +41,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод заполняет и возвращает экземпляр класса ArticleResponse
 	 * 
 	 * @param article - экземпляр класса Article
-	 * @return экземпляр класса ArticleResponse
+	 * 
+	 * @return ArticleResponse
 	 */
 	private ArticleResponse fillArticleResponse(Article article) {
+		
 		ArticleResponse articleResponse = new ArticleResponse();
 
 		articleResponse.setId(article.getId());
@@ -64,9 +70,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод заполняет коллекцию тем
 	 * 
 	 * @param articleRequest - параметры req-запроса
+	 * 
 	 * @return Collection<Theme>
 	 */
 	private Collection<Theme> fillThemes(ArticleRequest articleRequest) {
+		
 		Collection<Theme> themes = new ArrayList<>();
 		for (String themeName : articleRequest.getThemes()) {
 			themeName = themeName.toLowerCase();
@@ -87,9 +95,10 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод возвращает все статьи при их наличии, иначе возвращает сообщение, что
 	 * статьи не найдены
 	 * 
-	 * @return список всех статей (ArticleResponse) / сообщение об их отсутствии
+	 * @return List<ArticleResponse>
 	 */
-	public ResponseEntity<?> getAllArticle() {
+	public List<ArticleResponse> getAllArticle() {
+		
 		List<ArticleResponse> articles = new ArrayList<>();
 
 		Collection<Article> iArticles = articleRepository.findByOrderByIdDesc();
@@ -106,14 +115,8 @@ public class ArticleServiceImpl implements ArticleService {
 				articles.add(articleResponse);
 			}
 		}
-
-		if (articles.size() > 0) {
-			return new ResponseEntity<>(articles, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "За последнии 24 часа статьей не найдено"),
-					HttpStatus.NOT_FOUND);
-		}
+		
+		return articles;
 	}
 
 	
@@ -121,18 +124,19 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод поиска статьи по ID
 	 * 
 	 * @param id - индитификатор статьи
-	 * @return статью или сообщение о ее отсутствии
+	 * 
+	 * @return ArticleResponse / null
 	 */
-	public ResponseEntity<?> getArticleResponse(int id) {
+	public ArticleResponse getArticle(int id) {
+		
 		try {
 			Article article = articleRepository.findById(id).get();
 
 			ArticleResponse articleResponse = fillArticleResponse(article);
 
-			return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+			return articleResponse;
 		} catch (Exception e) {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данная статья не найдена"),
-					HttpStatus.NOT_FOUND);
+			return null;
 		}
 	}
 
@@ -141,9 +145,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод добавления новой статьи в БД
 	 * 
 	 * @param articleRequest - данные для новой статьи
-	 * @return сообщение об успехе/провале добавления статьи
+	 * 
+	 * @return InfoMessageResponse
 	 */
-	public ResponseEntity<?> addNewArticle(ArticleRequest articleRequest) {
+	public InfoMessageResponse addNewArticle(ArticleRequest articleRequest) {
+		
 		Article article = new Article();
 
 		article.setTitle(articleRequest.getTitle());
@@ -156,11 +162,9 @@ public class ArticleServiceImpl implements ArticleService {
 		
 		try {
 			articleRepository.save(article);
-			return new ResponseEntity<>(new SuccesMessage("Статья успешно добавлена"), HttpStatus.OK);
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Статья успешно добавлена");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новую статью"),
-					HttpStatus.BAD_REQUEST);
+			return new InfoMessageResponse(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новую статью");
 		}
 	}
 
@@ -169,17 +173,26 @@ public class ArticleServiceImpl implements ArticleService {
 	 * Метод удаления статьи по ID
 	 * 
 	 * @param id - индитификатор статьи
-	 * @return сообщение об успехе/провале удаления статьи
+	 * 
+	 * @return InfoMessageResponse
 	 */
-	public ResponseEntity<?> deleteArticle(int id) {
+	public InfoMessageResponse deleteArticle(int id) {
+		
 		try {
 			Article article = articleRepository.findById(id).get();
+			
+			List<Theme> themes = (List<Theme>) article.getThemes();
+			for (Theme theme : themes) {
+				if(checkThemeCounts(theme.getId().intValue()) == 1) {
+					themeRepository.delete(theme);
+				}
+			}
+			
 			articleRepository.delete(article);
-			return new ResponseEntity<>(new SuccesMessage("Статья успешно удалена"), HttpStatus.OK);
+			
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Статья успешно удалена");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данная статья не найдена или уже удалена"),
-					HttpStatus.NOT_FOUND);
+			return new InfoMessageResponse(HttpStatus.NOT_FOUND.value(), "Данная статья не найдена или уже удалена");
 		}
 	}
 
@@ -189,9 +202,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 
 	 * @param articleRequest - изменяемые параметры
 	 * @param id             - индитификатор статьи
-	 * @return сообщение об успехе/провале обновления статьи
+	 * 
+	 * @return InfoMessageResponse
 	 */
-	public ResponseEntity<?> changeAtricle(ArticleRequest articleRequest, int id) {
+	public InfoMessageResponse changeAtricle(ArticleRequest articleRequest, int id) {
+		
 		try {
 			Article article = articleRepository.findById(id).get();
 
@@ -211,43 +226,37 @@ public class ArticleServiceImpl implements ArticleService {
 			}
 
 			articleRepository.save(article);
-
-			return new ResponseEntity<>(new SuccesMessage("Статья успешно изменена"), HttpStatus.OK);
+			
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Статья успешно изменена");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.NOT_MODIFIED.value(), "Не удалось изменить данную статью"),
-					HttpStatus.NOT_MODIFIED);
+			
+			return new InfoMessageResponse(HttpStatus.NOT_MODIFIED.value(), "Не удалось изменить данную статью");
 		}
 
 	}
-
+	
 	
 	/**
-	 * Метод получение экземпляра Article по id
+	 * Метод получения количества того сколько раз тема встречается во всех статьях
 	 * 
-	 * @param id - индитификатор
-	 * @return экземпляр Article
-	 */
-	public Article getArticle(int id) {
-		try {
-			Article article = articleRepository.findById(id).get();
-			return article;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	
-	/**
-	 * Метод сохранения экземпляра Article в БД
+	 * @param themeId - индитификатор темы
 	 * 
-	 * @param article - экземпляр Article
+	 * @return int
 	 */
-	public void saveArticle(Article article) {
-		try {
-			articleRepository.save(article);
-		} catch (Exception e) {
-			System.out.println(e);
+	private int checkThemeCounts(int themeId) {
+		
+		List<Article> articles = (List<Article>) articleRepository.findAll();
+		
+		int count = 0;
+		for (Article article : articles) {
+			
+			List<Theme> themes = (List<Theme>) article.getThemes();
+			
+			for (Theme theme : themes) {
+				if (theme.getId().intValue() == themeId) count++;
+			}
 		}
+		
+		return count;
 	}
 }

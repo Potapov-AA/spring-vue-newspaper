@@ -7,45 +7,48 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.CommentRequest;
 import ru.streje.newspaper.dtos.CommentResponse;
-import ru.streje.newspaper.messages.ErrorMessage;
-import ru.streje.newspaper.messages.SuccesMessage;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Comment;
 import ru.streje.newspaper.models.User;
+import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.repositories.CommentRepository;
-import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.CommentService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
-@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-	private final CommentRepository commentRepository;
-	private final JwtTokenUtils jwtTokenUtils;
-	private final ArticleService articleService;
-	private final UserService userService;
+	
+	@Autowired
+	private CommentRepository commentRepository;
+	
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**
-	 * Метод получения всех комментариев определенной статьи
+	 * Метод получения комментариев статьи
 	 * 
 	 * @param articleId - индитификатор статьи
-	 * @return CommentResponse или сообщение о отсутствии комментариев
+	 * 
+	 * @return List<CommentResponse>
 	 */
 	@Transactional
-	public ResponseEntity<?> getComments(int articleId) {
+	public List<CommentResponse> getComments(int articleId) {
 
-		Article article = articleService.getArticle(articleId);
-		Collection<Comment> comments = commentRepository.findByArticle(article);
+		Article article = articleRepository.findById(articleId).get();
+		Collection<Comment> comments = commentRepository.findByArticleId(article.getId());
 
 		List<CommentResponse> commentResponses = new ArrayList<>();
 
@@ -58,63 +61,56 @@ public class CommentServiceImpl implements CommentService {
 			commentResponse.setText(comment.getText());
 			commentResponses.add(commentResponse);
 		}
-
-		if (commentResponses.size() > 0) {
-			return new ResponseEntity<>(commentResponses, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Комментарии не найдены"),
-					HttpStatus.OK);
-		}
+		
+		return commentResponses;
 	}
 
 	
 	/**
-	 * Метод добавления комментариев
+	 * Метод добавления комментария
 	 * 
-	 * @param token          - токен авторизации
 	 * @param articleId      - индитификатор статьи
 	 * @param commentRequest - параметры запроса
-	 * @return сообщение о успешности или провале добавления комментария
+	 * 
+	 * @return InfoMessageResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> addComment(String token, int articleId, CommentRequest commentRequest) {
+	public InfoMessageResponse addComment(int articleId, CommentRequest commentRequest) {
+		
 		Comment comment = new Comment();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User user = userService.findByEmail(email).get();
-		Article article = articleService.getArticle(articleId);
-
-		comment.setArticle(article);
+		
+		comment.setArticle(articleRepository.findById(articleId).get());
 		comment.setText(commentRequest.getText());
 		comment.setDate(new Date());
 		comment.setUser(user);
 
 		try {
 			commentRepository.save(comment);
-			return new ResponseEntity<>(new SuccesMessage("Комментарий успешно добавлен"), HttpStatus.OK);
+			return new InfoMessageResponse(HttpStatus.CREATED.value(), "Комментарий успешно добавлен");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий"),
-					HttpStatus.BAD_REQUEST);
+			return new InfoMessageResponse(HttpStatus.BAD_REQUEST.value(), "Не удалось добавить новый комментарий");
 		}
 	}
 	
 	
 	/***
-	 * Метод удаления комментариев
+	 * Метод удаления комментария
 	 * 
 	 * @param commentId - индификатор комментария
-	 * @return сообщение о успешности или провале удаления комментария
+	 * 
+	 * @return InfoMessageResponse
 	 */
-	public ResponseEntity<?> deleteComment(int commentId) {
+	public InfoMessageResponse deleteComment(int commentId) {
+		
 		try {
 			Comment comment = commentRepository.findById(commentId).get();
 			commentRepository.delete(comment);
-			return new ResponseEntity<>(new SuccesMessage("Комментарий успешно удалена"), HttpStatus.OK);
+			return new InfoMessageResponse(HttpStatus.OK.value(), "Комментарий успешно удален");
 		} catch (Exception e) {
-			return new ResponseEntity<>(
-					new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален"),
-					HttpStatus.NOT_FOUND);
+			return new InfoMessageResponse(HttpStatus.NOT_FOUND.value(), "Данный комментарий не найден или уже удален");
 		}
 	}
 }

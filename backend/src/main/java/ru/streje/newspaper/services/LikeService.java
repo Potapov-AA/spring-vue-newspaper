@@ -1,12 +1,12 @@
 package ru.streje.newspaper.services;
 
-import org.springframework.http.ResponseEntity;
+import ru.streje.newspaper.dtos.LikeResponse;
 
 public interface LikeService {
 	
-	public ResponseEntity<?> addRemoveLike(String token, int articleId);
+	public LikeResponse addRemoveLike(int articleId);
 	
-	public ResponseEntity<?> getUserLikeStatus(String token, int articleId);
+	public LikeResponse getUserLikeStatus(int articleId);
 	
-	public ResponseEntity<?> getCountLikes(int articleId);
+	public LikeResponse getCountLikes(int articleId);
 }

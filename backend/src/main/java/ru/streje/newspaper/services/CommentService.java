@@ -1,14 +1,16 @@
 package ru.streje.newspaper.services;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
 import ru.streje.newspaper.dtos.CommentRequest;
+import ru.streje.newspaper.dtos.CommentResponse;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 
 public interface CommentService {
 	
-	public ResponseEntity<?> getComments(int articleId);
+	public List<CommentResponse> getComments(int articleId);
 	
-	public ResponseEntity<?> addComment(String token, int articleId, CommentRequest commentRequest);
+	public InfoMessageResponse addComment(int articleId, CommentRequest commentRequest);
 	
-	public ResponseEntity<?> deleteComment(int commentId);
+	public InfoMessageResponse deleteComment(int commentId);
 }

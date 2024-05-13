@@ -4,43 +4,44 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.dtos.LikeResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.User;
-import ru.streje.newspaper.services.ArticleService;
+import ru.streje.newspaper.repositories.ArticleRepository;
 import ru.streje.newspaper.services.LikeService;
 import ru.streje.newspaper.services.UserService;
-import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 
 @Service
-@RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
-	private final ArticleService articleService;
-	private final UserService userService;
-	private final JwtTokenUtils jwtTokenUtils;
+	
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	
 	/**
-	 * Метод добавления/удаления лайков к статье
+	 * Метод добавления/удаления лайка к статье
 	 * 
-	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:int)
+	 * 
+	 * @return LikeResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> addRemoveLike(String token, int articleId) {
+	public LikeResponse addRemoveLike(int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
-		Article article = articleService.getArticle(articleId);
+		
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User targetUser = userService.findByEmail(email).get();
 
 		if (users.contains(targetUser)) {
@@ -54,27 +55,28 @@ public class LikeServiceImpl implements LikeService {
 		}
 
 		article.setUsers(users);
-		articleService.saveArticle(article);
-
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		articleRepository.save(article);
+		
+		return likeResponse;
 	}
 
 	
 	/**
 	 * Метод получения статуса лайка пользователя
 	 * 
-	 * @param token     - токен авторизации, для получения данных о пользователе
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:int)
+	 * 
+	 * @return LikeResponse
 	 */
 	@Transactional
-	public ResponseEntity<?> getUserLikeStatus(String token, int articleId) {
+	public LikeResponse getUserLikeStatus(int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
-		Article article = articleService.getArticle(articleId);
+		
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
-		String email = jwtTokenUtils.getUsername(token);
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		User targetUser = userService.findByEmail(email).get();
 
 		likeResponse.setCountLike(users.size());
@@ -85,24 +87,26 @@ public class LikeServiceImpl implements LikeService {
 			likeResponse.setUserStatus(-1);
 		}
 
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		return likeResponse;
 	}
 
+	
 	/**
 	 * Получение количества лайков
 	 * 
 	 * @param articleId - индитификатор статьи
-	 * @return LikeRespone(countLike:int, userStatus:-1 (доступно не авторизованым
-	 *         пользователям))
+	 * 
+	 * @return LikeResponse
 	 */
-	public ResponseEntity<?> getCountLikes(int articleId) {
+	public LikeResponse getCountLikes(int articleId) {
+		
 		LikeResponse likeResponse = new LikeResponse();
-
-		Article article = articleService.getArticle(articleId);
+		
+		Article article = articleRepository.findById(articleId).get();
 		Collection<User> users = article.getUsers();
 
 		likeResponse.setCountLike(users.size());
 
-		return new ResponseEntity<>(likeResponse, HttpStatus.OK);
+		return likeResponse;
 	}
 }

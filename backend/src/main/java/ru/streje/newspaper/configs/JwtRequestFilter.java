@@ -15,14 +15,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import ru.streje.newspaper.utilis.JwtTokenUtils;
 
 @Component
-@RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
+	
 	@Autowired
-	private final JwtTokenUtils jwtTokenUtils;
+	private JwtTokenUtils jwtTokenUtils;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

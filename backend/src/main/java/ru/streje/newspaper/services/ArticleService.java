@@ -1,23 +1,20 @@
 package ru.streje.newspaper.services;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
 import ru.streje.newspaper.dtos.ArticleRequest;
-import ru.streje.newspaper.models.Article;
+import ru.streje.newspaper.dtos.ArticleResponse;
+import ru.streje.newspaper.dtos.InfoMessageResponse;
 
 public interface ArticleService {
 	
-	public ResponseEntity<?> getAllArticle();
+	public List<ArticleResponse> getAllArticle();
 	
-	public ResponseEntity<?> getArticleResponse(int articleId);
+	public ArticleResponse getArticle(int articleId);
 	
-	public ResponseEntity<?> addNewArticle(ArticleRequest articleRequest);
+	public InfoMessageResponse addNewArticle(ArticleRequest articleRequest);
 	
-	public ResponseEntity<?> deleteArticle(int articleId);
+	public InfoMessageResponse deleteArticle(int articleId);
 	
-	public ResponseEntity<?> changeAtricle(ArticleRequest articleRequest, int articleId);
-	
-	public Article getArticle(int articleId);
-	
-	public void saveArticle(Article article);
+	public InfoMessageResponse changeAtricle(ArticleRequest articleRequest, int articleId);
 }

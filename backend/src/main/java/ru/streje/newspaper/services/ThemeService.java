@@ -1,7 +1,9 @@
 package ru.streje.newspaper.services;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
+import ru.streje.newspaper.dtos.InfoMessageResponse;
+import ru.streje.newspaper.dtos.LikeDislikeThemeResponse;
 import ru.streje.newspaper.models.Theme;
 
 
@@ -11,13 +13,13 @@ public interface ThemeService {
 	
 	public void addTheme(String name);
 	
-	public ResponseEntity<?> getAllTheme();
+	public List<Theme> getAllTheme();
 	
-	public ResponseEntity<?> getUserLikesDislikeTheme(String token, Integer status);
+	public List<Theme> getUserLikesDislikeTheme(Integer status);
 	
-	public ResponseEntity<?> deleteUserLikeDislikeTheme(String token, Integer themeId);
+	public InfoMessageResponse deleteUserLikeDislikeTheme(Integer themeId);
 	
-	public ResponseEntity<?> addUserLikeDislikeTheme(String token, Integer themeId, Integer status);
+	public InfoMessageResponse addUserLikeDislikeTheme(Integer themeId, Integer status);
 	
-	public ResponseEntity<?> checkUserLikeDislikeThemeStatus(String token, Integer themeId);
+	public LikeDislikeThemeResponse checkUserLikeDislikeThemeStatus(Integer themeId);
 }

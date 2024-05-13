@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 public class ArticleResponse {
-	Integer id;
-	String title;
-	String text;
-	String image;
-	Date date;
-	List<String> themes;
-	Integer countLikes;
+	private Integer id;
+	private String title;
+	private String text;
+	private String image;
+	private Date date;
+	private List<String> themes;
+	private Integer countLikes;
 }

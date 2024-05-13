@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class CommentResponse {
-	Integer id;
-	String firstName;
-	String lastName;
-	String text;
-	Date date;
+	private Integer id;
+	private String firstName;
+	private String lastName;
+	private String text;
+	private Date date;
 }
