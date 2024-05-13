@@ -33,9 +33,22 @@ async function getAllComment() {
 
 
 const textComment = ref('')
+const warringMessage = ref('')
 
 // Функция добавления комментариев
 async function addComment(textComment) {
+  
+  warringMessage.value = ''
+
+  if (textComment.trim() == "") {
+    warringMessage.value = "Комментарий не может быть пустым"
+    return
+  }
+
+  if (textComment.length >= 1000) {
+    warringMessage.value = "Комментария должен содержать меньше 1000 символов!"
+    return
+  }
 
   await axios({
     url: '/api/addcomment/' + props.id,
@@ -47,8 +60,16 @@ async function addComment(textComment) {
       Authorization: useTokenStore().token
     }
   })
-
+    .catch((error) => {          
+            if (error.response.status == 500) {
+              console.log(error.response.status)
+              warringMessage.value = "Комментария должен содержать меньше 1000 символов!"
+            }
+    })
+  
   this.textComment = ''
+
+
   await getAllComment()
 }
 
@@ -78,13 +99,15 @@ onMounted(async () => {
   <div class="d-flex flex-column align-start">
     <button
       :id="'btn-show-comment-' + props.id"
-      @click="
+      @click="()=>{
+        warringMessage = ''
         showContent(
           'article-comment-' + props.id,
           'btn-show-comment-' + props.id,
           'btn-hide-comment-' + props.id,
           'mb-3 text-blue'
         )
+      }
       "
       class="text-blue"
     >
@@ -114,24 +137,30 @@ onMounted(async () => {
           :key="comment" 
           class="mb-3 d-flex flex-column"
         >
-          <div class="d-flex align-center">
-            <b>{{ comment.firstName }} {{ comment.lastName }}</b> 
+          <v-card :width="500">
+            <v-card-title>
+              <div class="d-flex align-center">
+                <b>{{ comment.firstName }} {{ comment.lastName }}</b> 
 
-            <v-btn 
-              icon 
-              v-if="useTokenStore().role == ROLES.ADMIN" 
-              variant="text" 
-              class="ml-2"
-            >
-              <v-icon color="red" @click="deleteComment(comment.id)">{{ 'mdi-delete' }}</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            {{ comment.text }}
-          </div>
-          <div class="text-grey-darken-1" style="font-size: 14px;">
-            {{ getStringDate(comment.date) }}
-          </div>
+                <v-btn 
+                  icon 
+                  v-if="useTokenStore().role == ROLES.ADMIN" 
+                  variant="text" 
+                  class="ml-2"
+                >
+                  <v-icon color="red" @click="deleteComment(comment.id)">{{ 'mdi-delete' }}</v-icon>
+                </v-btn>
+              </div>
+            </v-card-title>
+            <v-card-text class="text-body-1">
+              {{ comment.text }}
+            </v-card-text>
+            <v-card-actions class="mx-2 d-flex justify-space-between align-start">
+              <div class="text-grey-darken-1" style="font-size: 14px;">
+                {{ getStringDate(comment.date) }}
+              </div>
+            </v-card-actions>
+          </v-card>
         </div>
         <div v-if="countCommentShow < comments.length" class="mb-3">
           <p 
@@ -154,6 +183,7 @@ onMounted(async () => {
             rows="1"
             row-height="15"
           />
+          <div class="warringMessage text-center">{{ warringMessage }}</div>
           <div class="d-flex justify-end">
             <v-btn @click="addComment(textComment)" class="mb-3"> Отправить </v-btn>
           </div>
@@ -163,3 +193,9 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.warringMessage {
+  color: red;
+}
+</style>
