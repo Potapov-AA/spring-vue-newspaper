@@ -13,6 +13,8 @@ const countCommentShow = ref(3)
 
 const comments = ref([])
 
+const showDeleteConfirm = ref(false)
+
 
 // Функция получения всех комментариев к статье
 async function getAllComment() {
@@ -134,17 +136,48 @@ onMounted(async () => {
         >
           <v-card :width="500">
             <v-card-title>
-              <div class="d-flex align-center">
+              <div class="d-flex align-center justify-space-between">
                 <b>{{ comment.firstName }} {{ comment.lastName }}</b> 
-
                 <v-btn 
-                  icon 
+                  icon="mdi-delete"
+                  color="red"
                   v-if="useTokenStore().role == ROLES.ADMIN" 
                   variant="text" 
+                  @click="
+                    () => {
+                      showDeleteConfirm = true
+                    }
+                  "
                   class="ml-2"
+                />
+                  
+                <v-dialog
+                  v-model="showDeleteConfirm"
+                  width="auto"
                 >
-                  <v-icon color="red" @click="deleteComment(comment.id)">{{ 'mdi-delete' }}</v-icon>
-                </v-btn>
+                  <v-card
+                    max-width="400"
+                  >
+                    <template v-slot:actions>
+                      <v-btn
+                        class="ms-auto"
+                        color="red"
+                        text="Удалить"
+                        @click="
+                          () => {
+                            deleteComment(comment.id)
+                            showDeleteConfirm = false
+                          }
+                        "
+                      ></v-btn>
+                      <v-btn
+                        class="ms-auto"
+                        text="Отмена"
+                        @click="showDeleteConfirm = false"
+                      ></v-btn>
+                    </template>
+                  </v-card>
+                </v-dialog>
               </div>
             </v-card-title>
             <v-card-text class="text-body-1">
