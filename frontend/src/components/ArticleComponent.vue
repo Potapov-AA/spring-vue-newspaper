@@ -1,7 +1,7 @@
 <script setup>
 import { useTokenStore, ROLES } from '@/stores/token'
 import { useArticleStore } from '@/stores/articles'
-import { showContent, hideContent, base64ToImage, getStringDate } from '@/js/functions.js'
+import { showContent, hideContent, base64ToImage, getStringDate, updateListArticles } from '@/js/functions.js'
 import { onMounted, ref } from 'vue'
 import LikeComponent from '@/components/LikeComponent.vue'
 import CommentComponent from '@/components/CommentComponent.vue'
@@ -20,6 +20,7 @@ const showDeleteConfirm = ref(false)
 async function deleteArticle(id, token) {
   await useArticleStore().deleteArticle(id, token)
   await useArticleStore().getArticles()
+  await updateListArticles()
 }
 
 onMounted(() => {

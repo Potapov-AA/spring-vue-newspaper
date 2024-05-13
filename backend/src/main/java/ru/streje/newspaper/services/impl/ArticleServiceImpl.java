@@ -17,6 +17,7 @@ import ru.streje.newspaper.dtos.InfoMessageResponse;
 import ru.streje.newspaper.models.Article;
 import ru.streje.newspaper.models.Theme;
 import ru.streje.newspaper.repositories.ArticleRepository;
+import ru.streje.newspaper.repositories.ThemeRepository;
 import ru.streje.newspaper.services.ArticleService;
 import ru.streje.newspaper.services.ThemeService;
 
@@ -29,6 +30,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	private ThemeService themeService;
+	
+	@Autowired
+	private ThemeRepository themeRepository;
 	
 	private final int secondsIn24Houres = 86400;
 
@@ -176,6 +180,14 @@ public class ArticleServiceImpl implements ArticleService {
 		
 		try {
 			Article article = articleRepository.findById(id).get();
+			
+			List<Theme> themes = (List<Theme>) article.getThemes();
+			for (Theme theme : themes) {
+				if(checkThemeCounts(theme.getId().intValue()) == 1) {
+					themeRepository.delete(theme);
+				}
+			}
+			
 			articleRepository.delete(article);
 			
 			return new InfoMessageResponse(HttpStatus.OK.value(), "Статья успешно удалена");
@@ -221,5 +233,30 @@ public class ArticleServiceImpl implements ArticleService {
 			return new InfoMessageResponse(HttpStatus.NOT_MODIFIED.value(), "Не удалось изменить данную статью");
 		}
 
+	}
+	
+	
+	/**
+	 * Метод получения количества того сколько раз тема встречается во всех статьях
+	 * 
+	 * @param themeId - индитификатор темы
+	 * 
+	 * @return int
+	 */
+	private int checkThemeCounts(int themeId) {
+		
+		List<Article> articles = (List<Article>) articleRepository.findAll();
+		
+		int count = 0;
+		for (Article article : articles) {
+			
+			List<Theme> themes = (List<Theme>) article.getThemes();
+			
+			for (Theme theme : themes) {
+				if (theme.getId().intValue() == themeId) count++;
+			}
+		}
+		
+		return count;
 	}
 }
