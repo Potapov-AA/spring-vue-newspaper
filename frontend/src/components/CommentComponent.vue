@@ -45,11 +45,6 @@ async function addComment(textComment) {
     return
   }
 
-  if (textComment.length >= 1000) {
-    warringMessage.value = "Комментария должен содержать меньше 1000 символов!"
-    return
-  }
-
   await axios({
     url: '/api/addcomment/' + props.id,
     method: 'post',
