@@ -75,14 +75,7 @@ public class ThemeServiceImpl implements ThemeService {
 	 */
 	public List<Theme> getAllTheme() {
 		
-		Iterable<Theme> itThemes = themeRepository.findAll(); 
-		
-		List<Theme> themes  =  new ArrayList<>();
-		for(Theme theme: itThemes) {
-			themes.add(theme);
-		}
-		
-		return themes;
+		return (List<Theme>) themeRepository.findAll();
 	}
 	
 	
@@ -100,10 +93,10 @@ public class ThemeServiceImpl implements ThemeService {
 		User user = userService.findByEmail(email).get();
 		
 		Collection<LikeDislikeTheme> likeDislikeTheme = likeDislikeThemeRepository.findByUser(user);
-
+		
 		List<Theme> themes =  new ArrayList<>();
 		for(LikeDislikeTheme theme: likeDislikeTheme) {
-			if(theme.getStatus() == status) {
+			if(theme.getStatus().intValue() == status.intValue()) {
 				themes.add(theme.getTheme());
 			}
 		}
